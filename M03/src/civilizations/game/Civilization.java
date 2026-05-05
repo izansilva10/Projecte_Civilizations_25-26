@@ -211,7 +211,7 @@ public class Civilization implements Variables
             }
         }
 
-        public void newSwordman(int n) throws ResourceException
+        public void newSwordsman(int n) throws ResourceException
         {
             int creados = 0;
             for (int i = 0; i < n; i = i + 1)
@@ -228,7 +228,7 @@ public class Civilization implements Variables
                 }
                 else
                 {
-                    throw new ResourceException("Recursos insuficientes. Se han añadido " + creados + "Swordsman.")
+                    throw new ResourceException("Recursos insuficientes. Se han añadido " + creados + "Swordsman.");
                 }
             }
             System.out.println("Se han añadido " + n + "Swordsman");
@@ -345,7 +345,7 @@ public class Civilization implements Variables
                 if (this.iron >= IRON_COST_ROCKETLAUNCHERTOWER && this.wood >= WOOD_COST_ROCKETLAUNCHERTOWER) 
                 {
                     this.iron = this.iron - IRON_COST_ROCKETLAUNCHERTOWER;
-                    this.wood -= WOOD_COST_ROCKETLAUNCHERTOWER;
+                    this.wood = this.wood - WOOD_COST_ROCKETLAUNCHERTOWER;
                     army[6].add(new RocketLauncher(this.technologyDefense, this.technologyAttack));
                     creados = creados + 1;
                 } 
@@ -368,10 +368,10 @@ public class Civilization implements Variables
             {
                 if (this.mana >= MANA_COST_MAGICIAN && this.food >= FOOD_COST_MAGICIAN && this.wood >= WOOD_COST_MAGICIAN && this.iron >= IRON_COST_MAGICIAN) 
                 {
-                    this.mana -= MANA_COST_MAGICIAN;
-                    this.food -= FOOD_COST_MAGICIAN;
-                    this.wood -= WOOD_COST_MAGICIAN;
-                    this.iron -= IRON_COST_MAGICIAN;
+                    this.mana = this.mana - MANA_COST_MAGICIAN;
+                    this.food = this.food - FOOD_COST_MAGICIAN;
+                    this.wood = this.wood - WOOD_COST_MAGICIAN;
+                    this.iron = this.iron - IRON_COST_MAGICIAN;
                     army[7].add(new Magician(this.technologyDefense, this.technologyAttack));
                     creados = creados + 1;
                 } 
@@ -394,8 +394,8 @@ public class Civilization implements Variables
             {
                 if (this.mana >= MANA_COST_PRIEST && this.food >= FOOD_COST_PRIEST) 
                 {
-                    this.mana -= MANA_COST_PRIEST;
-                    this.food -= FOOD_COST_PRIEST;
+                    this.mana = this.mana - MANA_COST_PRIEST;
+                    this.food = this.food - FOOD_COST_PRIEST;
                     army[8].add(new Priest(this.technologyDefense, this.technologyAttack));
                     creados = creados + 1;
                 } 
