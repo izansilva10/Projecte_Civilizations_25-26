@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+  <link rel="icon" href="/portfolio.ico">
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" type="image/x-icon" href="/img/ico/favicon.ico" />
+</head>
+<body>
+  
+  {{> header}}
+
+ 
+
+  <main class="container">
+    <H1>PROJECTE CIVILITZACIONS</H1>
+    
+    <section id="info" class="game-info-section">
+      <div class="card-header">
+        <h2>Sobre el Joc</h2>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-text">
+          <p>
+            <strong>Civilizations</strong> és un videojoc d'estratègia on hauràs de construir el teu propi imperi, 
+            administrar recursos clau com menjar, fusta, ferro i manà, i enfrontar-te a altres civilitzacions en batalles èpiques.
+          </p>
+          <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+          </p>
+        </div>
+        
+        <div class="screenshots-gallery">
+          <div class="screenshot-container">
+            <img src="/imgs/screenshot1.png" alt="Captura de pantalla de la interfície" class="game-screenshot">
+            <p class="screenshot-caption">Gestió de recursos del teu imperi</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="battles-section">
+      <div class="card-header">
+        <h2>Últimes Batalles Realitzades</h2>
+        <p class="subtitle">Estat actual dels últims enfrontaments al servidor</p>
+      </div>
+
+      <div class="table-container">
+        <table class="battles-table">
+          <thead>
+            <tr>
+              <th>ID Batalla</th>
+              <th>Data i Hora</th>
+              <th>Atacant</th>
+              <th>Defensor</th>
+              <th>Resultat</th>
+              <th>Acció</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#102</td>
+              <td>05/05/2026 15:30</td>
+              <td>Civilizació Alfa</td>
+              <td>Civilizació Beta</td>
+              <td><span class="badge victory">Victòria Atacant</span></td>
+              <td><a href="/informes?informe=102" class="btn-table">Veure Informe</a></td>
+            </tr>
+            <tr>
+              <td>#101</td>
+              <td>04/05/2026 19:15</td>
+              <td>Grup C</td>
+              <td>Civilizació Gamma</td>
+              <td><span class="badge defeat">Victòria Defensor</span></td>
+              <td><a href="/informes?informe=101" class="btn-table">Veure Informe</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="center-btn">
+        <a href="/batalles" class="btn-secondary">Veure totes les batalles</a>
+      </div>
+    </section>
+
+  </main>
+
+  {{> footer}}
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informes</title>
+  <link rel="icon" href="/portfolio.ico">
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" type="image/x-icon" href="/img/ico/favicon.ico" />
+</head>
+<body>
+  
+  {{> header}}
+
+  <main class="container">
+    <H1>INFORMES</H1>
+    
+    <section class="card">
+      <div class="card-header">
+        <h2>Informe de Batalla #102</h2>
+        <a href="/batalles" class="btn-table">Tornar al llistat</a>
+      </div>
+
+      <div style="margin-top: 20px; line-height: 1.8;">
+        <p><strong>Atacant:</strong> Civilizació Alfa (Poder d'atac: 1,500)</p>
+        <p><strong>Defensor:</strong> Civilizació Beta (Poder de defensa: 1,200)</p>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.08); margin: 20px 0;">
+        
+        <h3>Desenvolupament de la Batalla</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; font-family: monospace; color: #a9ffeb;">
+          [Ronda 1] L'atacant llança boles de foc... La defensa resisteix!<br>
+          [Ronda 2] Els arquers de Civilizació Alfa fan caure les línies frontals.<br>
+          [Ronda 3] Victòria indiscutible de l'atacant. Recursos saquejats: 300 fusta, 100 menjar.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {{> footer}}
+
+</body>
+</html>

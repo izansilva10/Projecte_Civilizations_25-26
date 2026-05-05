@@ -1,0 +1,13 @@
+{
+  "name": "civilizations-web",
+  "version": "1.0.0",
+  "description": "Web del Projecte Civilizations",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "hbs": "^4.2.0"
+  }
+}

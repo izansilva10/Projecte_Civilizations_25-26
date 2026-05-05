@@ -1,0 +1,46 @@
+<header class="site-header">
+    <div class="container">
+        <nav class="nav-bar">
+            <a href="/" class="nav-logo-link">
+                <img src="/img/ico/logo1.png" alt="Logo Civilizations" class="nav-logo">
+            </a>
+            <div class="nav-links">
+    <a href="/" class="{{activeClass currentRoute '/'}}">Home</a>
+    <a href="/civilitzacio" class="{{activeClass currentRoute '/civilitzacio'}}">Civilització</a>
+    <a href="/batalles" class="{{activeClass currentRoute '/batalles'}}">Batalles</a>
+    <a href="/informes" class="{{activeClass currentRoute '/informes'}}">Informes</a>
+    <a href="/programadors" class="{{activeClass currentRoute '/programadors'}}">Programadors</a>
+</div>
+        </nav>
+
+        
+    </div>
+</header>
+<script>
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', function() {
+    const header = document.querySelector('.site-header');
+    const currentScrollY = window.scrollY;
+
+    // 1. Control del tamaño compacto (Shrink)
+    if (currentScrollY > 50) {
+      header.classList.add('shrink');
+    } else {
+      header.classList.remove('shrink');
+    }
+
+    // 2. Control de mostrar/ocultar según la dirección del scroll
+    // Si bajamos más de 10px, ocultamos el menú
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      header.classList.add('header-hidden');
+    } 
+    // Si subimos aunque sea un poco, lo volvemos a mostrar al instante
+    else if (currentScrollY < lastScrollY) {
+      header.classList.remove('header-hidden');
+    }
+
+    // Actualizamos la última posición del scroll
+    lastScrollY = currentScrollY;
+  });
+</script>
