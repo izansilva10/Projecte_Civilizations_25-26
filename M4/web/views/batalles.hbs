@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historial de Batalles</title>
+  <link rel="icon" type="image/x-icon" href="/img/ico/favicon.ico" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  
+  {{> header}}
+
+  <main class="container">
+    <H1>BATALLES</H1>
+    
+    <section class="card">
+      <div class="card-header">
+        <h2>Registre Històric de Batalles</h2>
+        <span class="muted">Mostrant tots els enfrontaments</span>
+      </div>
+
+      <div class="table-container" style="margin-top: 20px;">
+        <table class="battles-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Data</th>
+              <th>Atacant</th>
+              <th>Defensor</th>
+              <th>Estat</th>
+              <th>Acció</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>#102</td>
+              <td>05/05/2026 15:30</td>
+              <td>Civilizació Alfa</td>
+              <td>Civilizació Beta</td>
+              <td><span class="badge victory">Victòria Atacant</span></td>
+              <td><a href="/informes?informe=102" class="btn-table">Detalls</a></td>
+            </tr>
+            <tr>
+              <td>#101</td>
+              <td>04/05/2026 19:15</td>
+              <td>Grup C</td>
+              <td>Civilizació Gamma</td>
+              <td><span class="badge defeat">Victòria Defensor</span></td>
+              <td><a href="/informes?informe=101" class="btn-table">Detalls</a></td>
+            </tr>
+            <tr>
+              <td>#100</td>
+              <td>02/05/2026 12:00</td>
+              <td>Civilizació Beta</td>
+              <td>Grup C</td>
+              <td><span class="badge victory">Victòria Atacant</span></td>
+              <td><a href="/informes?informe=100" class="btn-table">Detalls</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  {{> footer}}
+
+</body>
+</html>

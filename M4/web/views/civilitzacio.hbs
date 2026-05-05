@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Civilitzacions</title>
+  <link rel="icon" type="image/x-icon" href="/img/ico/favicon.ico" />
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  
+  {{> header}}
+
+  <main class="container">
+    <H1>CIVILITZACIÓ</H1>
+    
+    <section class="card">
+      <div class="card-header">
+        <h2>Recursos Disponibles</h2>
+        <span class="muted">Actualitzat en temps real</span>
+      </div>
+      
+      <ul class="projects" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+        <li class="project">
+          <div class="project-link" style="transform: none; cursor: default;">
+            <div class="project-info">
+              <span class="project-title">🌾 Menjar</span>
+              <span class="project-desc">Necessari per alimentar tropes</span>
+            </div>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">850</span>
+          </div>
+        </li>
+        <li class="project">
+          <div class="project-link" style="transform: none; cursor: default;">
+            <div class="project-info">
+              <span class="project-title">🪵 Fusta</span>
+              <span class="project-desc">Construcció d'edificis i armes</span>
+            </div>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">1,200</span>
+          </div>
+        </li>
+        <li class="project">
+          <div class="project-link" style="transform: none; cursor: default;">
+            <div class="project-info">
+              <span class="project-title">🪙 Ferro</span>
+              <span class="project-desc">Forja d'armadures i armament</span>
+            </div>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">640</span>
+          </div>
+        </li>
+        <li class="project">
+          <div class="project-link" style="transform: none; cursor: default;">
+            <div class="project-info">
+              <span class="project-title">🔮 Manà</span>
+              <span class="project-desc">Energia per a encanteris i màgia</span>
+            </div>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">999</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <div class="card-header">
+        <h2>Estructures i Recerca</h2>
+      </div>
+      
+      <p class="muted" style="margin-top: 14px;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+    </section>
+
+  </main>
+
+  {{> footer}}
+
+</body>
+</html>
