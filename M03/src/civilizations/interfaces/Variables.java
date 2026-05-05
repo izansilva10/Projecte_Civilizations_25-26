@@ -1,3 +1,5 @@
+package civilizations.interfaces;
+
 public interface Variables 
 {
 // resources available to create the first enemy fleet
