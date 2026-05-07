@@ -339,6 +339,30 @@ public class Civilization implements Variables
                 throw new ResourceException("Recursos insuficientes. Se han añadido " + creados + " Priest.");
             }
         }
-        System.out.println("Se han añadido " + n + " Priest.");
+        System.out.println("Se han añadido " + creados + " Priest.");
+    }
+
+    public void printStats() 
+    {
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("                                                                CIVILIZATION STATS");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("RESOURCES\t\t\t\t\t\tBUILDINGS\t\t\t\t\t\tTECHNOLOGY");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("Iron: " + this.iron + "\t\t\t\t\t\tFarms: " + this.farm + "\t\t\t\t\t\tAttack Technology: " + this.technologyAttack);
+        System.out.println("Wood: " + this.wood + "\t\t\t\t\t\tSmithy: " + this.smithy + "\t\t\t\t\t\tDefense Technology: " + this.technologyDefense);
+        System.out.println("Food: " + this.food + "\t\t\t\t\t\tCarpentry: " + this.carpentry);
+        System.out.println("Mana: " + this.mana + "\t\t\t\t\t\tChurch: " + this.church);
+        System.out.println("\t\t\t\t\t\t\tMagic Tower: " + this.magicTower);
+        
+        System.out.println("\n--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("                                                                    ARMY STATS");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println("Swordsman: " + this.army[0].size() + "\t\tSpearman: " + this.army[1].size() + "\t\tCrossbow: " + this.army[2].size() + "\t\tCannon: " + this.army[3].size());
+        System.out.println("Arrow Tower: " + this.army[4].size() + "\t\tCatapult: " + this.army[5].size() + "\t\tRocket Tower: " + this.army[6].size() + "\t\tMagician: " + this.army[7].size());
+        System.out.println("Priest: " + this.army[8].size());
+        
+        System.out.println("\nBattles: " + this.battles);
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 }
