@@ -33,29 +33,35 @@ public abstract class AttackUnit implements MilitaryUnit, Variables
 
     // Implementació dels mètodes de MilitaryUnit //
 
-    public int attack() {
+    public int attack() 
+    {
         int experienceBonus = (baseDamage * experience * PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT) / 100;
         int sanctifyBonus = sanctified ? (baseDamage * PLUS_ATTACK_UNIT_SANCTIFIED) / 100 : 0;
         return baseDamage + experienceBonus + sanctifyBonus;
     }
 
-    public void takeDamage(int receivedDamage) {
+    public void takeDamage(int receivedDamage) 
+    {
         this.armor -= receivedDamage;
     }
 
-    public int getActualArmor() {
+    public int getActualArmor() 
+    {
         return this.armor;
     }
 
-    public void resetArmor() {
+    public void resetArmor() 
+    {
         this.armor = this.initialArmor;
     }
 
-    public void setExperience(int n) {
+    public void setExperience(int n) 
+    {
         this.experience = n;
     }
 
-    public int getExperience() {
+    public int getExperience() 
+    {
         return this.experience;
     }
 
