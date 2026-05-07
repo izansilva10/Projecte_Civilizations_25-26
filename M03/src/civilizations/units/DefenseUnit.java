@@ -12,7 +12,7 @@ public abstract class DefenseUnit implements MilitaryUnit, Variables
     protected int experience;
     protected boolean sanctified;
 
-    // Constructor per a unitats defensives del jugador (//
+    // Constructor per a unitats defensives del jugador //
     public DefenseUnit(int armor, int baseDamage) 
     {
         this.armor = armor;
