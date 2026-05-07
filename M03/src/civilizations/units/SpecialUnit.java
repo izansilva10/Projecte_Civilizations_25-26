@@ -37,7 +37,6 @@ public abstract class SpecialUnit implements MilitaryUnit, Variables
         return baseDamage + experienceBonus;
     }
 
-
     public void takeDamage(int receivedDamage) 
     {
         this.armor = this.armor - receivedDamage;
