@@ -42,7 +42,7 @@ public abstract class AttackUnit implements MilitaryUnit, Variables
 
     public void takeDamage(int receivedDamage) 
     {
-        this.armor -= receivedDamage;
+        this.armor = this.armor - receivedDamage;
     }
 
     public int getActualArmor() 
