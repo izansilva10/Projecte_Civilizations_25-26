@@ -32,7 +32,6 @@ public abstract class AttackUnit implements MilitaryUnit, Variables
     }
 
     // Implementació dels mètodes de MilitaryUnit //
-
     public int attack() 
     {
         int experienceBonus = (baseDamage * experience * PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT) / 100;
