@@ -8,7 +8,6 @@ public class Civilization {
     private int wood, iron, food, mana;
     private int magicTower, church, farm, smithy, carpentry;
     private int battles;
-    // Cambio: ArrayList de ArrayLists en lugar de array de ArrayLists
     private ArrayList<ArrayList<MilitaryUnit>> army;
 
     public Civilization() {
@@ -43,7 +42,6 @@ public class Civilization {
     public int getCarpentry() { return carpentry; }
     public int getBattles() { return battles; }
 
-    // Devuelve un array de ArrayList para mantener compatibilidad con Battle
     public ArrayList<MilitaryUnit>[] getArmy() {
         ArrayList<MilitaryUnit>[] array = (ArrayList<MilitaryUnit>[]) new ArrayList[9];
         for (int i = 0; i < 9; i++) {
@@ -226,17 +224,61 @@ public class Civilization {
     public void newPriest(int n) throws ResourceException, BuildingException { addUnits(8, n); }
 
     public void printStats() {
-        System.out.println("*********/*********");
-        System.out.println("- TECHNOLOGY - Attack Defense " + technologyAttack + " " + technologyDefense);
-        System.out.println("- BUILDINGS - Farm Smithy Carpentry Magic Tower Church " + farm + " " + smithy + " " + carpentry + " " + magicTower + " " + church);
-        System.out.println("- DEFENSES - Arrow Tower Catapult Rocket Launcher " + army.get(4).size() + " " + army.get(5).size() + " " + army.get(6).size());
-        System.out.println("- ATTACK UNITS - Swordsman Spearman Crossbow Cannon " + army.get(0).size() + " " + army.get(1).size() + " " + army.get(2).size() + " " + army.get(3).size());
-        System.out.println("- ESPECIAL UNITS - Magician Priest " + army.get(7).size() + " " + army.get(8).size());
-        System.out.println("- RESOURCES - Food Wood Iron Mana " + food + " " + wood + " " + iron + " " + mana);
+        // Línea separadora superior
+        System.out.println("=======================================================================");
+        System.out.println("                         CIVILIZATION STATS");
+        System.out.println("=======================================================================");
+        
+        // Tecnología
+        System.out.println("\n  TECHNOLOGY");
+        System.out.println(String.format("    Attack.............: %4d", technologyAttack));
+        System.out.println(String.format("    Defense............: %4d", technologyDefense));
+        
+        // Edificios
+        System.out.println("\n  BUILDINGS");
+        System.out.println(String.format("    Farm...............: %4d", farm));
+        System.out.println(String.format("    Smithy.............: %4d", smithy));
+        System.out.println(String.format("    Carpentry..........: %4d", carpentry));
+        System.out.println(String.format("    Magic Tower........: %4d", magicTower));
+        System.out.println(String.format("    Church.............: %4d", church));
+        
+        // Defensas
+        System.out.println("\n  DEFENSES");
+        System.out.println(String.format("    Arrow Tower........: %4d", army.get(4).size()));
+        System.out.println(String.format("    Catapult...........: %4d", army.get(5).size()));
+        System.out.println(String.format("    Rocket Launcher....: %4d", army.get(6).size()));
+        
+        // Unidades de ataque
+        System.out.println("\n  ATTACK UNITS");
+        System.out.println(String.format("    Swordsman..........: %4d", army.get(0).size()));
+        System.out.println(String.format("    Spearman...........: %4d", army.get(1).size()));
+        System.out.println(String.format("    Crossbow...........: %4d", army.get(2).size()));
+        System.out.println(String.format("    Cannon.............: %4d", army.get(3).size()));
+        
+        // Unidades especiales
+        System.out.println("\n  SPECIAL UNITS");
+        System.out.println(String.format("    Magician...........: %4d", army.get(7).size()));
+        System.out.println(String.format("    Priest.............: %4d", army.get(8).size()));
+        
+        // Recursos
+        System.out.println("\n  RESOURCES");
+        System.out.println(String.format("    Food...............: %4d", food));
+        System.out.println(String.format("    Wood...............: %4d", wood));
+        System.out.println(String.format("    Iron...............: %4d", iron));
+        System.out.println(String.format("    Mana...............: %4d", mana));
+        
+        // Generación de recursos
         int genFood = Variables.CIVILIZATION_FOOD_GENERATED + farm * Variables.CIVILIZATION_FOOD_GENERATED_PER_FARM;
         int genWood = Variables.CIVILIZATION_WOOD_GENERATED + carpentry * Variables.CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY;
         int genIron = Variables.CIVILIZATION_IRON_GENERATED + smithy * Variables.CIVILIZATION_IRON_GENERATED_PER_SMITHY;
         int genMana = magicTower * Variables.CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER;
-        System.out.println("- GENERATION RESOURCES - Food Wood Iron Mana " + genFood + " " + genWood + " " + genIron + " " + genMana);
+        System.out.println("\n  GENERATION (per minute)");
+        System.out.println(String.format("    Food...............: %4d", genFood));
+        System.out.println(String.format("    Wood...............: %4d", genWood));
+        System.out.println(String.format("    Iron...............: %4d", genIron));
+        System.out.println(String.format("    Mana...............: %4d", genMana));
+        
+        // Línea separadora inferior
+        System.out.println("\n=======================================================================");
     }
 }
