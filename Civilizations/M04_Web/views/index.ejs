@@ -1,0 +1,45 @@
+<%- include('partials/head', { title: 'Civilizations - Portada' }) %>
+<%- include('partials/header') %>
+
+<main>
+    <h1>⚔️ Civilizations ⚔️</h1>
+    <p style="text-align:center; font-size:1.2rem;">Gestiona tu civilización, construye, mejora y lucha contra enemigos.</p>
+
+    <div class="card">
+        <h2>Capturas del juego</h2>
+        <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <img src="/images/screenshot1.jpg" alt="Menú principal" style="max-width:45%; border:2px solid var(--color-oro);">
+            <img src="/images/screenshot2.jpg" alt="Estadísticas" style="max-width:45%; border:2px solid var(--color-oro);">
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Últimas 2 batallas</h2>
+        <% if (ultimasBatallas && ultimasBatallas.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Batalla #</th>
+                        <th>Madera obtenida</th>
+                        <th>Hierro obtenido</th>
+                        <th>Informe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% ultimasBatallas.forEach(b => { %>
+                        <tr>
+                            <td><%= b.num %></td>
+                            <td><%= b.wood %> <img src="/images/wood-icon.png" class="resource-icon" alt="Madera"></td>
+                            <td><%= b.iron %> <img src="/images/iron-icon.png" class="resource-icon" alt="Hierro"></td>
+                            <td><a href="/informe?informe=<%= b.num %>">Ver informe</a></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>Aún no hay batallas registradas.</p>
+        <% } %>
+    </div>
+</main>
+
+<%- include('partials/footer') %>
