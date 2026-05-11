@@ -1,0 +1,36 @@
+<%- include('partials/head', { title: 'Batallas - Civilizations' }) %>
+<%- include('partials/header') %>
+
+<main>
+    <h1>Historial de batallas</h1>
+    <div style="text-align:center; font-size:1.5rem; margin:1rem 0;">
+        Total de batallas jugadas: <strong style="color: var(--color-oro);"><%= total %></strong>
+    </div>
+
+    <% if (batallas && batallas.length > 0) { %>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Madera</th>
+                    <th>Hierro</th>
+                    <th>Informe</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% batallas.forEach(b => { %>
+                    <tr>
+                        <td><%= b.num %></td>
+                        <td><%= b.wood %> <img src="/images/wood-icon.png" class="resource-icon" alt="Madera"></td>
+                        <td><%= b.iron %> <img src="/images/iron-icon.png" class="resource-icon" alt="Hierro"></td>
+                        <td><a href="/informe?informe=<%= b.num %>">Ver</a></td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No hay batallas aún.</p>
+    <% } %>
+</main>
+
+<%- include('partials/footer') %>

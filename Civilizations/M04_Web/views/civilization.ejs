@@ -1,0 +1,35 @@
+<%- include('partials/head', { title: 'Civilización' }) %>
+<%- include('partials/header') %>
+
+<main>
+    <h1>Estado de la Civilización</h1>
+    <% if (civ) { %>
+        <div class="card">
+            <h2>Recursos</h2>
+            <p><img src="/images/food-icon.png" class="resource-icon" alt="Comida"> Comida: <strong><%= civ.food %></strong></p>
+            <p><img src="/images/wood-icon.png" class="resource-icon" alt="Madera"> Madera: <strong><%= civ.wood %></strong></p>
+            <p><img src="/images/iron-icon.png" class="resource-icon" alt="Hierro"> Hierro: <strong><%= civ.iron %></strong></p>
+            <p><img src="/images/mana-icon.png" class="resource-icon" alt="Maná"> Maná: <strong><%= civ.mana %></strong></p>
+        </div>
+
+        <div class="card">
+            <h2>Edificios</h2>
+            <p>Granjas: <%= civ.farm %> | Carpinterías: <%= civ.carpentry %> | Herrerías: <%= civ.smithy %></p>
+            <p>Torres Mágicas: <%= civ.magicTower %> | Iglesias: <%= civ.church %></p>
+        </div>
+
+        <div class="card">
+            <h2>Tecnologías</h2>
+            <p>Ataque: Nivel <%= civ.attackLevel %> | Defensa: Nivel <%= civ.defenseLevel %></p>
+        </div>
+
+        <div class="card">
+            <h2>Batallas</h2>
+            <p>Batallas totales: <%= civ.battles %></p>
+        </div>
+    <% } else { %>
+        <p>No se encontraron datos de la civilización.</p>
+    <% } %>
+</main>
+
+<%- include('partials/footer') %>
