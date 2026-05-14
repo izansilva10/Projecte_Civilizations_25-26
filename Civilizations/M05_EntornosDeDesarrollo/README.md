@@ -15,9 +15,9 @@ Juego de estrategia por consola donde gestionas una civilización medieval. Cons
 Civilizations/
 ├── M01_Documentacion/ # Manual de usuario y documentación del juego
 ├── M02_BaseDeDatos/ # Scripts SQL (create_tables.sql)
-├── M03_Programacion/ # Código fuente Java (paquete Examen_final)
+├── M03_Programacion/ # Código fuente Java (paquete civilizations)
 ├── M04_Web/ # Aplicación web (app.js, views, public)
-└── M05_Entornos/ # Diagramas UML, README y planificación
+└── M05_Entornos/ # Diagrama, README y planificación
 
 ## Instalación y ejecución
 
