@@ -1,3 +1,0 @@
-node_modules/
-public/images/*.jpg
-public/images/*.png   # excepto iconos? mejor ignorar todos y añadir manualmente
