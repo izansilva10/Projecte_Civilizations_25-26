@@ -113,16 +113,26 @@ public class Main
         {
             switch (type) 
             {
-                case 1: civilization.newSwordsman(n); break;
-                case 2: civilization.newSpearman(n); break;
-                case 3: civilization.newCrossbow(n); break;
-                case 4: civilization.newCannon(n); break;
-                case 5: civilization.newArrowTower(n); break;
-                case 6: civilization.newCatapult(n); break;
-                case 7: civilization.newRocketLauncher(n); break;
-                case 8: civilization.newMagician(n); break;
-                case 9: civilization.newPriest(n); break;
-                default: System.out.println("Tipo no válido"); return;
+                case 1: civilization.newSwordsman(n); 
+                break;
+                case 2: civilization.newSpearman(n); 
+                break;
+                case 3: civilization.newCrossbow(n); 
+                break;
+                case 4: civilization.newCannon(n); 
+                break;
+                case 5: civilization.newArrowTower(n); 
+                break;
+                case 6: civilization.newCatapult(n); 
+                break;
+                case 7: civilization.newRocketLauncher(n); 
+                break;
+                case 8: civilization.newMagician(n); 
+                break;
+                case 9: civilization.newPriest(n); 
+                break;
+                default: System.out.println("Tipo no válido");
+                return;
             }
             System.out.println("Unidades añadidas.");
         } 
