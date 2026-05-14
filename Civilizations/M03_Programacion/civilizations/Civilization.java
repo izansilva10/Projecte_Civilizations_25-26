@@ -48,14 +48,38 @@ public class Civilization
     { 
         return iron; 
     }
-    public int getFood() { return food; }
-    public int getMana() { return mana; }
-    public int getMagicTower() { return magicTower; }
-    public int getChurch() { return church; }
-    public int getFarm() { return farm; }
-    public int getSmithy() { return smithy; }
-    public int getCarpentry() { return carpentry; }
-    public int getBattles() { return battles; }
+    public int getFood() 
+    { 
+        return food; 
+    }
+    public int getMana() 
+    { 
+        return mana; 
+    }
+    public int getMagicTower() 
+    { 
+        return magicTower; 
+    }
+    public int getChurch() 
+    { 
+        return church; 
+    }
+    public int getFarm() 
+    { 
+        return farm; 
+    }
+    public int getSmithy() 
+    { 
+        return smithy; 
+    }
+    public int getCarpentry() 
+    { 
+        return carpentry; 
+    }
+    public int getBattles() 
+    { 
+        return battles; 
+    }
 
     public ArrayList<MilitaryUnit>[] getArmy() {
         ArrayList<MilitaryUnit>[] array = (ArrayList<MilitaryUnit>[]) new ArrayList[9];
