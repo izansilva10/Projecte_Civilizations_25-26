@@ -1,6 +1,7 @@
 package civilizations;
 
-public interface Variables {
+public interface Variables 
+{
     // Recursos base ejército enemigo
     int IRON_BASE_ENEMY_ARMY = 26000;
     int WOOD_BASE_ENEMY_ARMY = 180000;
@@ -73,17 +74,20 @@ public interface Variables {
     int MANA_COST_PRIEST = 15000;
 
     // Arrays de costes
-    int[] WOOD_COST_UNITS = {
+    int[] WOOD_COST_UNITS = 
+    {
         WOOD_COST_SWORDSMAN, WOOD_COST_SPEARMAN, WOOD_COST_CROSSBOW, WOOD_COST_CANNON,
         WOOD_COST_ARROWTOWER, WOOD_COST_CATAPULT, WOOD_COST_ROCKETLAUNCHERTOWER,
         WOOD_COST_MAGICIAN, WOOD_COST_PRIEST
     };
-    int[] IRON_COST_UNITS = {
+    int[] IRON_COST_UNITS = 
+    {
         IRON_COST_SWORDSMAN, IRON_COST_SPEARMAN, IRON_COST_CROSSBOW, IRON_COST_CANNON,
         IRON_COST_ARROWTOWER, IRON_COST_CATAPULT, IRON_COST_ROCKETLAUNCHERTOWER,
         IRON_COST_MAGICIAN, IRON_COST_PRIEST
     };
-    int[] FOOD_COST_UNITS = {
+    int[] FOOD_COST_UNITS = 
+    {
         FOOD_COST_SWORDSMAN, FOOD_COST_SPEARMAN, FOOD_COST_CROSSBOW, FOOD_COST_CANNON,
         FOOD_COST_ARROWTOWER, FOOD_COST_CATAPULT, FOOD_COST_ROCKETLAUNCHERTOWER,
         FOOD_COST_MAGICIAN, FOOD_COST_PRIEST
@@ -175,8 +179,14 @@ public interface Variables {
     int CHANCE_ATTACK_AGAIN_MAGICIAN = 75;
     int CHANCE_ATTACK_AGAIN_PRIEST = 0;
 
-    int[] CHANCE_ATTACK_CIVILIZATION_UNITS = {4, 9, 13, 37, 4, 9, 14, 10, 0};
-    int[] CHANCE_ATTACK_ENEMY_UNITS = {10, 20, 30, 40};
+    int[] CHANCE_ATTACK_CIVILIZATION_UNITS = 
+    {
+        4, 9, 13, 37, 4, 9, 14, 10, 0
+    };
+    int[] CHANCE_ATTACK_ENEMY_UNITS = 
+    {
+        10, 20, 30, 40
+    };
 
     int PERCENTAGE_WASTE = 70;
 }
