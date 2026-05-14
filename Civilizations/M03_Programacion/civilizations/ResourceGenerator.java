@@ -2,14 +2,17 @@ package civilizations;
 
 import java.util.TimerTask;
 
-public class ResourceGenerator extends TimerTask {
+public class ResourceGenerator extends TimerTask 
+{
     private Civilization civilization;
 
-    public ResourceGenerator(Civilization civilization) {
+    public ResourceGenerator(Civilization civilization) 
+    {
         this.civilization = civilization;
     }
 
-    public void run() {
+    public void run() 
+    {
         int extraFood = civilization.getFarm() * Variables.CIVILIZATION_FOOD_GENERATED_PER_FARM;
         int extraWood = civilization.getCarpentry() * Variables.CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY;
         int extraIron = civilization.getSmithy() * Variables.CIVILIZATION_IRON_GENERATED_PER_SMITHY;

@@ -1,6 +1,7 @@
 package civilizations;
 
-public interface MilitaryUnit {
+public interface MilitaryUnit 
+{
     int attack();
     void takeDamage(int receivedDamage);
     int getActualArmor();
