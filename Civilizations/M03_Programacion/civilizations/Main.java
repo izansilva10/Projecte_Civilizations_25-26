@@ -44,13 +44,20 @@ public class Main
 
             switch (op) 
             {
-                case 1: civilization.printStats(); break;
-                case 2: buildMenu(); break;
-                case 3: upgradeMenu(); break;
-                case 4: createUnitsMenu(); break;
-                case 5: viewThreat(); break;
-                case 6: viewBattleHistory(); break;
-                case 7: exit = true; break;
+                case 1: civilization.printStats(); 
+                break;
+                case 2: buildMenu(); 
+                break;
+                case 3: upgradeMenu(); 
+                break;
+                case 4: createUnitsMenu(); 
+                break;
+                case 5: viewThreat(); 
+                break;
+                case 6: viewBattleHistory(); 
+                break;
+                case 7: exit = true; 
+                break;
                 default: System.out.println("Opción no válida");
             }
         }
@@ -68,12 +75,18 @@ public class Main
         {
             switch (op) 
             {
-                case 1: civilization.newFarm(); break;
-                case 2: civilization.newCarpentry(); break;
-                case 3: civilization.newSmithy(); break;
-                case 4: civilization.newMagicTower(); break;
-                case 5: civilization.newChurch(); break;
-                default: System.out.println("Opción no válida"); return;
+                case 1: civilization.newFarm(); 
+                break;
+                case 2: civilization.newCarpentry(); 
+                break;
+                case 3: civilization.newSmithy(); 
+                break;
+                case 4: civilization.newMagicTower(); 
+                break;
+                case 5: civilization.newChurch(); 
+                break;
+                default: System.out.println("Opción no válida"); 
+                return;
             }
             System.out.println("Edificio construido.");
         } 
@@ -93,7 +106,8 @@ public class Main
             else if (op == 2) civilization.upgradeTechnologyAttack();
             else 
                 { 
-                    System.out.println("Opción no válida"); return; 
+                    System.out.println("Opción no válida"); 
+                    return; 
                 }
             System.out.println("Tecnología mejorada.");
         } 
