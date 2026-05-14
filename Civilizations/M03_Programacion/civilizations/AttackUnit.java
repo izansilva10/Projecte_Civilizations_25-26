@@ -1,13 +1,15 @@
 package civilizations;
 
-public abstract class AttackUnit implements MilitaryUnit {
+public abstract class AttackUnit implements MilitaryUnit 
+{
     protected int armor;
     protected int initialArmor;
     protected int baseDamage;
     protected int experience;
     protected boolean sanctified;
 
-    public AttackUnit(int armor, int baseDamage) {
+    public AttackUnit(int armor, int baseDamage) 
+    {
         this.armor = armor;
         this.initialArmor = armor;
         this.baseDamage = baseDamage;
@@ -15,32 +17,39 @@ public abstract class AttackUnit implements MilitaryUnit {
         this.sanctified = false;
     }
 
-    public int attack() {
+    public int attack() 
+    {
         int totalDamage = baseDamage;
         totalDamage += (experience * Variables.PLUS_ATTACK_UNIT_PER_EXPERIENCE_POINT * baseDamage) / 100;
-        if (sanctified) {
+        if (sanctified) 
+        {
             totalDamage += (Variables.PLUS_ATTACK_UNIT_SANCTIFIED * baseDamage) / 100;
         }
         return totalDamage;
     }
 
-    public void takeDamage(int receivedDamage) {
+    public void takeDamage(int receivedDamage) 
+    {
         armor -= receivedDamage;
     }
 
-    public int getActualArmor() {
+    public int getActualArmor() 
+    {
         return armor;
     }
 
-    public void resetArmor() {
+    public void resetArmor() 
+    {
         armor = initialArmor;
     }
 
-    public void setExperience(int n) {
+    public void setExperience(int n) 
+    {
         this.experience = n;
     }
 
-    public int getExperience() {
+    public int getExperience()
+    {
         return experience;
     }
 
