@@ -6,9 +6,9 @@ Juego de estrategia por consola donde gestionas una civilización medieval. Cons
 
 | Capa | Tecnología |
 |------|------------|
-| Backend (lógica de juego) | Java 8+ |
-| Base de datos | Oracle SQL |
-| Frontend web | Node.js + Express + EJS + CSS3 |
+| Backend (lógica de juego) | Java  |
+| Base de datos | SQL |
+| Frontend web | Node.js + hbs + CSS3 |
 | Control de versiones | Git + GitHub |
 
 ## Estructura del proyecto
@@ -39,6 +39,10 @@ Civilizations/
 2. Instala las dependencias:
    npm install
 
+## EntornosDeDesarrollo(M05)
+
+1. Creacion del Diagrama 
+2. Planificacion 
 
 ### Release
 La versión actual del proyecto está disponible en:
