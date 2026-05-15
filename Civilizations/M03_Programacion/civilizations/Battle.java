@@ -3,7 +3,8 @@ package civilizations;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Battle {
+public class Battle 
+{
     private ArrayList<MilitaryUnit> civilizationArmy;
     private ArrayList<MilitaryUnit> enemyArmy;
     private String battleDevelopment;
