@@ -352,7 +352,8 @@ public class Civilization
         addUnits(8, n); 
     }
 
-    public void printStats() {
+    public void printStats() 
+    {
     System.out.println("=======================================================================");
     System.out.println("                         CIVILIZATION STATS");
     System.out.println("=======================================================================");
