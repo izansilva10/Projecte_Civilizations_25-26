@@ -3,27 +3,19 @@ package civilizations;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Battle {
-    // Ejércitos planos
+public class Battle 
+{
     private ArrayList<MilitaryUnit> civilizationArmy;
     private ArrayList<MilitaryUnit> enemyArmy;
-    // Desarrollo de la batalla
     private String battleDevelopment;
-    // Costes iniciales de flotas: [0] civilización, [1] enemigo -> [food, wood, iron]
     private int[][] initialCostFleet;
-    // Número inicial de unidades
     private int initialNumberUnitsCivilization;
     private int initialNumberUnitsEnemy;
-    // Residuos generados [madera, hierro]
     private int[] wasteWoodIron;
-    // Unidades caídas (drops)
     private int enemyDrops;
     private int civilizationDrops;
-    // Pérdidas ponderadas: [0] civilización, [1] enemigo -> [food, wood, iron, ponderado]
     private int[][] resourcesLooses;
-    // Conteo inicial por tipo: [0] civilización (9 tipos), [1] enemigo (4 tipos)
     private int[][] initialArmies;
-    // Conteo actual por tipo
     private int[] actualNumberUnitsCivilization;
     private int[] actualNumberUnitsEnemy;
     private Random rand;
@@ -34,14 +26,12 @@ public class Battle {
         battleDevelopment = "";
         wasteWoodIron = new int[2];
         resourcesLooses = new int[2][4];
-        initialArmies = new int[2][9]; // enemigo solo usa índices 0-3
+        initialArmies = new int[2][9];
         actualNumberUnitsCivilization = new int[9];
         actualNumberUnitsEnemy = new int[4];
 
-        // Civilización: grupos ya vienen separados
         civilizationArmy = new ArrayList<MilitaryUnit>();
-        for (int i = 0; i < 9; i++) 
-        {
+        for (int i = 0; i < 9; i++) {
             initialArmies[0][i] = civilizationArmyGroups[i].size();
             actualNumberUnitsCivilization[i] = initialArmies[0][i];
             for (MilitaryUnit u : civilizationArmyGroups[i]) 
@@ -50,17 +40,14 @@ public class Battle {
             }
         }
 
-        // Enemigo: lista plana, contar tipos
         enemyArmy = new ArrayList<MilitaryUnit>(enemyArmyList);
-        for (MilitaryUnit u : enemyArmy) 
-        {
+        for (MilitaryUnit u : enemyArmy) {
             if (u instanceof Swordsman)      actualNumberUnitsEnemy[0]++;
             else if (u instanceof Spearman)  actualNumberUnitsEnemy[1]++;
             else if (u instanceof Crossbow)  actualNumberUnitsEnemy[2]++;
             else if (u instanceof Cannon)    actualNumberUnitsEnemy[3]++;
         }
-        for (int i = 0; i < 4; i++) 
-        {
+        for (int i = 0; i < 4; i++) {
             initialArmies[1][i] = actualNumberUnitsEnemy[i];
         }
 
@@ -72,15 +59,13 @@ public class Battle {
         initialCostFleet[1] = fleetResourceCost(enemyArmyList, false);
     }
 
-    // Calcula el coste total (food, wood, iron) de un ejército
     private int[] fleetResourceCost(Object army, boolean isCivilization) 
     {
         int food = 0, wood = 0, iron = 0;
         if (isCivilization) 
         {
             ArrayList<MilitaryUnit>[] groups = (ArrayList<MilitaryUnit>[]) army;
-            for (int i = 0; i < 9; i++) 
-            {
+            for (int i = 0; i < 9; i++) {
                 for (MilitaryUnit u : groups[i]) 
                 {
                     food += u.getFoodCost();
@@ -102,14 +87,32 @@ public class Battle {
         return new int[]{food, wood, iron};
     }
 
-    public void startBattle() 
-    {
+    public void startBattle() {
+        // Si la civilización no tiene ejército, pierde automáticamente
+        if (civilizationArmy.isEmpty()) 
+        {
+            battleDevelopment += "Battle Winned by Enemy (Civilization has no army)\n";
+            resourcesLooses[0] = new int[]{0, 0, 0, 0};
+            resourcesLooses[1] = new int[]{0, 0, 0, 1};
+            return;
+        }
+
+        // Si el enemigo no tiene ejército, gana la civilización
+        if (enemyArmy.isEmpty()) 
+        {
+            battleDevelopment += "Battle Winned by Civilization (Enemy has no army)\n";
+            resourcesLooses[0] = new int[]{0, 0, 0, 1};
+            resourcesLooses[1] = new int[]{0, 0, 0, 0};
+            return;
+        }
+
         boolean civilizationAttacks = rand.nextBoolean();
 
         while (true) 
-            {
+        {
             if (civilizationArmy.size() <= initialNumberUnitsCivilization * 0.2 ||
-                enemyArmy.size() <= initialNumberUnitsEnemy * 0.2) {
+                enemyArmy.size() <= initialNumberUnitsEnemy * 0.2) 
+            {
                 break;
             }
 
@@ -151,9 +154,9 @@ public class Battle {
         battleDevelopment += attackerType + " generates the damage = " + damage + "\n";
         battleDevelopment += defenderType + " stays with armor = " + defender.getActualArmor() + "\n";
 
-        if (defender.getActualArmor() <= 0) {
+        if (defender.getActualArmor() <= 0) 
+        {
             battleDevelopment += "we eliminate " + defenderType + "\n";
-            // Generación de residuos
             if (rand.nextInt(100) < defender.getChanceGeneratorInWaste()) 
             {
                 int woodWaste = (defender.getWoodCost() * Variables.PERCENTAGE_WASTE) / 100;
@@ -272,18 +275,15 @@ public class Battle {
         if (total == 0) return 0;
         int r = rand.nextInt(total);
         int cumulative = 0;
-        for (int i = 0; i < counts.length; i++) 
-        {
+        for (int i = 0; i < counts.length; i++) {
             cumulative += counts[i];
             if (r < cumulative) return i;
         }
         return counts.length - 1;
     }
 
-    private void updateUnitCounts(MilitaryUnit u, String side) 
-    {
-        if (side.equals("Civilization")) 
-        {
+    private void updateUnitCounts(MilitaryUnit u, String side) {
+        if (side.equals("Civilization")) {
             if (u instanceof Swordsman) actualNumberUnitsCivilization[0]--;
             else if (u instanceof Spearman) actualNumberUnitsCivilization[1]--;
             else if (u instanceof Crossbow) actualNumberUnitsCivilization[2]--;
@@ -295,7 +295,7 @@ public class Battle {
             else if (u instanceof Priest) actualNumberUnitsCivilization[8]--;
         } 
         else 
-        { // Enemy
+        {
             if (u instanceof Swordsman) actualNumberUnitsEnemy[0]--;
             else if (u instanceof Spearman) actualNumberUnitsEnemy[1]--;
             else if (u instanceof Crossbow) actualNumberUnitsEnemy[2]--;
@@ -303,9 +303,7 @@ public class Battle {
         }
     }
 
-    private void calculateResults() 
-    {
-        // Calcular pérdidas para cada bando
+    private void calculateResults() {
         int[] civLosses = calculateLosses(initialArmies[0], actualNumberUnitsCivilization, true);
         int[] eneLosses = calculateLosses(initialArmies[1], actualNumberUnitsEnemy, false);
 
@@ -321,12 +319,9 @@ public class Battle {
         int weightedEne = eneLosses[2] + eneLosses[1]/5 + eneLosses[0]/10;
         resourcesLooses[1][3] = weightedEne;
 
-        if (weightedCiv <= weightedEne) 
-        {
+        if (weightedCiv <= weightedEne) {
             battleDevelopment += "Battle Winned by Civilization, We Collect Rubble\n";
-        } 
-        else 
-        {
+        } else {
             battleDevelopment += "Battle Winned by Enemy\n";
         }
     }
@@ -339,11 +334,9 @@ public class Battle {
         int[] costIron = Variables.IRON_COST_UNITS;
 
         int length = isCivilization ? 9 : 4;
-        for (int i = 0; i < length; i++) 
-        {
+        for (int i = 0; i < length; i++) {
             int lost = initialCounts[i] - finalCounts[i];
-            if (lost > 0) 
-            {
+            if (lost > 0) {
                 foodLoss += lost * costFood[i];
                 woodLoss += lost * costWood[i];
                 ironLoss += lost * costIron[i];
@@ -352,7 +345,6 @@ public class Battle {
         return new int[]{foodLoss, woodLoss, ironLoss};
     }
 
-    // Reportes
     public String getBattleReport(int battleNumber) 
     {
         StringBuilder sb = new StringBuilder();
@@ -361,7 +353,8 @@ public class Battle {
         sb.append("Army planet Units Drops Initial Army Enemy Units Drops\n");
         String[] namesCiv = {"Swordsman","Spearman","Crossbow","Cannon","Arrow Tower","Catapult","Rocket Launcher","Magician","Priest"};
         String[] namesEne = {"Swordsman","Spearman","Crossbow","Cannon"};
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) 
+        {
             int dropsCiv = initialArmies[0][i] - actualNumberUnitsCivilization[i];
             sb.append(namesCiv[i]).append(" ").append(actualNumberUnitsCivilization[i]).append(" ").append(dropsCiv).append(" ");
             if (i < 4) 
@@ -372,16 +365,13 @@ public class Battle {
             sb.append("\n");
         }
         sb.append("**************************************************************************************\n");
-        // Costes iniciales
         sb.append("Cost Army Civilization: Food ").append(initialCostFleet[0][0]).append(" Wood ").append(initialCostFleet[0][1]).append(" Iron ").append(initialCostFleet[0][2]).append("\n");
         sb.append("Cost Army Enemy: Food ").append(initialCostFleet[1][0]).append(" Wood ").append(initialCostFleet[1][1]).append(" Iron ").append(initialCostFleet[1][2]).append("\n");
         sb.append("**************************************************************************************\n");
-        // Pérdidas
         sb.append("Losses Army Civilization: Food ").append(resourcesLooses[0][0]).append(" Wood ").append(resourcesLooses[0][1]).append(" Iron ").append(resourcesLooses[0][2]).append("\n");
         sb.append("Losses Army Enemy: Food ").append(resourcesLooses[1][0]).append(" Wood ").append(resourcesLooses[1][1]).append(" Iron ").append(resourcesLooses[1][2]).append("\n");
         sb.append("**************************************************************************************\n");
         sb.append("Waste Generated: Wood ").append(wasteWoodIron[0]).append(" Iron ").append(wasteWoodIron[1]).append("\n");
-        // Ganador real
         if (resourcesLooses[0][3] <= resourcesLooses[1][3]) 
         {
             sb.append("Battle Winned by Civilization, We Collect Rubble\n");
@@ -399,8 +389,8 @@ public class Battle {
     }
 
     public int[] getWasteWoodIron() 
-    { 
-        return wasteWoodIron; 
+    {
+        return wasteWoodIron;
     }
 
     public boolean civilizationWon() 
@@ -408,7 +398,6 @@ public class Battle {
         return resourcesLooses[0][3] <= resourcesLooses[1][3];
     }
 
-    // Resetear armaduras tras batalla (útil)
     public void resetCivilizationArmor() 
     {
         for (MilitaryUnit u : civilizationArmy) 
