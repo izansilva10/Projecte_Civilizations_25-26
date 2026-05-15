@@ -81,13 +81,13 @@ public class InterfazCivilization extends Application {
         techDefLabel = new Label();
         techAtkLabel = new Label();
 
-        resourcesGrid.add(new Label("🍖 Comida:"), 0, 0);
+        resourcesGrid.add(new Label("🍽️ Comida:"), 0, 0);
         resourcesGrid.add(foodLabel, 1, 0);
         resourcesGrid.add(new Label("🪵 Madera:"), 2, 0);
         resourcesGrid.add(woodLabel, 3, 0);
         resourcesGrid.add(new Label("⛏️ Hierro:"), 0, 1);
         resourcesGrid.add(ironLabel, 1, 1);
-        resourcesGrid.add(new Label("🔮 Maná:"), 2, 1);
+        resourcesGrid.add(new Label("✦ Maná:"), 2, 1);
         resourcesGrid.add(manaLabel, 3, 1);
         resourcesGrid.add(new Label("🛡️ Tecnología Defensa:"), 0, 2);
         resourcesGrid.add(techDefLabel, 1, 2);
@@ -110,7 +110,7 @@ public class InterfazCivilization extends Application {
         buildingsGrid.add(carpentryLabel, 3, 0);
         buildingsGrid.add(new Label("⚒️ Herrerías:"), 0, 1);
         buildingsGrid.add(smithyLabel, 1, 1);
-        buildingsGrid.add(new Label("🔮 Torres Mágicas:"), 2, 1);
+        buildingsGrid.add(new Label("🏛️ Torres Mágicas:"), 2, 1);
         buildingsGrid.add(magicTowerLabel, 3, 1);
         buildingsGrid.add(new Label("⛪ Iglesias:"), 0, 2);
         buildingsGrid.add(churchLabel, 1, 2);
@@ -128,6 +128,7 @@ public class InterfazCivilization extends Application {
             try {
                 civilization.newFarm();
                 showInfo("Granja construida correctamente.");
+                updateUI();
             } catch (ResourceException ex) {
                 showAlert(ex.getMessage());
             }
@@ -136,6 +137,7 @@ public class InterfazCivilization extends Application {
             try {
                 civilization.newCarpentry();
                 showInfo("Carpintería construida correctamente.");
+                updateUI();
             } catch (ResourceException ex) {
                 showAlert(ex.getMessage());
             }
@@ -144,6 +146,7 @@ public class InterfazCivilization extends Application {
             try {
                 civilization.newSmithy();
                 showInfo("Herrería construida correctamente.");
+                updateUI();
             } catch (ResourceException ex) {
                 showAlert(ex.getMessage());
             }
@@ -152,6 +155,7 @@ public class InterfazCivilization extends Application {
             try {
                 civilization.newMagicTower();
                 showInfo("Torre Mágica construida correctamente.");
+                updateUI();
             } catch (ResourceException ex) {
                 showAlert(ex.getMessage());
             }
@@ -160,6 +164,7 @@ public class InterfazCivilization extends Application {
             try {
                 civilization.newChurch();
                 showInfo("Iglesia construida correctamente.");
+                updateUI();
             } catch (ResourceException ex) {
                 showAlert(ex.getMessage());
             }
@@ -178,6 +183,7 @@ public class InterfazCivilization extends Application {
             try {
                 civilization.upgradeTechnologyDefense();
                 showInfo("Tecnología de Defensa mejorada.");
+                updateUI();
             } catch (ResourceException ex) {
                 showAlert(ex.getMessage());
             }
@@ -186,6 +192,7 @@ public class InterfazCivilization extends Application {
             try {
                 civilization.upgradeTechnologyAttack();
                 showInfo("Tecnología de Ataque mejorada.");
+                updateUI();
             } catch (ResourceException ex) {
                 showAlert(ex.getMessage());
             }
@@ -206,220 +213,272 @@ public class InterfazCivilization extends Application {
         armyTable.getColumns().addAll(unitCol, countCol);
         armyTable.setPrefHeight(300);
 
-        GridPane unitButtons = new GridPane();
-        unitButtons.setHgap(10);
-        unitButtons.setVgap(10);
-
+        Label attackLabel = new Label("⚔️ UNIDADES DE ATAQUE");
+        attackLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        HBox attackBox = new HBox(10);
+        attackBox.setAlignment(Pos.CENTER_LEFT);
         Button swordsmanBtn = new Button("Espadachín");
         Button spearmanBtn = new Button("Lancero");
         Button crossbowBtn = new Button("Ballesta");
         Button cannonBtn = new Button("Cañón");
+        attackBox.getChildren().addAll(swordsmanBtn, spearmanBtn, crossbowBtn, cannonBtn);
+
+        Label defenseLabel = new Label("🛡️ DEFENSAS Y ESPECIALES");
+        defenseLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #2c3e50;");
+        HBox defenseBox = new HBox(10);
+        defenseBox.setAlignment(Pos.CENTER_LEFT);
         Button arrowTowerBtn = new Button("Torre Flechas");
         Button catapultBtn = new Button("Catapulta");
         Button rocketBtn = new Button("Torre Cohete");
         Button magicianBtn = new Button("Mago");
         Button priestBtn = new Button("Sacerdote");
+        defenseBox.getChildren().addAll(arrowTowerBtn, catapultBtn, rocketBtn, magicianBtn, priestBtn);
 
+        // Configurar acciones con actualización forzada y depuración
         swordsmanBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántos Espadachines quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newSwordsman(cantidad);
-                showInfo("Se han creado " + cantidad + " Espadachín(es).");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear unidad");
+            dialog.setHeaderText("¿Cuántos Espadachines quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newSwordsman(cantidad);
+                        showInfo("Se han creado " + cantidad + " Espadachín(es).");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Espadachines = " + civilization.getArmy()[0].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-spearmanBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántos Lanceros quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newSpearman(cantidad);
-                showInfo("Se han creado " + cantidad + " Lancero(s).");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        spearmanBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear unidad");
+            dialog.setHeaderText("¿Cuántos Lanceros quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newSpearman(cantidad);
+                        showInfo("Se han creado " + cantidad + " Lancero(s).");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Lanceros = " + civilization.getArmy()[1].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-crossbowBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántas Ballestas quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newCrossbow(cantidad);
-                showInfo("Se han creado " + cantidad + " Ballesta(s).");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        crossbowBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear unidad");
+            dialog.setHeaderText("¿Cuántas Ballestas quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newCrossbow(cantidad);
+                        showInfo("Se han creado " + cantidad + " Ballesta(s).");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Ballestas = " + civilization.getArmy()[2].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-cannonBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántos Cañones quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newCannon(cantidad);
-                showInfo("Se han creado " + cantidad + " Cañón(es).");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        cannonBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear unidad");
+            dialog.setHeaderText("¿Cuántos Cañones quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newCannon(cantidad);
+                        showInfo("Se han creado " + cantidad + " Cañón(es).");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Cañones = " + civilization.getArmy()[3].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-arrowTowerBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántas Torres de Flechas quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newArrowTower(cantidad);
-                showInfo("Se han creado " + cantidad + " Torre(s) de Flechas.");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        arrowTowerBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear defensa");
+            dialog.setHeaderText("¿Cuántas Torres de Flechas quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newArrowTower(cantidad);
+                        showInfo("Se han creado " + cantidad + " Torre(s) de Flechas.");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Torres Flechas = " + civilization.getArmy()[4].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-catapultBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántas Catapultas quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newCatapult(cantidad);
-                showInfo("Se han creado " + cantidad + " Catapulta(s).");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        catapultBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear defensa");
+            dialog.setHeaderText("¿Cuántas Catapultas quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newCatapult(cantidad);
+                        showInfo("Se han creado " + cantidad + " Catapulta(s).");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Catapultas = " + civilization.getArmy()[5].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-rocketBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántas Torres Cohete quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newRocketLauncher(cantidad);
-                showInfo("Se han creado " + cantidad + " Torre(s) Cohete.");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        rocketBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear defensa");
+            dialog.setHeaderText("¿Cuántas Torres Cohete quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newRocketLauncher(cantidad);
+                        showInfo("Se han creado " + cantidad + " Torre(s) Cohete.");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Torres Cohete = " + civilization.getArmy()[6].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-magicianBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántos Magos quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newMagician(cantidad);
-                showInfo("Se han creado " + cantidad + " Mago(s).");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        magicianBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear unidad especial");
+            dialog.setHeaderText("¿Cuántos Magos quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newMagician(cantidad);
+                        showInfo("Se han creado " + cantidad + " Mago(s).");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Magos = " + civilization.getArmy()[7].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-priestBtn.setOnAction(e -> {
-    TextInputDialog dialog = new TextInputDialog("1");
-    dialog.setTitle("Crear unidad");
-    dialog.setHeaderText("¿Cuántos Sacerdotes quieres crear?");
-    dialog.setContentText("Cantidad:");
-    Optional<String> result = dialog.showAndWait();
-    result.ifPresent(value -> {
-        try {
-            int cantidad = Integer.parseInt(value);
-            if (cantidad > 0) {
-                civilization.newPriest(cantidad);
-                showInfo("Se han creado " + cantidad + " Sacerdote(s).");
-            }
-        } catch (NumberFormatException ex) {
-            showAlert("Cantidad no válida.");
-        } catch (ResourceException | BuildingException ex) {
-            showAlert(ex.getMessage());
-        }
-    });
-});
+        priestBtn.setOnAction(e -> {
+            TextInputDialog dialog = new TextInputDialog("1");
+            dialog.setTitle("Crear unidad especial");
+            dialog.setHeaderText("¿Cuántos Sacerdotes quieres crear?");
+            dialog.setContentText("Cantidad:");
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(value -> {
+                try {
+                    int cantidad = Integer.parseInt(value);
+                    if (cantidad > 0) {
+                        civilization.newPriest(cantidad);
+                        showInfo("Se han creado " + cantidad + " Sacerdote(s).");
+                        Platform.runLater(() -> {
+                            updateUI();
+                            armyTable.refresh();
+                        });
+                        System.out.println("DEBUG: Sacerdotes = " + civilization.getArmy()[8].size());
+                    }
+                } catch (NumberFormatException ex) {
+                    showAlert("Cantidad no válida.");
+                } catch (ResourceException | BuildingException ex) {
+                    showAlert(ex.getMessage());
+                }
+            });
+        });
 
-        unitButtons.add(swordsmanBtn, 0, 0);
-        unitButtons.add(spearmanBtn, 1, 0);
-        unitButtons.add(crossbowBtn, 2, 0);
-        unitButtons.add(cannonBtn, 3, 0);
-        unitButtons.add(arrowTowerBtn, 0, 1);
-        unitButtons.add(catapultBtn, 1, 1);
-        unitButtons.add(rocketBtn, 2, 1);
-        unitButtons.add(magicianBtn, 3, 1);
-        unitButtons.add(priestBtn, 4, 1);
+        VBox buttonsContainer = new VBox(10);
+        buttonsContainer.getChildren().addAll(attackLabel, attackBox, defenseLabel, defenseBox);
+        buttonsContainer.setPadding(new Insets(10, 0, 0, 0));
 
-        panel.getChildren().addAll(new Label("Ejército actual:"), armyTable, new Label("Crear nuevas unidades:"), unitButtons);
+        panel.getChildren().addAll(new Label("Ejército actual:"), armyTable, buttonsContainer);
+        
+        Button refreshBtn = new Button("🔄 Refrescar tabla");
+            refreshBtn.setOnAction(e -> updateUI());
+            panel.getChildren().add(refreshBtn);
+            
         return panel;
     }
 
@@ -549,6 +608,7 @@ priestBtn.setOnAction(e -> {
                 showInfo("Has perdido la batalla. ¡Refuerza tus defensas!");
             }
             civilization.setBattles(civilization.getBattles() + 1);
+            updateUI();
 
             String report = battle.getBattleReport(battleHistory.size());
             String development = battle.getBattleDevelopment();
@@ -597,6 +657,8 @@ priestBtn.setOnAction(e -> {
                 int count = armyGroups[i].size();
                 armyTable.getItems().add(unitNames[i] + " : " + count);
             }
+            // Forzar refresco visual
+            armyTable.refresh();
 
             if (currentEnemyArmy.isEmpty()) {
                 threatArea.setText("No hay amenaza en este momento.\nEspera a que llegue un ejército enemigo (cada 3 minutos).");
