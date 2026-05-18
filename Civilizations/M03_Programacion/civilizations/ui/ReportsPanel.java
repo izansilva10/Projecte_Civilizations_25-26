@@ -3,11 +3,15 @@ package civilizations.ui;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
+import civilizations.Battle;
+import java.util.ArrayList;
 
 public class ReportsPanel {
     private TextArea battleReportArea;
+    private ArrayList<Battle> battleHistory;
 
-    public ReportsPanel() {
+    public ReportsPanel(ArrayList<Battle> battleHistory) {
+        this.battleHistory = battleHistory;
     }
 
     public VBox getPanel() {
@@ -23,11 +27,14 @@ public class ReportsPanel {
         return panel;
     }
 
-    public void updateUI(String report) {
-        battleReportArea.setText(report);
-    }
-
-    public void appendBattleReport(String report, String development) {
+    public void updateUI() {
+        if (battleHistory == null || battleHistory.isEmpty()) {
+            battleReportArea.setText("No hay batallas registradas.");
+            return;
+        }
+        Battle lastBattle = battleHistory.get(battleHistory.size() - 1);
+        String report = lastBattle.getBattleReport(battleHistory.size());
+        String development = lastBattle.getBattleDevelopment();
         battleReportArea.setText(report + "\n\n--- DESARROLLO PASO A PASO ---\n" + development);
     }
 }
