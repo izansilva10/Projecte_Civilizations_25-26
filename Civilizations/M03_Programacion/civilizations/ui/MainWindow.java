@@ -1,61 +1,44 @@
 package civilizations.ui;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
 import civilizations.*;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
-public class MainWindow {
+public class MainWindow extends javafx.application.Application {
     private Civilization civilization;
+    private ResourcesPanel resourcesPanel;
+    private ArmyPanel armyPanel;
+    private ReportsPanel reportsPanel;
     private ArrayList<Battle> battleHistory;
     private ArrayList<MilitaryUnit> currentEnemyArmy;
     private Timer resourceTimer;
     private Timer enemyTimer;
-    private boolean battleInProgress = false;
 
-    private ResourcesPanel resourcesPanel;
-    private ArmyPanel armyPanel;
-    private BattlePanel battlePanel;
-    private ReportsPanel reportsPanel;
-
+    @Override
     public void start(Stage stage) {
         civilization = new Civilization();
         battleHistory = new ArrayList<>();
         currentEnemyArmy = new ArrayList<>();
 
+        // Iniciar los timers (generación de recursos y creación de enemigos)
         startTimers();
 
-        // Crear paneles con sus callbacks
-        resourcesPanel = new ResourcesPanel(civilization, this::updateAllUI);
-        armyPanel = new ArmyPanel(civilization, this::updateAllUI);
-        battlePanel = new BattlePanel(civilization, currentEnemyArmy, this::startBattleManually);
-        reportsPanel = new ReportsPanel();
+        // Crear paneles
+        resourcesPanel = new ResourcesPanel(civilization, this::updateUI);
+        armyPanel = new ArmyPanel(civilization, this::updateUI);
+        reportsPanel = new ReportsPanel(battleHistory);
 
         TabPane tabPane = new TabPane();
+        Tab resourcesTab = new Tab("Recursos y Edificios", resourcesPanel.getPanel());
+        Tab armyTab = new Tab("Ejército", armyPanel.getPanel());
+        Tab reportsTab = new Tab("Reportes", reportsPanel.getPanel());
 
-        Tab resourcesTab = new Tab("Recursos y Edificios");
-        resourcesTab.setClosable(false);
-        resourcesTab.setContent(resourcesPanel.getPanel());
-
-        Tab armyTab = new Tab("Ejército");
-        armyTab.setClosable(false);
-        armyTab.setContent(armyPanel.getPanel());
-
-        Tab battleTab = new Tab("Batalla");
-        battleTab.setClosable(false);
-        battleTab.setContent(battlePanel.getPanel());
-
-        Tab reportsTab = new Tab("Reportes");
-        reportsTab.setClosable(false);
-        reportsTab.setContent(reportsPanel.getPanel());
-
-        tabPane.getTabs().addAll(resourcesTab, armyTab, battleTab, reportsTab);
+        tabPane.getTabs().addAll(resourcesTab, armyTab, reportsTab);
 
         Scene scene = new Scene(tabPane, 1000, 700);
         stage.setTitle("Civilizations - Interfaz Gráfica");
@@ -65,28 +48,12 @@ public class MainWindow {
         startUIUpdater();
     }
 
-    private void startUIUpdater() {
-        javafx.animation.AnimationTimer updater = new javafx.animation.AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                updateAllUI();
-            }
-        };
-        updater.start();
-    }
-
-    private void updateAllUI() {
-        Platform.runLater(() -> {
-            resourcesPanel.updateUI();
-            armyPanel.updateUI();
-            battlePanel.updateUI();
-        });
-    }
-
     private void startTimers() {
+        // Timer de recursos (cada 60 segundos)
         resourceTimer = new Timer();
         resourceTimer.scheduleAtFixedRate(new ResourceGenerator(civilization), 0, 60000);
 
+        // Timer de ejército enemigo (cada 180 segundos = 3 minutos)
         enemyTimer = new Timer();
         enemyTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -97,6 +64,7 @@ public class MainWindow {
     }
 
     private void createEnemyAndBattle() {
+        // Lógica para crear ejército enemigo y librar batalla automática
         int battles = civilization.getBattles();
         int foodBase = Variables.FOOD_BASE_ENEMY_ARMY + (battles * Variables.ENEMY_FLEET_INCREASE * Variables.FOOD_BASE_ENEMY_ARMY / 100);
         int woodBase = Variables.WOOD_BASE_ENEMY_ARMY + (battles * Variables.ENEMY_FLEET_INCREASE * Variables.WOOD_BASE_ENEMY_ARMY / 100);
@@ -134,7 +102,7 @@ public class MainWindow {
     private int selectEnemyType(int[] probs) {
         int total = 0;
         for (int p : probs) total += p;
-        int r = new java.util.Random().nextInt(total);
+        int r = new Random().nextInt(total);
         int cum = 0;
         for (int i = 0; i < probs.length; i++) {
             cum += probs[i];
@@ -153,20 +121,7 @@ public class MainWindow {
         }
     }
 
-    private void startBattleManually() {
-        if (currentEnemyArmy.isEmpty()) {
-            showAlert("No hay ejército enemigo. Espera a que llegue uno (cada 3 minutos).");
-            return;
-        }
-        if (battleInProgress) {
-            showAlert("Ya hay una batalla en curso.");
-            return;
-        }
-        startBattleWithEnemy(currentEnemyArmy);
-    }
-
     private void startBattleWithEnemy(ArrayList<MilitaryUnit> enemyArmy) {
-        battleInProgress = true;
         try {
             Battle battle = new Battle(civilization.getArmy(), enemyArmy);
             battle.startBattle();
@@ -175,48 +130,34 @@ public class MainWindow {
                 int[] waste = battle.getWasteWoodIron();
                 civilization.addWood(waste[0]);
                 civilization.addIron(waste[1]);
-                showInfo("¡Has ganado la batalla! Has obtenido " + waste[0] + " madera y " + waste[1] + " hierro de residuos.");
+                System.out.println("¡Has ganado la batalla! Residuos: madera " + waste[0] + ", hierro " + waste[1]);
             } else {
-                showInfo("Has perdido la batalla. ¡Refuerza tus defensas!");
+                System.out.println("Has perdido la batalla.");
             }
             civilization.setBattles(civilization.getBattles() + 1);
-            updateAllUI();
-
-            String report = battle.getBattleReport(battleHistory.size());
-            String development = battle.getBattleDevelopment();
-            Platform.runLater(() -> {
-                reportsPanel.appendBattleReport(report, development);
-            });
-
-            currentEnemyArmy.clear();
+            updateUI();
         } catch (Exception e) {
-            showAlert("Error durante la batalla: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            battleInProgress = false;
         }
     }
 
-    private void showAlert(String message) {
-        Platform.runLater(() -> {
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
-        });
+    private void startUIUpdater() {
+        AnimationTimer updater = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                updateUI();
+            }
+        };
+        updater.start();
     }
 
-    private void showInfo(String message) {
-        Platform.runLater(() -> {
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
-            alert.setTitle("Información");
-            alert.setHeaderText(null);
-            alert.setContentText(message);
-            alert.showAndWait();
-        });
+    private void updateUI() {
+        resourcesPanel.updateUI();
+        armyPanel.updateUI();
+        reportsPanel.updateUI();
     }
 
+    @Override
     public void stop() {
         if (resourceTimer != null) resourceTimer.cancel();
         if (enemyTimer != null) enemyTimer.cancel();

@@ -14,7 +14,7 @@ public class InterfazCivilization extends Application {
     }
 
     @Override
-    public void stop() {
+    public void stop() throws Exception {
         if (mainWindow != null) mainWindow.stop();
     }
 
