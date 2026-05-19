@@ -19,6 +19,7 @@ public class Battle
     private int[] actualNumberUnitsCivilization;
     private int[] actualNumberUnitsEnemy;
     private Random rand;
+    private boolean civilizationHadNoArmy;  // Nuevo campo para recordar si la civilización no tenía ejército
 
     public Battle(ArrayList<MilitaryUnit>[] civilizationArmyGroups, ArrayList<MilitaryUnit> enemyArmyList) 
     {
@@ -29,6 +30,7 @@ public class Battle
         initialArmies = new int[2][9];
         actualNumberUnitsCivilization = new int[9];
         actualNumberUnitsEnemy = new int[4];
+        civilizationHadNoArmy = false;
 
         civilizationArmy = new ArrayList<MilitaryUnit>();
         for (int i = 0; i < 9; i++) {
@@ -91,9 +93,11 @@ public class Battle
         // Si la civilización no tiene ejército, pierde automáticamente
         if (civilizationArmy.isEmpty()) 
         {
+            civilizationHadNoArmy = true;
             battleDevelopment += "Battle Winned by Enemy (Civilization has no army)\n";
-            resourcesLooses[0] = new int[]{0, 0, 0, 0};
-            resourcesLooses[1] = new int[]{0, 0, 0, 1};
+            // Aseguramos que las pérdidas ponderadas den la victoria al enemigo
+            resourcesLooses[0][3] = 1000; // pérdidas altas para la civilización
+            resourcesLooses[1][3] = 0;    // pérdidas nulas para el enemigo
             return;
         }
 
@@ -101,17 +105,18 @@ public class Battle
         if (enemyArmy.isEmpty()) 
         {
             battleDevelopment += "Battle Winned by Civilization (Enemy has no army)\n";
-            resourcesLooses[0] = new int[]{0, 0, 0, 1};
-            resourcesLooses[1] = new int[]{0, 0, 0, 0};
+            resourcesLooses[0][3] = 0;
+            resourcesLooses[1][3] = 1000;
             return;
         }
 
         boolean civilizationAttacks = rand.nextBoolean();
 
+        // Umbral cambiado del 20% al 10% para batallas más largas
         while (true) 
         {
-            if (civilizationArmy.size() <= initialNumberUnitsCivilization * 0.2 ||
-                enemyArmy.size() <= initialNumberUnitsEnemy * 0.2) 
+            if (civilizationArmy.size() <= initialNumberUnitsCivilization * 0.1 ||
+                enemyArmy.size() <= initialNumberUnitsEnemy * 0.1) 
             {
                 break;
             }
@@ -372,7 +377,9 @@ public class Battle
         sb.append("Losses Army Enemy: Food ").append(resourcesLooses[1][0]).append(" Wood ").append(resourcesLooses[1][1]).append(" Iron ").append(resourcesLooses[1][2]).append("\n");
         sb.append("**************************************************************************************\n");
         sb.append("Waste Generated: Wood ").append(wasteWoodIron[0]).append(" Iron ").append(wasteWoodIron[1]).append("\n");
-        if (resourcesLooses[0][3] <= resourcesLooses[1][3]) 
+        
+        // Usar el mismo criterio que civilizationWon() para el mensaje
+        if (civilizationWon()) 
         {
             sb.append("Battle Winned by Civilization, We Collect Rubble\n");
         } 
@@ -395,6 +402,11 @@ public class Battle
 
     public boolean civilizationWon() 
     {
+        // Si al inicio la civilización no tenía ejército, ha perdido
+        if (civilizationHadNoArmy) return false;
+        // Si el enemigo no tenía ejército, ha ganado
+        if (initialNumberUnitsEnemy == 0) return true;
+        // En caso normal, comparar pérdidas ponderadas
         return resourcesLooses[0][3] <= resourcesLooses[1][3];
     }
 
