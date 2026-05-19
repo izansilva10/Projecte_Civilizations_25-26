@@ -7,6 +7,17 @@
         "/usr/share/openjfx/lib/javafx.graphics.jar",
         "/usr/share/openjfx/lib/javafx.media.jar",
         "/usr/share/openjfx/lib/javafx.swing.jar",
-        "/usr/share/openjfx/lib/javafx.web.jar"
+        "/usr/share/openjfx/lib/javafx.web.jar",
+        "javafx/lib/javafx.base.jar",
+        "javafx/lib/javafx.controls.jar",
+        "javafx/lib/javafx.fxml.jar",
+        "javafx/lib/javafx.graphics.jar",
+        "javafx/lib/javafx.media.jar",
+        "javafx/lib/javafx.swing.jar",
+        "javafx/lib/javafx.web.jar",
+        "javafx/lib/javafx-swt.jar",
+        "javafx/lib/jdk.jsobject.jar",
+        "javafx/lib/jfx.incubator.input.jar",
+        "javafx/lib/jfx.incubator.richtext.jar"
     ]
 }
