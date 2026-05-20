@@ -26,7 +26,7 @@ public class ResourcesPanel {
         panel.setPadding(new Insets(15, 0, 15, 0));
         panel.setStyle("-fx-background: linear-gradient(from 0% 0% to 100% 100%, #2c3e50, #1a2a3a); -fx-border-width: 0;");
 
-        // --- BARRA DE RECURSOS (plateada, igual que en ArmyPanel) ---
+        // --- BARRA DE RECURSOS ---
         HBox resourcesBar = new HBox(25);
         resourcesBar.setAlignment(Pos.CENTER);
         resourcesBar.setStyle("-fx-background-color: #708090; -fx-padding: 12; -fx-border-radius: 8; -fx-border-color: #c0c0c0; -fx-border-width: 1;");
@@ -34,58 +34,58 @@ public class ResourcesPanel {
 
         String labelStyle = "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;";
 
-        Label foodIcon = new Label("🍽️ Comida:"); foodIcon.setStyle(labelStyle);
+        Label foodIcon = new Label("Comida:"); foodIcon.setStyle(labelStyle);
         foodValueLabel = new Label("0"); foodValueLabel.setStyle(labelStyle);
-        Label woodIcon = new Label("🪵 Madera:"); woodIcon.setStyle(labelStyle);
+        Label woodIcon = new Label("Madera:"); woodIcon.setStyle(labelStyle);
         woodValueLabel = new Label("0"); woodValueLabel.setStyle(labelStyle);
-        Label ironIcon = new Label("⛏️ Hierro:"); ironIcon.setStyle(labelStyle);
+        Label ironIcon = new Label("Hierro:"); ironIcon.setStyle(labelStyle);
         ironValueLabel = new Label("0"); ironValueLabel.setStyle(labelStyle);
-        Label manaIcon = new Label("✦ Maná:"); manaIcon.setStyle(labelStyle);
+        Label manaIcon = new Label("Mana:"); manaIcon.setStyle(labelStyle);
         manaValueLabel = new Label("0"); manaValueLabel.setStyle(labelStyle);
 
         resourcesBar.getChildren().addAll(foodIcon, foodValueLabel, woodIcon, woodValueLabel, ironIcon, ironValueLabel, manaIcon, manaValueLabel);
 
-        // --- TÍTULO CONSTRUIR EDIFICIOS ---
-        Label constructionTitle = new Label("🏗️ CONSTRUIR EDIFICIOS");
+        // --- TITULO CONSTRUIR EDIFICIOS ---
+        Label constructionTitle = new Label("CONSTRUIR EDIFICIOS");
         constructionTitle.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
         constructionTitle.setAlignment(Pos.CENTER);
         constructionTitle.setMaxWidth(Double.MAX_VALUE);
 
-        // --- BOTONES DE CONSTRUCCIÓN EN FILA HORIZONTAL (5 botones) ---
+        // --- BOTONES DE CONSTRUCCION ---
         HBox constructionBox = new HBox(20);
         constructionBox.setAlignment(Pos.CENTER);
         constructionBox.setPadding(new Insets(15, 0, 15, 0));
         constructionBox.setMaxWidth(Double.MAX_VALUE);
 
-        Button farmBtn = createVerticalCostButton("🍽️ Granja", 5000, 10000, 12000, 0);
-        Button carpentryBtn = createVerticalCostButton("🪚 Carpintería", 10000, 10000, 12000, 0);
-        Button smithyBtn = createVerticalCostButton("⚒️ Herrería", 5000, 10000, 12000, 0);
-        Button magicTowerBtn = createVerticalCostButton("🔮 Torre Mágica", 5000, 10000, 12000, 0);
-        Button churchBtn = createVerticalCostButton("⛪ Iglesia", 5000, 10000, 12000, 0);
+        Button farmBtn = createVerticalCostButton("Granja", 5000, 10000, 12000, 0);
+        Button carpentryBtn = createVerticalCostButton("Carpinteria", 10000, 10000, 12000, 0);
+        Button smithyBtn = createVerticalCostButton("Herreria", 5000, 10000, 12000, 0);
+        Button magicTowerBtn = createVerticalCostButton("Torre Magica", 5000, 10000, 12000, 0);
+        Button churchBtn = createVerticalCostButton("Iglesia", 5000, 10000, 12000, 0);
 
         constructionBox.getChildren().addAll(farmBtn, carpentryBtn, smithyBtn, magicTowerBtn, churchBtn);
 
-        // --- TÍTULO MEJORAR TECNOLOGÍA ---
-        Label techTitle = new Label("⚙️ MEJORAR TECNOLOGÍA");
+        // --- TITULO MEJORAR TECNOLOGIA ---
+        Label techTitle = new Label("MEJORAR TECNOLOGIA");
         techTitle.setStyle("-fx-text-fill: white; -fx-font-size: 22px; -fx-font-weight: bold;");
         techTitle.setAlignment(Pos.CENTER);
         techTitle.setMaxWidth(Double.MAX_VALUE);
 
-        // --- BOTONES DE MEJORA EN FILA HORIZONTAL ---
+        // --- BOTONES DE MEJORA ---
         HBox techBox = new HBox(40);
         techBox.setAlignment(Pos.CENTER);
         techBox.setPadding(new Insets(20, 0, 10, 0));
 
-        upgradeDefenseBtn = createTechButton("🛡️ Mejorar Defensa", "⛏️2000");
-        upgradeAttackBtn = createTechButton("⚔️ Mejorar Ataque", "⛏️2000");
+        upgradeDefenseBtn = createTechButton("Mejorar Defensa", "2000 hierro");
+        upgradeAttackBtn = createTechButton("Mejorar Ataque", "2000 hierro");
 
         techBox.getChildren().addAll(upgradeDefenseBtn, upgradeAttackBtn);
 
         // --- ACCIONES ---
         farmBtn.setOnAction(e -> construir(() -> civilization.newFarm(), "Granja"));
-        carpentryBtn.setOnAction(e -> construir(() -> civilization.newCarpentry(), "Carpintería"));
-        smithyBtn.setOnAction(e -> construir(() -> civilization.newSmithy(), "Herrería"));
-        magicTowerBtn.setOnAction(e -> construir(() -> civilization.newMagicTower(), "Torre Mágica"));
+        carpentryBtn.setOnAction(e -> construir(() -> civilization.newCarpentry(), "Carpinteria"));
+        smithyBtn.setOnAction(e -> construir(() -> civilization.newSmithy(), "Herreria"));
+        magicTowerBtn.setOnAction(e -> construir(() -> civilization.newMagicTower(), "Torre Magica"));
         churchBtn.setOnAction(e -> construir(() -> civilization.newChurch(), "Iglesia"));
         upgradeDefenseBtn.setOnAction(e -> mejorar(() -> civilization.upgradeTechnologyDefense(), "Defensa"));
         upgradeAttackBtn.setOnAction(e -> mejorar(() -> civilization.upgradeTechnologyAttack(), "Ataque"));
@@ -94,7 +94,7 @@ public class ResourcesPanel {
         return panel;
     }
 
-    // Botón con costes en formato vertical (comida, madera, hierro)
+    // Boton con costes en formato vertical (comida, madera, hierro)
     private Button createVerticalCostButton(String name, int food, int wood, int iron, int mana) {
         Button btn = new Button();
         btn.setStyle("-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-border-color: #5dade2; -fx-border-radius: 10; -fx-padding: 10 5;");
@@ -105,40 +105,40 @@ public class ResourcesPanel {
 
         VBox content = new VBox(5);
         content.setAlignment(Pos.CENTER);
-        
+
         Label nameLabel = new Label(name);
         nameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
-        
+
         VBox costsBox = new VBox(2);
         costsBox.setAlignment(Pos.CENTER);
         if (food > 0) {
-            Label foodLabel = new Label("🍽️ " + String.format("%,d", food));
+            Label foodLabel = new Label("Comida: " + String.format("%,d", food));
             foodLabel.setStyle("-fx-text-fill: #aaccff; -fx-font-size: 14px;");
             costsBox.getChildren().add(foodLabel);
         }
         if (wood > 0) {
-            Label woodLabel = new Label("🪵 " + String.format("%,d", wood));
+            Label woodLabel = new Label("Madera: " + String.format("%,d", wood));
             woodLabel.setStyle("-fx-text-fill: #aaccff; -fx-font-size: 14px;");
             costsBox.getChildren().add(woodLabel);
         }
         if (iron > 0) {
-            Label ironLabel = new Label("⛏️ " + String.format("%,d", iron));
+            Label ironLabel = new Label("Hierro: " + String.format("%,d", iron));
             ironLabel.setStyle("-fx-text-fill: #aaccff; -fx-font-size: 14px;");
             costsBox.getChildren().add(ironLabel);
         }
         if (mana > 0) {
-            Label manaLabel = new Label("✦ " + String.format("%,d", mana));
+            Label manaLabel = new Label("Mana: " + String.format("%,d", mana));
             manaLabel.setStyle("-fx-text-fill: #aaccff; -fx-font-size: 14px;");
             costsBox.getChildren().add(manaLabel);
         }
-        
+
         content.getChildren().addAll(nameLabel, costsBox);
         btn.setGraphic(content);
         btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         return btn;
     }
 
-    // Botón de tecnología (también con fuente más grande)
+    // Boton de tecnologia
     private Button createTechButton(String text, String cost) {
         Button btn = new Button();
         btn.setStyle("-fx-background-color: #2c3e50; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-border-color: #5dade2; -fx-border-radius: 10; -fx-padding: 10 5;");
@@ -149,20 +149,20 @@ public class ResourcesPanel {
 
         VBox content = new VBox(5);
         content.setAlignment(Pos.CENTER);
-        
+
         Label nameLabel = new Label(text);
         nameLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
-        
+
         Label costLabel = new Label(cost);
         costLabel.setStyle("-fx-text-fill: #aaccff; -fx-font-size: 14px;");
-        
+
         content.getChildren().addAll(nameLabel, costLabel);
         btn.setGraphic(content);
         btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
         return btn;
     }
 
-    // Interfaz para acciones con excepción
+    // Interfaz para acciones con excepcion
     @FunctionalInterface
     private interface ActionWithException {
         void run() throws ResourceException;
@@ -172,6 +172,7 @@ public class ResourcesPanel {
         try {
             action.run();
             showInfo(nombre + " construida correctamente.");
+            civilization.saveToDatabase(); // <--- GUARDAR EN MYSQL
             updateUICallback.run();
         } catch (ResourceException e) {
             showAlert(e.getMessage());
@@ -181,7 +182,8 @@ public class ResourcesPanel {
     private void mejorar(ActionWithException action, String nombre) {
         try {
             action.run();
-            showInfo("Tecnología de " + nombre + " mejorada.");
+            showInfo("Tecnologia de " + nombre + " mejorada.");
+            civilization.saveToDatabase(); // <--- GUARDAR EN MYSQL
             updateUICallback.run();
         } catch (ResourceException e) {
             showAlert(e.getMessage());
@@ -194,7 +196,7 @@ public class ResourcesPanel {
         ironValueLabel.setText(String.format("%,d", civilization.getIron()));
         manaValueLabel.setText(String.format("%,d", civilization.getMana()));
 
-        // Calcular costes dinámicos de mejora
+        // Calcular costes dinamicos de mejora
         int defLevel = civilization.getTechnologyDefense();
         int atkLevel = civilization.getTechnologyAttack();
 
@@ -203,11 +205,21 @@ public class ResourcesPanel {
         int atkIronCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + atkLevel * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
         int atkWoodCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + atkLevel * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
 
-        String defCost = (defWoodCost > 0 ? "🪵" + defWoodCost + " " : "") + "⛏️" + defIronCost;
-        String atkCost = (atkWoodCost > 0 ? "🪵" + atkWoodCost + " " : "") + "⛏️" + atkIronCost;
+        // Reemplazar ternarios por if-else
+        String defCost = "";
+        if (defWoodCost > 0) {
+            defCost = "Madera: " + defWoodCost + " ";
+        }
+        defCost = defCost + "Hierro: " + defIronCost;
 
-        actualizarTextoBoton(upgradeDefenseBtn, "🛡️ Mejorar Defensa", defCost);
-        actualizarTextoBoton(upgradeAttackBtn, "⚔️ Mejorar Ataque", atkCost);
+        String atkCost = "";
+        if (atkWoodCost > 0) {
+            atkCost = "Madera: " + atkWoodCost + " ";
+        }
+        atkCost = atkCost + "Hierro: " + atkIronCost;
+
+        actualizarTextoBoton(upgradeDefenseBtn, "Mejorar Defensa", defCost);
+        actualizarTextoBoton(upgradeAttackBtn, "Mejorar Ataque", atkCost);
     }
 
     private void actualizarTextoBoton(Button btn, String textoBase, String coste) {
@@ -235,7 +247,7 @@ public class ResourcesPanel {
     private void showInfo(String msg) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Información");
+            alert.setTitle("Informacion");
             alert.setHeaderText(null);
             alert.setContentText(msg);
             alert.showAndWait();
