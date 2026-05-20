@@ -15,7 +15,8 @@ public class Main
 
     public static void main(String[] args) 
     {
-        civilization = new Civilization();
+        // Cargar la civilización desde la base de datos al iniciar
+        civilization = Civilization.loadFromDatabase();
         scanner = new Scanner(System.in);
 
         // Tareas programadas
@@ -50,7 +51,10 @@ public class Main
                 case 5: viewThreat(); break;
                 case 6: viewBattleHistory(); break;
                 case 7: mostrarAyuda(); break;
-                case 8: exit = true; break;
+                case 8: 
+                    civilization.saveToDatabase();
+                    exit = true; 
+                    break;
                 default: System.out.println("Opción no válida");
             }
         }
@@ -91,6 +95,7 @@ public class Main
                     return;
             }
             System.out.println("Edificio construido correctamente.");
+            civilization.saveToDatabase(); // Guardar cambio
         } 
         catch (ResourceException e) 
         {
@@ -120,6 +125,7 @@ public class Main
                     return; 
                 }
             System.out.println("Tecnología mejorada.");
+            civilization.saveToDatabase(); // Guardar cambio
         } 
         catch (ResourceException e) 
         {
@@ -178,6 +184,7 @@ public class Main
                      break;
             }
             System.out.println("Unidades añadidas correctamente.");
+            civilization.saveToDatabase(); // Guardar cambio
         } 
         catch (ResourceException | BuildingException e) 
         {

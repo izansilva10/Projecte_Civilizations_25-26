@@ -14,15 +14,14 @@ public class MainWindow extends javafx.application.Application {
     private ResourcesPanel resourcesPanel;
     private ArmyPanel armyPanel;
     private ReportsPanel reportsPanel;
-    private CivilizationInfoPanel infoPanel;   // Nuevo panel
+    private CivilizationInfoPanel infoPanel;
     private ArrayList<Battle> battleHistory;
     private ArrayList<MilitaryUnit> currentEnemyArmy;
     private Timer resourceTimer;
     private Timer enemyTimer;
 
-    @Override
     public void start(Stage stage) {
-        civilization = new Civilization();
+        civilization = Civilization.loadFromDatabase();
         battleHistory = new ArrayList<>();
         currentEnemyArmy = new ArrayList<>();
 
@@ -36,7 +35,6 @@ public class MainWindow extends javafx.application.Application {
         TabPane tabPane = new TabPane();
         tabPane.setStyle("-fx-background-color: #2a2a2a; -fx-tab-text-fill: white;");
 
-        // Crear las pestañas (la de información será la primera)
         Tab infoTab = new Tab("🏛️ Información", infoPanel.getPanel());
         Tab resourcesTab = new Tab("🏛️ Recursos y Edificios", resourcesPanel.getPanel());
         Tab armyTab = new Tab("⚔️ Ejército", armyPanel.getPanel());
@@ -53,7 +51,6 @@ public class MainWindow extends javafx.application.Application {
         armyTab.setClosable(false);
         reportsTab.setClosable(false);
 
-        // Añadir en orden: Información primero
         tabPane.getTabs().addAll(infoTab, resourcesTab, armyTab, reportsTab);
 
         Scene scene = new Scene(tabPane, 1400, 800);
@@ -62,16 +59,14 @@ public class MainWindow extends javafx.application.Application {
         stage.show();
 
         startUIUpdater();
-        updateUI(); // actualización inicial
+        updateUI();
     }
 
-    // ================== MÉTODOS ORIGINALES (sin cambios) ==================
     private void startTimers() {
         resourceTimer = new Timer();
         resourceTimer.scheduleAtFixedRate(new ResourceGenerator(civilization), 0, 60000);
         enemyTimer = new Timer();
         enemyTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
             public void run() {
                 Platform.runLater(() -> createEnemyAndBattle());
             }
@@ -136,17 +131,18 @@ public class MainWindow extends javafx.application.Application {
     private void startBattleWithEnemy(ArrayList<MilitaryUnit> enemyArmy) {
         try {
             Battle battle = new Battle(civilization.getArmy(), enemyArmy);
-            battle.startBattle();
+            battle.startBattle(civilization);
             battleHistory.add(battle);
             if (battle.civilizationWon()) {
                 int[] waste = battle.getWasteWoodIron();
                 civilization.addWood(waste[0]);
                 civilization.addIron(waste[1]);
-                System.out.println("¡Has ganado la batalla! Residuos: madera " + waste[0] + ", hierro " + waste[1]);
+                System.out.println("Has ganado la batalla! Residuos: madera " + waste[0] + ", hierro " + waste[1]);
             } else {
                 System.out.println("Has perdido la batalla.");
             }
             civilization.setBattles(civilization.getBattles() + 1);
+            civilization.saveToDatabase();
             updateUI();
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +151,7 @@ public class MainWindow extends javafx.application.Application {
 
     private void startUIUpdater() {
         AnimationTimer updater = new AnimationTimer() {
-            @Override
+
             public void handle(long now) {
                 updateUI();
             }
@@ -170,9 +166,11 @@ public class MainWindow extends javafx.application.Application {
         if (infoPanel != null) infoPanel.updateUI();
     }
 
-    @Override
     public void stop() {
         if (resourceTimer != null) resourceTimer.cancel();
         if (enemyTimer != null) enemyTimer.cancel();
+        if (civilization != null) {
+            civilization.saveToDatabase();
+        }
     }
 }

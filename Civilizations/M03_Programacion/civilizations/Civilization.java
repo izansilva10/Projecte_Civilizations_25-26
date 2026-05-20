@@ -1,6 +1,11 @@
 package civilizations;
 
 import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.SQLException;
 
 public class Civilization 
 {
@@ -30,6 +35,8 @@ public class Civilization
         {
             army.add(new ArrayList<MilitaryUnit>());
         }
+        // Guardar la nueva civilización en la base de datos
+        saveToDatabase();
     }
 
     public int getTechnologyDefense() 
@@ -81,7 +88,6 @@ public class Civilization
         return battles; 
     }
 
-
     public ArrayList<MilitaryUnit>[] getArmy() 
     {
         ArrayList<MilitaryUnit>[] array = (ArrayList<MilitaryUnit>[]) new ArrayList[9];
@@ -112,6 +118,111 @@ public class Civilization
     { 
         battles = b; 
     }
+
+    // ---------- MÉTODOS DE BASE DE DATOS ----------
+    public void saveToDatabase() 
+    {
+        try (Connection conn = Database.getConnection()) 
+        {
+            boolean existe = false;
+            String checkSql = "SELECT civilization_id FROM civilization_stats WHERE civilization_id = 1";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(checkSql)) 
+            {
+                if (rs.next()) 
+                {
+                    existe = true;
+                }
+            }
+
+            if (existe) 
+            {
+                String updateSql = "UPDATE civilization_stats SET name=?, wood_amount=?, iron_amount=?, food_amount=?, mana_amount=?, magicTower_counter=?, church_counter=?, farm_counter=?, smithy_counter=?, carpentry_counter=?, technology_defense_level=?, technology_attack_level=?, battles_counter=? WHERE civilization_id=1";
+                try (PreparedStatement ps = conn.prepareStatement(updateSql)) 
+                {
+                    ps.setString(1, "MiCivilizacion");
+                    ps.setInt(2, this.wood);
+                    ps.setInt(3, this.iron);
+                    ps.setInt(4, this.food);
+                    ps.setInt(5, this.mana);
+                    ps.setInt(6, this.magicTower);
+                    ps.setInt(7, this.church);
+                    ps.setInt(8, this.farm);
+                    ps.setInt(9, this.smithy);
+                    ps.setInt(10, this.carpentry);
+                    ps.setInt(11, this.technologyDefense);
+                    ps.setInt(12, this.technologyAttack);
+                    ps.setInt(13, this.battles);
+                    ps.executeUpdate();
+                }
+            } 
+            else 
+            {
+                String insertSql = "INSERT INTO civilization_stats (civilization_id, name, wood_amount, iron_amount, food_amount, mana_amount, magicTower_counter, church_counter, farm_counter, smithy_counter, carpentry_counter, technology_defense_level, technology_attack_level, battles_counter) VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(insertSql)) 
+                {
+                    ps.setString(1, "MiCivilizacion");
+                    ps.setInt(2, this.wood);
+                    ps.setInt(3, this.iron);
+                    ps.setInt(4, this.food);
+                    ps.setInt(5, this.mana);
+                    ps.setInt(6, this.magicTower);
+                    ps.setInt(7, this.church);
+                    ps.setInt(8, this.farm);
+                    ps.setInt(9, this.smithy);
+                    ps.setInt(10, this.carpentry);
+                    ps.setInt(11, this.technologyDefense);
+                    ps.setInt(12, this.technologyAttack);
+                    ps.setInt(13, this.battles);
+                    ps.executeUpdate();
+                }
+            }
+            System.out.println("Civilización guardada en MySQL.");
+        } 
+        catch (SQLException e) 
+        {
+            System.out.println("Error al guardar civilización: " + e.getMessage());
+        }
+    }
+
+    public static Civilization loadFromDatabase() 
+    {
+        Civilization civ = new Civilization();
+        try (Connection conn = Database.getConnection()) 
+        {
+            String sql = "SELECT * FROM civilization_stats WHERE civilization_id = 1";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) 
+            {
+                if (rs.next()) 
+                {
+                    civ.wood = rs.getInt("wood_amount");
+                    civ.iron = rs.getInt("iron_amount");
+                    civ.food = rs.getInt("food_amount");
+                    civ.mana = rs.getInt("mana_amount");
+                    civ.magicTower = rs.getInt("magicTower_counter");
+                    civ.church = rs.getInt("church_counter");
+                    civ.farm = rs.getInt("farm_counter");
+                    civ.smithy = rs.getInt("smithy_counter");
+                    civ.carpentry = rs.getInt("carpentry_counter");
+                    civ.technologyDefense = rs.getInt("technology_defense_level");
+                    civ.technologyAttack = rs.getInt("technology_attack_level");
+                    civ.battles = rs.getInt("battles_counter");
+                    System.out.println("Civilización cargada desde MySQL.");
+                } 
+                else 
+                {
+                    System.out.println("No hay datos guardados. Se crea una nueva civilización.");
+                }
+            }
+        } 
+        catch (SQLException e) 
+        {
+            System.out.println("Error al cargar civilización: " + e.getMessage());
+        }
+        return civ;
+    }
+    // ----------------------------------------------
 
     public void newFarm() throws ResourceException 
     {
@@ -228,7 +339,15 @@ public class Civilization
         int foodCost = Variables.FOOD_COST_UNITS[type];
         int woodCost = Variables.WOOD_COST_UNITS[type];
         int ironCost = Variables.IRON_COST_UNITS[type];
-        int manaCost = (type == 7) ? Variables.MANA_COST_MAGICIAN : (type == 8) ? Variables.MANA_COST_PRIEST : 0;
+        int manaCost = 0;
+        if (type == 7) 
+        {
+            manaCost = Variables.MANA_COST_MAGICIAN;
+        } 
+        else if (type == 8) 
+        {
+            manaCost = Variables.MANA_COST_PRIEST;
+        }
 
         int created = 0;
         for (int i = 0; i < n; i++) 
@@ -354,54 +473,54 @@ public class Civilization
 
     public void printStats() 
     {
-    System.out.println("=======================================================================");
-    System.out.println("                         CIVILIZATION STATS");
-    System.out.println("=======================================================================");
-    
-    // Recursos con formato de miles
-    System.out.println("\n  RECURSOS");
-    System.out.println(String.format("    Comida....: %,-6d    (generación: %,d/min)", food, 
-        Variables.CIVILIZATION_FOOD_GENERATED + farm * Variables.CIVILIZATION_FOOD_GENERATED_PER_FARM));
-    System.out.println(String.format("    Madera....: %,-6d    (generación: %,d/min)", wood, 
-        Variables.CIVILIZATION_WOOD_GENERATED + carpentry * Variables.CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY));
-    System.out.println(String.format("    Hierro....: %,-6d    (generación: %,d/min)", iron, 
-        Variables.CIVILIZATION_IRON_GENERATED + smithy * Variables.CIVILIZATION_IRON_GENERATED_PER_SMITHY));
-    System.out.println(String.format("    Maná......: %,-6d    (generación: %,d/min)", mana, 
-        magicTower * Variables.CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER));
+        System.out.println("=======================================================================");
+        System.out.println("                         CIVILIZATION STATS");
+        System.out.println("=======================================================================");
+        
+        // Recursos con formato de miles
+        System.out.println("\n  RECURSOS");
+        System.out.println(String.format("    Comida....: %,-6d    (generación: %,d/min)", food, 
+            Variables.CIVILIZATION_FOOD_GENERATED + farm * Variables.CIVILIZATION_FOOD_GENERATED_PER_FARM));
+        System.out.println(String.format("    Madera....: %,-6d    (generación: %,d/min)", wood, 
+            Variables.CIVILIZATION_WOOD_GENERATED + carpentry * Variables.CIVILIZATION_WOOD_GENERATED_PER_CARPENTRY));
+        System.out.println(String.format("    Hierro....: %,-6d    (generación: %,d/min)", iron, 
+            Variables.CIVILIZATION_IRON_GENERATED + smithy * Variables.CIVILIZATION_IRON_GENERATED_PER_SMITHY));
+        System.out.println(String.format("    Maná......: %,-6d    (generación: %,d/min)", mana, 
+            magicTower * Variables.CIVILIZATION_MANA_GENERATED_PER_MAGIC_TOWER));
 
-    // Edificios con costes
-    System.out.println("\n  EDIFICIOS");
-    System.out.println(String.format("    Granjas........: %d    (coste: %dc, %dm, %dh)", farm, 
-        Variables.FOOD_COST_FARM, Variables.WOOD_COST_FARM, Variables.IRON_COST_FARM));
-    System.out.println(String.format("    Carpinterías...: %d    (coste: %dc, %dm, %dh)", carpentry, 
-        Variables.FOOD_COST_CARPENTRY, Variables.WOOD_COST_CARPENTRY, Variables.IRON_COST_CARPENTRY));
-    System.out.println(String.format("    Herrerías......: %d    (coste: %dc, %dm, %dh)", smithy, 
-        Variables.FOOD_COST_SMITHY, Variables.WOOD_COST_SMITHY, Variables.IRON_COST_SMITHY));
-    System.out.println(String.format("    Torres Mágicas.: %d    (coste: %dc, %dm, %dh)", magicTower, 
-        Variables.FOOD_COST_MAGICTOWER, Variables.WOOD_COST_MAGICTOWER, Variables.IRON_COST_MAGICTOWER));
-    System.out.println(String.format("    Iglesias.......: %d    (coste: %dc, %dm, %dh)", church, 
-        Variables.FOOD_COST_CHURCH, Variables.WOOD_COST_CHURCH, Variables.IRON_COST_CHURCH));
+        // Edificios con costes
+        System.out.println("\n  EDIFICIOS");
+        System.out.println(String.format("    Granjas........: %d    (coste: %dc, %dm, %dh)", farm, 
+            Variables.FOOD_COST_FARM, Variables.WOOD_COST_FARM, Variables.IRON_COST_FARM));
+        System.out.println(String.format("    Carpinterías...: %d    (coste: %dc, %dm, %dh)", carpentry, 
+            Variables.FOOD_COST_CARPENTRY, Variables.WOOD_COST_CARPENTRY, Variables.IRON_COST_CARPENTRY));
+        System.out.println(String.format("    Herrerías......: %d    (coste: %dc, %dm, %dh)", smithy, 
+            Variables.FOOD_COST_SMITHY, Variables.WOOD_COST_SMITHY, Variables.IRON_COST_SMITHY));
+        System.out.println(String.format("    Torres Mágicas.: %d    (coste: %dc, %dm, %dh)", magicTower, 
+            Variables.FOOD_COST_MAGICTOWER, Variables.WOOD_COST_MAGICTOWER, Variables.IRON_COST_MAGICTOWER));
+        System.out.println(String.format("    Iglesias.......: %d    (coste: %dc, %dm, %dh)", church, 
+            Variables.FOOD_COST_CHURCH, Variables.WOOD_COST_CHURCH, Variables.IRON_COST_CHURCH));
 
-    // Tecnologías con coste del siguiente nivel
-    System.out.println("\n  TECNOLOGÍAS");
-    int nextDefCost = Variables.UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + technologyDefense * Variables.UPGRADEPLUS_DEFENSE_TECHNOLOGY_IRON_COST;
-    int nextAtkCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + technologyAttack * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
-    System.out.println(String.format("    Ataque..: Nivel %d    (siguiente: %,d hierro)", technologyAttack, nextAtkCost));
-    System.out.println(String.format("    Defensa.: Nivel %d    (siguiente: %,d hierro)", technologyDefense, nextDefCost));
+        // Tecnologías con coste del siguiente nivel
+        System.out.println("\n  TECNOLOGÍAS");
+        int nextDefCost = Variables.UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + technologyDefense * Variables.UPGRADEPLUS_DEFENSE_TECHNOLOGY_IRON_COST;
+        int nextAtkCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + technologyAttack * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
+        System.out.println(String.format("    Ataque..: Nivel %d    (siguiente: %,d hierro)", technologyAttack, nextAtkCost));
+        System.out.println(String.format("    Defensa.: Nivel %d    (siguiente: %,d hierro)", technologyDefense, nextDefCost));
 
-    // Ejército
-    System.out.println("\n  EJÉRCITO");
-    System.out.println(String.format("    Swordsman..........: %,-4d", army.get(0).size()));
-    System.out.println(String.format("    Spearman...........: %,-4d", army.get(1).size()));
-    System.out.println(String.format("    Crossbow...........: %,-4d", army.get(2).size()));
-    System.out.println(String.format("    Cannon.............: %,-4d", army.get(3).size()));
-    System.out.println(String.format("    ArrowTower.........: %,-4d", army.get(4).size()));
-    System.out.println(String.format("    Catapult...........: %,-4d", army.get(5).size()));
-    System.out.println(String.format("    RocketLauncher.....: %,-4d", army.get(6).size()));
-    System.out.println(String.format("    Magician...........: %,-4d (requiere Torre Mágica)", army.get(7).size()));
-    System.out.println(String.format("    Priest.............: %,-4d (requiere Iglesia)", army.get(8).size()));
+        // Ejército
+        System.out.println("\n  EJÉRCITO");
+        System.out.println(String.format("    Swordsman..........: %,-4d", army.get(0).size()));
+        System.out.println(String.format("    Spearman...........: %,-4d", army.get(1).size()));
+        System.out.println(String.format("    Crossbow...........: %,-4d", army.get(2).size()));
+        System.out.println(String.format("    Cannon.............: %,-4d", army.get(3).size()));
+        System.out.println(String.format("    ArrowTower.........: %,-4d", army.get(4).size()));
+        System.out.println(String.format("    Catapult...........: %,-4d", army.get(5).size()));
+        System.out.println(String.format("    RocketLauncher.....: %,-4d", army.get(6).size()));
+        System.out.println(String.format("    Magician...........: %,-4d (requiere Torre Mágica)", army.get(7).size()));
+        System.out.println(String.format("    Priest.............: %,-4d (requiere Iglesia)", army.get(8).size()));
 
-    System.out.println("\n  BATALLAS LIBRADAS: " + battles);
-    System.out.println("=======================================================================");
+        System.out.println("\n  BATALLAS LIBRADAS: " + battles);
+        System.out.println("=======================================================================");
     }
 }
