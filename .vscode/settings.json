@@ -18,6 +18,7 @@
         "javafx/lib/javafx-swt.jar",
         "javafx/lib/jdk.jsobject.jar",
         "javafx/lib/jfx.incubator.input.jar",
-        "javafx/lib/jfx.incubator.richtext.jar"
+        "javafx/lib/jfx.incubator.richtext.jar",
+        "javafx/lib/mysql-connector-j-9.7.0.jar"
     ]
 }

@@ -30,9 +30,15 @@ public class EnemyArmyCreator extends TimerTask {
         int ironBase = (int)(Variables.IRON_BASE_ENEMY_ARMY * factor);
         
         // Valores mínimos para evitar ejércitos ridículos
-        foodBase = Math.max(foodBase, 80000);
-        woodBase = Math.max(woodBase, 200000);
-        ironBase = Math.max(ironBase, 50000);
+        if (foodBase < 80000) {
+            foodBase = 80000;
+        }
+        if (woodBase < 200000) {
+            woodBase = 200000;
+        }
+        if (ironBase < 50000) {
+            ironBase = 50000;
+        }
 
         ArrayList<MilitaryUnit> newEnemyArmy = new ArrayList<>();
         int[] probs = {35, 25, 20, 20}; // Swordsman, Spearman, Crossbow, Cannon
@@ -90,10 +96,10 @@ public class EnemyArmyCreator extends TimerTask {
 
         enemyList.clear();
         enemyList.addAll(newEnemyArmy);
-        System.out.println("⚔️ ¡Ejército enemigo se aproxima! Tamaño: " + newEnemyArmy.size());
+        System.out.println("Ejercito enemigo se aproxima! Tamaño: " + newEnemyArmy.size());
 
         Battle battle = new Battle(civilization.getArmy(), newEnemyArmy);
-        battle.startBattle();
+        battle.startBattle(civilization);  // <-- Se pasa 'civilization' para guardar la batalla en MySQL
         battleHistory.add(battle);
         if (battle.civilizationWon()) {
             int[] waste = battle.getWasteWoodIron();

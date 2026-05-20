@@ -4,11 +4,10 @@ import java.util.ArrayList;
 
 public class BattleStarter 
 {
-
     public static void startBattle(Civilization civ, ArrayList<MilitaryUnit> enemyArmy, ArrayList<Battle> history) 
     {
         Battle battle = new Battle(civ.getArmy(), enemyArmy);
-        battle.startBattle();
+        battle.startBattle(civ);  // <-- Se pasa 'civ' para guardar la batalla en MySQL
         history.add(battle);
         if (battle.civilizationWon()) 
         {
