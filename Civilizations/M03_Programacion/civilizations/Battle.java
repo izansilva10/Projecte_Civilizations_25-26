@@ -2,6 +2,9 @@ package civilizations;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Battle 
 {
@@ -19,7 +22,7 @@ public class Battle
     private int[] actualNumberUnitsCivilization;
     private int[] actualNumberUnitsEnemy;
     private Random rand;
-    private boolean civilizationHadNoArmy;  // Nuevo campo para recordar si la civilización no tenía ejército
+    private boolean civilizationHadNoArmy;
 
     public Battle(ArrayList<MilitaryUnit>[] civilizationArmyGroups, ArrayList<MilitaryUnit> enemyArmyList) 
     {
@@ -89,15 +92,15 @@ public class Battle
         return new int[]{food, wood, iron};
     }
 
-    public void startBattle() {
+    public void startBattle(Civilization civ) {
         // Si la civilización no tiene ejército, pierde automáticamente
         if (civilizationArmy.isEmpty()) 
         {
             civilizationHadNoArmy = true;
             battleDevelopment += "Battle Winned by Enemy (Civilization has no army)\n";
-            // Aseguramos que las pérdidas ponderadas den la victoria al enemigo
-            resourcesLooses[0][3] = 1000; // pérdidas altas para la civilización
-            resourcesLooses[1][3] = 0;    // pérdidas nulas para el enemigo
+            resourcesLooses[0][3] = 1000;
+            resourcesLooses[1][3] = 0;
+            saveBattleToDatabase(civ);
             return;
         }
 
@@ -107,6 +110,7 @@ public class Battle
             battleDevelopment += "Battle Winned by Civilization (Enemy has no army)\n";
             resourcesLooses[0][3] = 0;
             resourcesLooses[1][3] = 1000;
+            saveBattleToDatabase(civ);
             return;
         }
 
@@ -133,13 +137,20 @@ public class Battle
         }
 
         calculateResults();
+        saveBattleToDatabase(civ);
     }
 
     private void performAttack(ArrayList<MilitaryUnit> attackerArmy, ArrayList<MilitaryUnit> defenderArmy, boolean civilizationIsAttacker) 
     {
         if (attackerArmy.isEmpty() || defenderArmy.isEmpty()) return;
 
-        int group = civilizationIsAttacker ? getCivilizationGroupAttacker() : getEnemyGroupAttacker();
+        int group;
+        if (civilizationIsAttacker) {
+            group = getCivilizationGroupAttacker();
+        } else {
+            group = getEnemyGroupAttacker();
+        }
+
         MilitaryUnit attacker = getRandomUnitOfGroup(attackerArmy, group, civilizationIsAttacker);
         if (attacker == null) return;
 
@@ -152,8 +163,20 @@ public class Battle
 
         String attackerType = attacker.getClass().getSimpleName();
         String defenderType = defender.getClass().getSimpleName();
-        String attackerSide = civilizationIsAttacker ? "Civilization" : "Enemy";
-        String defenderSide = civilizationIsAttacker ? "Enemy" : "Civilization";
+
+        String attackerSide;
+        if (civilizationIsAttacker) {
+            attackerSide = "Civilization";
+        } else {
+            attackerSide = "Enemy";
+        }
+
+        String defenderSide;
+        if (civilizationIsAttacker) {
+            defenderSide = "Enemy";
+        } else {
+            defenderSide = "Civilization";
+        }
 
         battleDevelopment += "Attacks " + attackerSide + ": " + attackerType + " attacks " + defenderType + "\n";
         battleDevelopment += attackerType + " generates the damage = " + damage + "\n";
@@ -190,8 +213,11 @@ public class Battle
         ArrayList<MilitaryUnit> groupList = new ArrayList<MilitaryUnit>();
         for (MilitaryUnit u : army) 
         {
-            if (isCivilization && matchesCivilizationGroup(u, group)) groupList.add(u);
-            else if (!isCivilization && matchesEnemyGroup(u, group)) groupList.add(u);
+            if (isCivilization && matchesCivilizationGroup(u, group)) {
+                groupList.add(u);
+            } else if (!isCivilization && matchesEnemyGroup(u, group)) {
+                groupList.add(u);
+            }
         }
         if (groupList.isEmpty()) return null;
         return groupList.get(rand.nextInt(groupList.size()));
@@ -252,7 +278,13 @@ public class Battle
 
     private int getGroupDefender(ArrayList<MilitaryUnit> army, boolean isEnemy) 
     {
-        int[] counts = new int[isEnemy ? 4 : 9];
+        int[] counts;
+        if (isEnemy) {
+            counts = new int[4];
+        } else {
+            counts = new int[9];
+        }
+
         for (MilitaryUnit u : army) 
         {
             if (isEnemy) 
@@ -338,7 +370,13 @@ public class Battle
         int[] costWood = Variables.WOOD_COST_UNITS;
         int[] costIron = Variables.IRON_COST_UNITS;
 
-        int length = isCivilization ? 9 : 4;
+        int length;
+        if (isCivilization) {
+            length = 9;
+        } else {
+            length = 4;
+        }
+
         for (int i = 0; i < length; i++) {
             int lost = initialCounts[i] - finalCounts[i];
             if (lost > 0) {
@@ -349,6 +387,105 @@ public class Battle
         }
         return new int[]{foodLoss, woodLoss, ironLoss};
     }
+
+    // ---------- MÉTODO PARA GUARDAR EN BASE DE DATOS ----------
+    private void saveBattleToDatabase(Civilization civ) {
+        try (Connection conn = Database.getConnection()) {
+            int numBatalla = civ.getBattles() + 1;
+
+            // 1. Insertar en battle_stats
+            String insertBattle = "INSERT INTO battle_stats (civilization_id, num_battle, wood_acquired, iron_acquired) VALUES (1, ?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(insertBattle)) {
+                ps.setInt(1, numBatalla);
+                ps.setInt(2, wasteWoodIron[0]);
+                ps.setInt(3, wasteWoodIron[1]);
+                ps.executeUpdate();
+            }
+
+            // 2. Guardar log de batalla (battle_log)
+            String insertLog = "INSERT INTO battle_log (civilization_id, num_battle, num_line, log_entry) VALUES (1, ?, ?, ?)";
+            String[] lineas = battleDevelopment.split("\n");
+            for (int i = 0; i < lineas.length; i++) {
+                if (lineas[i].trim().length() == 0) continue;
+                try (PreparedStatement ps = conn.prepareStatement(insertLog)) {
+                    ps.setInt(1, numBatalla);
+                    ps.setInt(2, i + 1);
+                    ps.setString(3, lineas[i]);
+                    ps.executeUpdate();
+                }
+            }
+
+            // 3. Guardar estadísticas de unidades de la civilización (ataque)
+            String insertCivAttack = "INSERT INTO civilization_attack_stats (civilization_id, num_battle, type, initial, drops) VALUES (1, ?, ?, ?, ?)";
+            String[] tiposAtaque = {"Swordsman","Spearman","Crossbow","Cannon"};
+            for (int i = 0; i < 4; i++) {
+                int inicial = initialArmies[0][i];
+                int actual = actualNumberUnitsCivilization[i];
+                int bajas = inicial - actual;
+                try (PreparedStatement ps = conn.prepareStatement(insertCivAttack)) {
+                    ps.setInt(1, numBatalla);
+                    ps.setString(2, tiposAtaque[i]);
+                    ps.setInt(3, inicial);
+                    ps.setInt(4, bajas);
+                    ps.executeUpdate();
+                }
+            }
+
+            // 4. Guardar estadísticas de defensa de la civilización
+            String insertCivDefense = "INSERT INTO civilization_defense_stats (civilization_id, num_battle, type, initial, drops) VALUES (1, ?, ?, ?, ?)";
+            String[] tiposDefensa = {"ArrowTower","Catapult","RocketLauncherTower"};
+            for (int i = 0; i < 3; i++) {
+                int idx = i + 4;
+                int inicial = initialArmies[0][idx];
+                int actual = actualNumberUnitsCivilization[idx];
+                int bajas = inicial - actual;
+                try (PreparedStatement ps = conn.prepareStatement(insertCivDefense)) {
+                    ps.setInt(1, numBatalla);
+                    ps.setString(2, tiposDefensa[i]);
+                    ps.setInt(3, inicial);
+                    ps.setInt(4, bajas);
+                    ps.executeUpdate();
+                }
+            }
+
+            // 5. Guardar estadísticas de unidades especiales de la civilización
+            String insertCivSpecial = "INSERT INTO civilization_special_stats (civilization_id, num_battle, type, initial, drops) VALUES (1, ?, ?, ?, ?)";
+            String[] tiposEspecial = {"Magician","Priest"};
+            for (int i = 0; i < 2; i++) {
+                int idx = i + 7;
+                int inicial = initialArmies[0][idx];
+                int actual = actualNumberUnitsCivilization[idx];
+                int bajas = inicial - actual;
+                try (PreparedStatement ps = conn.prepareStatement(insertCivSpecial)) {
+                    ps.setInt(1, numBatalla);
+                    ps.setString(2, tiposEspecial[i]);
+                    ps.setInt(3, inicial);
+                    ps.setInt(4, bajas);
+                    ps.executeUpdate();
+                }
+            }
+
+            // 6. Guardar estadísticas de ataque del enemigo
+            String insertEnemy = "INSERT INTO enemy_attack_stats (civilization_id, num_battle, type, initial, drops) VALUES (1, ?, ?, ?, ?)";
+            for (int i = 0; i < 4; i++) {
+                int inicial = initialArmies[1][i];
+                int actual = actualNumberUnitsEnemy[i];
+                int bajas = inicial - actual;
+                try (PreparedStatement ps = conn.prepareStatement(insertEnemy)) {
+                    ps.setInt(1, numBatalla);
+                    ps.setString(2, tiposAtaque[i]);
+                    ps.setInt(3, inicial);
+                    ps.setInt(4, bajas);
+                    ps.executeUpdate();
+                }
+            }
+
+            System.out.println("Batalla guardada en MySQL.");
+        } catch (SQLException e) {
+            System.out.println("Error al guardar batalla: " + e.getMessage());
+        }
+    }
+    // ----------------------------------------------
 
     public String getBattleReport(int battleNumber) 
     {
