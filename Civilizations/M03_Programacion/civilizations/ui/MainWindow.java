@@ -14,6 +14,7 @@ public class MainWindow extends javafx.application.Application {
     private ResourcesPanel resourcesPanel;
     private ArmyPanel armyPanel;
     private ReportsPanel reportsPanel;
+    private CivilizationInfoPanel infoPanel;   // Nuevo panel
     private ArrayList<Battle> battleHistory;
     private ArrayList<MilitaryUnit> currentEnemyArmy;
     private Timer resourceTimer;
@@ -30,43 +31,44 @@ public class MainWindow extends javafx.application.Application {
         resourcesPanel = new ResourcesPanel(civilization, this::updateUI);
         armyPanel = new ArmyPanel(civilization, this::updateUI);
         reportsPanel = new ReportsPanel(battleHistory);
+        infoPanel = new CivilizationInfoPanel(civilization, this::updateUI);
 
         TabPane tabPane = new TabPane();
-        // Fondo del TabPane y color del texto de las pestañas (por si acaso)
         tabPane.setStyle("-fx-background-color: #2a2a2a; -fx-tab-text-fill: white;");
 
+        // Crear las pestañas (la de información será la primera)
+        Tab infoTab = new Tab("🏛️ Información", infoPanel.getPanel());
         Tab resourcesTab = new Tab("🏛️ Recursos y Edificios", resourcesPanel.getPanel());
         Tab armyTab = new Tab("⚔️ Ejército", armyPanel.getPanel());
         Tab reportsTab = new Tab("📜 Reportes", reportsPanel.getPanel());
 
-        // Estilo específico para cada pestaña: texto blanco, fondo oscuro, sin bordes laterales
         String tabStyle = "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-width: 0;";
+        infoTab.setStyle(tabStyle);
         resourcesTab.setStyle(tabStyle);
         armyTab.setStyle(tabStyle);
         reportsTab.setStyle(tabStyle);
 
+        infoTab.setClosable(false);
         resourcesTab.setClosable(false);
         armyTab.setClosable(false);
         reportsTab.setClosable(false);
 
-        tabPane.getTabs().addAll(resourcesTab, armyTab, reportsTab);
+        // Añadir en orden: Información primero
+        tabPane.getTabs().addAll(infoTab, resourcesTab, armyTab, reportsTab);
 
-        // Tamaño de ventana amplio para que los botones se vean bien
         Scene scene = new Scene(tabPane, 1400, 800);
         stage.setTitle("Civilizations");
         stage.setScene(scene);
         stage.show();
 
         startUIUpdater();
-        // Forzar actualización inicial para que los recursos aparezcan al instante
-        updateUI();
+        updateUI(); // actualización inicial
     }
 
-    // ================== MÉTODOS ORIGINALES (no modificados) ==================
+    // ================== MÉTODOS ORIGINALES (sin cambios) ==================
     private void startTimers() {
         resourceTimer = new Timer();
         resourceTimer.scheduleAtFixedRate(new ResourceGenerator(civilization), 0, 60000);
-
         enemyTimer = new Timer();
         enemyTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -165,6 +167,7 @@ public class MainWindow extends javafx.application.Application {
         if (resourcesPanel != null) resourcesPanel.updateUI();
         if (armyPanel != null) armyPanel.updateUI();
         if (reportsPanel != null) reportsPanel.updateUI();
+        if (infoPanel != null) infoPanel.updateUI();
     }
 
     @Override
