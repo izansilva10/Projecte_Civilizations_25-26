@@ -51,4 +51,3 @@ GitHub: https://github.com/izansilva10/Projecte_Civilizations_25-26.git
 ### Autores
 Jairo Garcia 
 Izan Silva
-Diego Aguilar
