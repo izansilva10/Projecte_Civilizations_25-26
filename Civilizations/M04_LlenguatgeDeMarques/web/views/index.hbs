@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home</title>
-  <link rel="icon" href="/portfolio.ico">
+  <title>Inicio - Civilizations</title>
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="icon" type="image/x-icon" href="/img/ico/favicon.ico" />
 </head>
@@ -12,31 +11,32 @@
   
   {{> header}}
 
- 
-
   <main class="container">
-    <H1>PROJECTE CIVILITZACIONS</H1>
+    <H1>PROYECTO CIVILIZATIONS</H1>
     
     <section id="info" class="game-info-section">
       <div class="card-header">
-        <h2>Sobre el Joc</h2>
+        <h2>Sobre el Juego</h2>
       </div>
       
       <div class="info-grid">
         <div class="info-text">
           <p>
-            <strong>Civilizations</strong> és un videojoc d'estratègia on hauràs de construir el teu propi imperi, 
-            administrar recursos clau com menjar, fusta, ferro i manà, i enfrontar-te a altres civilitzacions en batalles èpiques.
+            <strong>Civilizations</strong> es un juego de estrategia donde gestionas tu propia civilización. 
+            Administra recursos como <strong>comida, madera, hierro y maná</strong>, construye edificios que mejoran tu producción, 
+            investiga tecnologías de ataque y defensa, y recluta un ejército poderoso para defenderte de ataques enemigos.
           </p>
           <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+            Las batallas son automáticas y se resuelven con un sistema táctico basado en probabilidades. 
+            Cada enfrentamiento genera residuos que puedes recolectar si resultas victorioso. 
+            El objetivo es sobrevivir al mayor número de batallas posible mientras fortaleces tu imperio.
           </p>
         </div>
         
         <div class="screenshots-gallery">
           <div class="screenshot-container">
-            <img src="/imgs/screenshot1.png" alt="Captura de pantalla de la interfície" class="game-screenshot">
-            <p class="screenshot-caption">Gestió de recursos del teu imperi</p>
+            <img src="/imgs/screenshot1.png" alt="Captura de pantalla del juego" class="game-screenshot">
+            <p class="screenshot-caption">Gestión de recursos y construcción de edificios</p>
           </div>
         </div>
       </div>
@@ -44,45 +44,45 @@
 
     <section class="battles-section">
       <div class="card-header">
-        <h2>Últimes Batalles Realitzades</h2>
-        <p class="subtitle">Estat actual dels últims enfrontaments al servidor</p>
+        <h2>Últimas Batallas Realizadas</h2>
+        <p class="subtitle">Estado actual de los enfrentamientos en el servidor</p>
       </div>
 
       <div class="table-container">
         <table class="battles-table">
           <thead>
             <tr>
-              <th>ID Batalla</th>
-              <th>Data i Hora</th>
-              <th>Atacant</th>
+              <th>ID</th>
+              <th>Atacante</th>
               <th>Defensor</th>
-              <th>Resultat</th>
-              <th>Acció</th>
+              <th>Resultado</th>
+              <th>Acción</th>
             </tr>
           </thead>
           <tbody>
+            {{#each batallas}}
             <tr>
-              <td>#102</td>
-              <td>05/05/2026 15:30</td>
-              <td>Civilizació Alfa</td>
-              <td>Civilizació Beta</td>
-              <td><span class="badge victory">Victòria Atacant</span></td>
-              <td><a href="/informes?informe=102" class="btn-table">Veure Informe</a></td>
+              <td>#{{this.id}}</td>
+              <td>{{this.atacante}}</td>
+              <td>{{this.defensor}}</td>
+              <td>
+                <span class="badge {{#if (eq this.resultado 'victoria')}}victory{{else}}defeat{{/if}}">
+                  {{#if (eq this.resultado 'victoria')}}Victoria{{else}}Derrota{{/if}}
+                </span>
+              </td>
+              <td><a href="/informes?informe={{this.id}}" class="btn-table">Ver Informe</a></td>
             </tr>
+            {{else}}
             <tr>
-              <td>#101</td>
-              <td>04/05/2026 19:15</td>
-              <td>Grup C</td>
-              <td>Civilizació Gamma</td>
-              <td><span class="badge defeat">Victòria Defensor</span></td>
-              <td><a href="/informes?informe=101" class="btn-table">Veure Informe</a></td>
+              <td colspan="5">No hay batallas registradas.</td>
             </tr>
+            {{/each}}
           </tbody>
         </table>
       </div>
       
       <div class="center-btn">
-        <a href="/batalles" class="btn-secondary">Veure totes les batalles</a>
+        <a href="/batalles" class="btn-secondary">Ver todas las batallas</a>
       </div>
     </section>
 

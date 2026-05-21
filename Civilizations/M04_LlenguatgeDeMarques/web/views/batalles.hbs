@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Historial de Batalles</title>
+  <title>Historial de Batallas - Civilizations</title>
   <link rel="icon" type="image/x-icon" href="/img/ico/favicon.ico" />
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
@@ -12,12 +12,12 @@
   {{> header}}
 
   <main class="container">
-    <H1>BATALLES</H1>
+    <H1>BATALLAS</H1>
     
     <section class="card">
       <div class="card-header">
-        <h2>Registre Històric de Batalles</h2>
-        <span class="muted">Mostrant tots els enfrontaments</span>
+        <h2>Registro Histórico de Batallas</h2>
+        <span class="muted">Mostrando todos los enfrentamientos registrados</span>
       </div>
 
       <div class="table-container" style="margin-top: 20px;">
@@ -25,38 +25,30 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Data</th>
-              <th>Atacant</th>
+              <th>Atacante</th>
               <th>Defensor</th>
-              <th>Estat</th>
-              <th>Acció</th>
+              <th>Resultado</th>
+              <th>Acción</th>
             </tr>
           </thead>
           <tbody>
+            {{#each batallas}}
             <tr>
-              <td>#102</td>
-              <td>05/05/2026 15:30</td>
-              <td>Civilizació Alfa</td>
-              <td>Civilizació Beta</td>
-              <td><span class="badge victory">Victòria Atacant</span></td>
-              <td><a href="/informes?informe=102" class="btn-table">Detalls</a></td>
+              <td>#{{this.id}}</td>
+              <td>{{this.atacante}}</td>
+              <td>{{this.defensor}}</td>
+              <td>
+                <span class="badge {{#if (eq this.resultado 'victoria')}}victory{{else}}defeat{{/if}}">
+                  {{#if (eq this.resultado 'victoria')}}Victoria{{else}}Derrota{{/if}}
+                </span>
+              </td>
+              <td><a href="/informes?informe={{this.id}}" class="btn-table">Detalles</a></td>
             </tr>
+            {{else}}
             <tr>
-              <td>#101</td>
-              <td>04/05/2026 19:15</td>
-              <td>Grup C</td>
-              <td>Civilizació Gamma</td>
-              <td><span class="badge defeat">Victòria Defensor</span></td>
-              <td><a href="/informes?informe=101" class="btn-table">Detalls</a></td>
+              <td colspan="5">No hay batallas registradas.</td>
             </tr>
-            <tr>
-              <td>#100</td>
-              <td>02/05/2026 12:00</td>
-              <td>Civilizació Beta</td>
-              <td>Grup C</td>
-              <td><span class="badge victory">Victòria Atacant</span></td>
-              <td><a href="/informes?informe=100" class="btn-table">Detalls</a></td>
-            </tr>
+            {{/each}}
           </tbody>
         </table>
       </div>
