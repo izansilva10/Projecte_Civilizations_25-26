@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Civilitzacions</title>
+  <title>Civilización - Civilizations</title>
   <link rel="icon" type="image/x-icon" href="/img/ico/favicon.ico" />
   <link rel="stylesheet" href="/css/styles.css" />
 </head>
@@ -12,60 +12,72 @@
   {{> header}}
 
   <main class="container">
-    <H1>CIVILITZACIÓ</H1>
+    <H1>CIVILIZACIÓN</H1>
     
     <section class="card">
       <div class="card-header">
         <h2>Recursos Disponibles</h2>
-        <span class="muted">Actualitzat en temps real</span>
+        <span class="muted">Actualizado en tiempo real</span>
       </div>
       
+      {{#if civ}}
       <ul class="projects" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
         <li class="project">
           <div class="project-link" style="transform: none; cursor: default;">
             <div class="project-info">
-              <span class="project-title">🌾 Menjar</span>
-              <span class="project-desc">Necessari per alimentar tropes</span>
+              <span class="project-title">🌾 Comida</span>
+              <span class="project-desc">Necesaria para alimentar tropas</span>
             </div>
-            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">850</span>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">{{civ.food_amount}}</span>
           </div>
         </li>
         <li class="project">
           <div class="project-link" style="transform: none; cursor: default;">
             <div class="project-info">
-              <span class="project-title">🪵 Fusta</span>
-              <span class="project-desc">Construcció d'edificis i armes</span>
+              <span class="project-title">🪵 Madera</span>
+              <span class="project-desc">Construcción de edificios y armas</span>
             </div>
-            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">1,200</span>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">{{civ.wood_amount}}</span>
           </div>
         </li>
         <li class="project">
           <div class="project-link" style="transform: none; cursor: default;">
             <div class="project-info">
-              <span class="project-title">🪙 Ferro</span>
-              <span class="project-desc">Forja d'armadures i armament</span>
+              <span class="project-title">🪙 Hierro</span>
+              <span class="project-desc">Forja de armaduras y armamento</span>
             </div>
-            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">640</span>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">{{civ.iron_amount}}</span>
           </div>
         </li>
         <li class="project">
           <div class="project-link" style="transform: none; cursor: default;">
             <div class="project-info">
-              <span class="project-title">🔮 Manà</span>
-              <span class="project-desc">Energia per a encanteris i màgia</span>
+              <span class="project-title">🔮 Maná</span>
+              <span class="project-desc">Energía para hechizos y magia</span>
             </div>
-            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">999</span>
+            <span class="box-link" style="background: rgba(0, 255, 213, 0.1); border-color: #00ffd5; color: #00ffd5;">{{civ.mana_amount}}</span>
           </div>
         </li>
       </ul>
-    </section>
 
-    <section class="card">
-      <div class="card-header">
-        <h2>Estructures i Recerca</h2>
+      <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div>
+          <h3>Edificios</h3>
+          <p><strong>Granjas:</strong> {{civ.farm_counter}}</p>
+          <p><strong>Carpinterías:</strong> {{civ.carpentry_counter}}</p>
+          <p><strong>Herrerías:</strong> {{civ.smithy_counter}}</p>
+          <p><strong>Torres Mágicas:</strong> {{civ.magicTower_counter}}</p>
+          <p><strong>Iglesias:</strong> {{civ.church_counter}}</p>
+        </div>
+        <div>
+          <h3>Tecnología</h3>
+          <p><strong>Defensa:</strong> Nivel {{civ.technology_defense_level}}</p>
+          <p><strong>Ataque:</strong> Nivel {{civ.technology_attack_level}}</p>
+        </div>
       </div>
-      
-      <p class="muted" style="margin-top: 14px;">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+      {{else}}
+      <p class="muted">No se encontraron datos de la civilización.</p>
+      {{/if}}
     </section>
 
   </main>
