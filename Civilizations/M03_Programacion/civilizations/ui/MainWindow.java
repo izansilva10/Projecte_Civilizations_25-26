@@ -20,6 +20,7 @@ public class MainWindow extends javafx.application.Application {
     private Timer resourceTimer;
     private Timer enemyTimer;
 
+    @Override
     public void start(Stage stage) {
         civilization = Civilization.loadFromDatabase();
         battleHistory = new ArrayList<>();
@@ -33,18 +34,12 @@ public class MainWindow extends javafx.application.Application {
         infoPanel = new CivilizationInfoPanel(civilization, this::updateUI);
 
         TabPane tabPane = new TabPane();
-        tabPane.setStyle("-fx-background-color: #2a2a2a; -fx-tab-text-fill: white;");
+        tabPane.getStyleClass().add("tab-pane");
 
-        Tab infoTab = new Tab("🏛️ Información", infoPanel.getPanel());
-        Tab resourcesTab = new Tab("🏛️ Recursos y Edificios", resourcesPanel.getPanel());
-        Tab armyTab = new Tab("⚔️ Ejército", armyPanel.getPanel());
-        Tab reportsTab = new Tab("📜 Reportes", reportsPanel.getPanel());
-
-        String tabStyle = "-fx-background-color: #000000; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-border-width: 0;";
-        infoTab.setStyle(tabStyle);
-        resourcesTab.setStyle(tabStyle);
-        armyTab.setStyle(tabStyle);
-        reportsTab.setStyle(tabStyle);
+        Tab infoTab = new Tab("🏛️ INFORMACIÓN", infoPanel.getPanel());
+        Tab resourcesTab = new Tab("🏗️ EDIFICIOS", resourcesPanel.getPanel());
+        Tab armyTab = new Tab("⚔️ EJÉRCITO", armyPanel.getPanel());
+        Tab reportsTab = new Tab("📜 REPORTES", reportsPanel.getPanel());
 
         infoTab.setClosable(false);
         resourcesTab.setClosable(false);
@@ -53,7 +48,8 @@ public class MainWindow extends javafx.application.Application {
 
         tabPane.getTabs().addAll(infoTab, resourcesTab, armyTab, reportsTab);
 
-        Scene scene = new Scene(tabPane, 1400, 800);
+        Scene scene = new Scene(tabPane, 1440, 860);
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         stage.setTitle("Civilizations");
         stage.setScene(scene);
         stage.show();
@@ -67,6 +63,7 @@ public class MainWindow extends javafx.application.Application {
         resourceTimer.scheduleAtFixedRate(new ResourceGenerator(civilization), 0, 60000);
         enemyTimer = new Timer();
         enemyTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
             public void run() {
                 Platform.runLater(() -> createEnemyAndBattle());
             }
@@ -151,7 +148,7 @@ public class MainWindow extends javafx.application.Application {
 
     private void startUIUpdater() {
         AnimationTimer updater = new AnimationTimer() {
-
+            @Override
             public void handle(long now) {
                 updateUI();
             }
@@ -166,6 +163,7 @@ public class MainWindow extends javafx.application.Application {
         if (infoPanel != null) infoPanel.updateUI();
     }
 
+    @Override
     public void stop() {
         if (resourceTimer != null) resourceTimer.cancel();
         if (enemyTimer != null) enemyTimer.cancel();

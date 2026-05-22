@@ -12,23 +12,26 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import civilizations.Civilization;
 import civilizations.MilitaryUnit;
-
 import java.io.File;
 import java.util.ArrayList;
 
 public class CivilizationInfoPanel {
     private Civilization civilization;
     private Runnable updateUICallback;
-    
-    // Ruta de la imagen (dentro del proyecto, carpeta resources)
     private static final String IMAGE_PATH = "resources/image.png";
-    
+
+    // Recursos
     private Label foodValueLabel, woodValueLabel, ironValueLabel, manaValueLabel;
+    // Tecnologías
     private Label techDefLabel, techAtkLabel;
+    // Edificios
     private Label farmLabel, carpentryLabel, smithyLabel, magicTowerLabel, churchLabel;
+    // Ejército
     private Label[] unitCountLabels = new Label[9];
-    private final String[] unitNames = {"Espadachín", "Lancero", "Ballesta", "Cañón",
-                                        "Torre Flechas", "Catapulta", "Torre Cohete", "Mago", "Sacerdote"};
+    private final String[] unitNames = {
+        "Espadachín", "Lancero", "Ballesta", "Cañón",
+        "Torre de Flechas", "Catapulta", "Torre Cohete", "Mago", "Sacerdote"
+    };
 
     public CivilizationInfoPanel(Civilization civilization, Runnable updateUICallback) {
         this.civilization = civilization;
@@ -36,162 +39,207 @@ public class CivilizationInfoPanel {
     }
 
     public VBox getPanel() {
-        VBox panel = new VBox(10);
+        VBox panel = new VBox(15);
         panel.setPadding(new Insets(15));
         panel.setAlignment(Pos.TOP_CENTER);
-        
-        // --- CARGAR IMAGEN DE FONDO (OBLIGATORIA) ---
-        boolean imagenCargada = false;
+
+        // Fondo con imagen (si existe) o gradiente oscuro
         try {
             File imgFile = new File(IMAGE_PATH);
-            System.out.println("Buscando imagen en: " + imgFile.getAbsolutePath());
             if (imgFile.exists()) {
                 Image backgroundImage = new Image(imgFile.toURI().toString());
-                // Escala la imagen para que cubra todo el panel (100% ancho y alto)
                 BackgroundSize bgSize = new BackgroundSize(100, 100, true, true, false, true);
                 BackgroundImage bgImage = new BackgroundImage(backgroundImage,
                         BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                         BackgroundPosition.CENTER, bgSize);
                 panel.setBackground(new Background(bgImage));
-                imagenCargada = true;
-                System.out.println("✅ Fondo de imagen cargado correctamente: " + IMAGE_PATH);
             } else {
-                System.err.println("❌ No se encontró la imagen en: " + imgFile.getAbsolutePath());
+                panel.setStyle("-fx-background-color: #0f1720;");
             }
         } catch (Exception e) {
-            System.err.println("❌ Error al cargar la imagen: " + e.getMessage());
+            panel.setStyle("-fx-background-color: #0f1720;");
         }
-        
-        // Si no se pudo cargar la imagen, usamos un color de respaldo (rojo para que sea evidente)
-        if (!imagenCargada) {
-            panel.setStyle("-fx-background-color: #8b0000;"); // rojo para indicar error
-        }
-        
-        // --- BARRA DE RECURSOS (semirtransparente) ---
-        HBox resourcesBar = new HBox(25);
-        resourcesBar.setAlignment(Pos.CENTER);
-        resourcesBar.setStyle("-fx-background-color: rgba(112,128,144,0.7); -fx-padding: 12; -fx-border-radius: 8; -fx-border-color: #c0c0c0; -fx-border-width: 1;");
-        resourcesBar.setMaxWidth(Double.MAX_VALUE);
-        
-        String labelStyle = "-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 18px;";
-        
-        Label foodIcon = new Label("🍽️ Comida:"); foodIcon.setStyle(labelStyle);
-        foodValueLabel = new Label("0"); foodValueLabel.setStyle(labelStyle);
-        Label woodIcon = new Label("🪵 Madera:"); woodIcon.setStyle(labelStyle);
-        woodValueLabel = new Label("0"); woodValueLabel.setStyle(labelStyle);
-        Label ironIcon = new Label("⛏️ Hierro:"); ironIcon.setStyle(labelStyle);
-        ironValueLabel = new Label("0"); ironValueLabel.setStyle(labelStyle);
-        Label manaIcon = new Label("✦ Maná:"); manaIcon.setStyle(labelStyle);
-        manaValueLabel = new Label("0"); manaValueLabel.setStyle(labelStyle);
-        
-        resourcesBar.getChildren().addAll(foodIcon, foodValueLabel, woodIcon, woodValueLabel, ironIcon, ironValueLabel, manaIcon, manaValueLabel);
-        
-        // --- CONTENEDOR PRINCIPAL CON DOS COLUMNAS (fondos completamente transparentes) ---
+
+        // 1. Barra de recursos HUD
+        HBox resourcesBar = createResourceBar();
+
+        // 2. Contenedor de dos columnas
         HBox columnsContainer = new HBox(30);
         columnsContainer.setAlignment(Pos.TOP_CENTER);
         columnsContainer.setPadding(new Insets(10));
         columnsContainer.setMaxWidth(Double.MAX_VALUE);
-        columnsContainer.setStyle("-fx-background-color: transparent;");
-        
-        // COLUMNA IZQUIERDA (solo borde, sin relleno)
+
+        // --- COLUMNA IZQUIERDA: ESTADÍSTICAS Y EDIFICIOS ---
         VBox leftColumn = new VBox(15);
         leftColumn.setAlignment(Pos.TOP_CENTER);
-        leftColumn.setStyle("-fx-background-color: transparent; -fx-border-color: #5dade2; -fx-border-radius: 10; -fx-padding: 15; -fx-border-width: 2;");
-        leftColumn.setPrefWidth(400);
-        
-        Label leftTitle = new Label("📊 ESTADÍSTICAS");
-        leftTitle.setStyle("-fx-text-fill: #e6c97e; -fx-font-size: 18px; -fx-font-weight: bold;");
-        
-        GridPane leftGrid = new GridPane();
-        leftGrid.setHgap(20);
-        leftGrid.setVgap(12);
-        leftGrid.setPadding(new Insets(10));
-        leftGrid.setStyle("-fx-background-color: transparent;");
-        
-        // Tecnologías
+        leftColumn.setPrefWidth(450);
+        leftColumn.setMaxWidth(500);
+
+        // Panel de Tecnologías
+        VBox techCard = createInfoCard("⚙️ TECNOLOGÍAS");
+        GridPane techGrid = new GridPane();
+        techGrid.setHgap(20);
+        techGrid.setVgap(8);
+        techGrid.setPadding(new Insets(5));
+
         techDefLabel = new Label("0");
-        techDefLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+        techDefLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold;");
         techAtkLabel = new Label("0");
-        techAtkLabel.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-        leftGrid.add(new Label("🛡️ Tecnología Defensa:"), 0, 0);
-        leftGrid.add(techDefLabel, 1, 0);
-        leftGrid.add(new Label("⚔️ Tecnología Ataque:"), 0, 1);
-        leftGrid.add(techAtkLabel, 1, 1);
-        
-        Separator sep1 = new Separator();
-        sep1.setStyle("-fx-background-color: #5dade2;");
-        leftGrid.add(sep1, 0, 2);
-        GridPane.setColumnSpan(sep1, 2);
-        
-        // Edificios
-        farmLabel = new Label("0"); carpentryLabel = new Label("0"); smithyLabel = new Label("0");
-        magicTowerLabel = new Label("0"); churchLabel = new Label("0");
-        leftGrid.add(new Label("🏚️ Granjas:"), 0, 3);
-        leftGrid.add(farmLabel, 1, 3);
-        leftGrid.add(new Label("🪚 Carpinterías:"), 0, 4);
-        leftGrid.add(carpentryLabel, 1, 4);
-        leftGrid.add(new Label("⚒️ Herrerías:"), 0, 5);
-        leftGrid.add(smithyLabel, 1, 5);
-        leftGrid.add(new Label("🔮 Torres Mágicas:"), 0, 6);
-        leftGrid.add(magicTowerLabel, 1, 6);
-        leftGrid.add(new Label("⛪ Iglesias:"), 0, 7);
-        leftGrid.add(churchLabel, 1, 7);
-        
-        leftColumn.getChildren().addAll(leftTitle, leftGrid);
-        
-        // COLUMNA DERECHA (solo borde)
+        techAtkLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold;");
+
+        techGrid.add(new Label("🛡️ Defensa"), 0, 0);
+        techGrid.add(techDefLabel, 1, 0);
+        techGrid.add(new Label("⚔️ Ataque"), 0, 1);
+        techGrid.add(techAtkLabel, 1, 1);
+        techCard.getChildren().add(techGrid);
+
+        // Panel de Edificios
+        VBox buildCard = createInfoCard("🏗️ EDIFICIOS");
+        GridPane buildGrid = new GridPane();
+        buildGrid.setHgap(20);
+        buildGrid.setVgap(6);
+        buildGrid.setPadding(new Insets(5));
+
+        farmLabel = new Label("0"); carpentryLabel = new Label("0");
+        smithyLabel = new Label("0"); magicTowerLabel = new Label("0");
+        churchLabel = new Label("0");
+
+        buildGrid.add(new Label("🏚️ Granjas"), 0, 0);
+        buildGrid.add(farmLabel, 1, 0);
+        buildGrid.add(new Label("🪚 Carpinterías"), 0, 1);
+        buildGrid.add(carpentryLabel, 1, 1);
+        buildGrid.add(new Label("⚒️ Herrerías"), 0, 2);
+        buildGrid.add(smithyLabel, 1, 2);
+        buildGrid.add(new Label("🔮 Torres Mágicas"), 0, 3);
+        buildGrid.add(magicTowerLabel, 1, 3);
+        buildGrid.add(new Label("⛪ Iglesias"), 0, 4);
+        buildGrid.add(churchLabel, 1, 4);
+
+        buildCard.getChildren().add(buildGrid);
+
+        leftColumn.getChildren().addAll(techCard, buildCard);
+
+        // --- COLUMNA DERECHA: EJÉRCITO ---
         VBox rightColumn = new VBox(15);
         rightColumn.setAlignment(Pos.TOP_CENTER);
-        rightColumn.setStyle("-fx-background-color: transparent; -fx-border-color: #5dade2; -fx-border-radius: 10; -fx-padding: 15; -fx-border-width: 2;");
-        rightColumn.setPrefWidth(400);
-        
-        Label rightTitle = new Label("⚔️ EJÉRCITO ACTUAL");
-        rightTitle.setStyle("-fx-text-fill: #e6c97e; -fx-font-size: 18px; -fx-font-weight: bold;");
-        
+        rightColumn.setPrefWidth(450);
+        rightColumn.setMaxWidth(500);
+
+        // Panel de Ejército
+        VBox armyCard = createInfoCard("⚔️ EJÉRCITO");
         GridPane armyGrid = new GridPane();
         armyGrid.setHgap(20);
-        armyGrid.setVgap(10);
-        armyGrid.setPadding(new Insets(10));
-        armyGrid.setStyle("-fx-background-color: transparent;");
-        
+        armyGrid.setVgap(6);
+        armyGrid.setPadding(new Insets(5));
+
         for (int i = 0; i < 9; i++) {
             Label nameLabel = new Label(unitNames[i]);
-            nameLabel.setStyle("-fx-text-fill: #aaccff; -fx-font-size: 15px;");
+            nameLabel.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 15px;");
             unitCountLabels[i] = new Label("0");
-            unitCountLabels[i].setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+            unitCountLabels[i].setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold;");
             armyGrid.add(nameLabel, 0, i);
             armyGrid.add(unitCountLabels[i], 1, i);
         }
-        
-        rightColumn.getChildren().addAll(rightTitle, armyGrid);
-        
+
+        armyCard.getChildren().add(armyGrid);
+        rightColumn.getChildren().add(armyCard);
+
+        // Agregar columnas al contenedor
         columnsContainer.getChildren().addAll(leftColumn, rightColumn);
-        
-        // ScrollPane transparente
+
+        // 3. ScrollPane para contenido
         ScrollPane scrollPane = new ScrollPane(columnsContainer);
         scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         scrollPane.setStyle("-fx-background: transparent; -fx-background-color: transparent;");
         scrollPane.setPrefHeight(600);
-        
+        VBox.setVgrow(scrollPane, Priority.ALWAYS);
+
         panel.getChildren().addAll(resourcesBar, scrollPane);
         return panel;
     }
-    
+
+    // ==========================================
+    // BARRA DE RECURSOS HUD
+    // ==========================================
+    private HBox createResourceBar() {
+        HBox bar = new HBox(25);
+        bar.setAlignment(Pos.CENTER);
+        bar.getStyleClass().add("resource-bar");
+        bar.setMaxWidth(Double.MAX_VALUE);
+
+        foodValueLabel = new Label("0");
+        woodValueLabel = new Label("0");
+        ironValueLabel = new Label("0");
+        manaValueLabel = new Label("0");
+
+        bar.getChildren().addAll(
+            createResourceCard("Comida", "🍽️", foodValueLabel),
+            createResourceCard("Madera", "🪵", woodValueLabel),
+            createResourceCard("Hierro", "⛏️", ironValueLabel),
+            createResourceCard("Maná", "✦", manaValueLabel)
+        );
+        return bar;
+    }
+
+    private HBox createResourceCard(String name, String icon, Label valueLabel) {
+        HBox card = new HBox(8);
+        card.setAlignment(Pos.CENTER_LEFT);
+        card.getStyleClass().add("resource-card");
+
+        Label iconLabel = new Label(icon);
+        iconLabel.getStyleClass().add("resource-icon");
+
+        VBox infoBox = new VBox(2);
+        infoBox.setAlignment(Pos.CENTER_LEFT);
+
+        Label nameLabel = new Label(name);
+        nameLabel.getStyleClass().add("resource-name");
+
+        valueLabel.getStyleClass().add("resource-value");
+
+        infoBox.getChildren().addAll(nameLabel, valueLabel);
+        card.getChildren().addAll(iconLabel, infoBox);
+        return card;
+    }
+
+    // ==========================================
+    // TARJETA DE INFORMACIÓN (PANEL ESTILO)
+    // ==========================================
+    private VBox createInfoCard(String title) {
+        VBox card = new VBox(10);
+        card.setPadding(new Insets(15));
+        card.setStyle("-fx-background-color: #1c2833; -fx-border-color: #4ea5d9; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 8, 0, 0, 4);");
+
+        Label titleLabel = new Label(title);
+        titleLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 0 0 8 0; -fx-border-color: #4ea5d9; -fx-border-width: 0 0 1 0;");
+
+        card.getChildren().add(titleLabel);
+        return card;
+    }
+
+    // ==========================================
+    // ACTUALIZACIÓN DE UI
+    // ==========================================
     public void updateUI() {
+        // Recursos
         foodValueLabel.setText(String.format("%,d", civilization.getFood()));
         woodValueLabel.setText(String.format("%,d", civilization.getWood()));
         ironValueLabel.setText(String.format("%,d", civilization.getIron()));
         manaValueLabel.setText(String.format("%,d", civilization.getMana()));
-        
+
+        // Tecnologías
         techDefLabel.setText(String.valueOf(civilization.getTechnologyDefense()));
         techAtkLabel.setText(String.valueOf(civilization.getTechnologyAttack()));
-        
+
+        // Edificios
         farmLabel.setText(String.valueOf(civilization.getFarm()));
         carpentryLabel.setText(String.valueOf(civilization.getCarpentry()));
         smithyLabel.setText(String.valueOf(civilization.getSmithy()));
         magicTowerLabel.setText(String.valueOf(civilization.getMagicTower()));
         churchLabel.setText(String.valueOf(civilization.getChurch()));
-        
+
+        // Ejército
         ArrayList<MilitaryUnit>[] armyGroups = civilization.getArmy();
         for (int i = 0; i < 9; i++) {
             int count = armyGroups[i].size();

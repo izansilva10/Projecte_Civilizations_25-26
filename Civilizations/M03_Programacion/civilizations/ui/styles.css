@@ -1,0 +1,389 @@
+/* =============================================
+   TEMA PRINCIPAL - Civilizations
+   Estilo: RTS / Estrategia (Civilization VI, Age of Empires IV)
+   ============================================= */
+
+* {
+    -fx-font-family: "Segoe UI", "System", sans-serif;
+}
+
+.root {
+    -fx-background: linear-gradient(from 0% 0% to 100% 100%, #0f1720, #16202a);
+}
+
+/* =============================================
+   PESTAÑAS - Estilo launcher de videojuego
+   ============================================= */
+
+.tab-pane {
+    -fx-tab-min-width: 160px;
+    -fx-tab-max-width: 200px;
+    -fx-tab-min-height: 48px;
+    -fx-tab-max-height: 48px;
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 4 0;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 8 16 0 16;
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-color: #4ea5d9;
+}
+
+.tab {
+    -fx-background-color: #1c2833;
+    -fx-background-radius: 8 8 0 0;
+    -fx-padding: 0 24;
+    -fx-cursor: hand;
+    -fx-transition: all 0.2s;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 2);
+}
+
+.tab:selected {
+    -fx-background-color: #0f1720;
+    -fx-border-color: #4ea5d9 #4ea5d9 transparent #4ea5d9;
+    -fx-border-width: 2 2 0 2;
+    -fx-border-radius: 8 8 0 0;
+}
+
+.tab:hover {
+    -fx-background-color: #2c3e50;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #b2bec3;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 8;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: #ecf0f1;
+}
+
+/* =============================================
+   BARRA DE RECURSOS - HUD Premium
+   ============================================= */
+
+.resource-bar {
+    -fx-background-color: #0f1720;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 0 0 2 0;
+    -fx-padding: 12 24;
+    -fx-spacing: 32;
+    -fx-alignment: center;
+}
+
+.resource-card {
+    -fx-background-color: #1c2833;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 6 18 6 14;
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 8, 0, 0, 4);
+    -fx-min-width: 180px;
+}
+
+.resource-card:hover {
+    -fx-background-color: #2c3e50;
+    -fx-border-color: #5dade2;
+    -fx-effect: dropshadow(three-pass-box, rgba(78, 165, 217, 0.3), 12, 0, 0, 6);
+}
+
+.resource-icon {
+    -fx-fit-width: 32px;
+    -fx-fit-height: 32px;
+}
+
+.resource-name {
+    -fx-text-fill: #b2bec3;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.resource-value {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Courier New", monospace;
+}
+
+/* =============================================
+   PANELES - Tarjetas estratégicas
+   ============================================= */
+
+.panel-card {
+    -fx-background-color: #1c2833;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 14, 0, 0, 6);
+    -fx-background-image: url("/img/panel-bg.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-opacity: 0.95;
+}
+
+.panel-card .title {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 12 0;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 0 0 1 0;
+    -fx-background-color: rgba(15, 23, 32, 0.6);
+    -fx-padding: 8 12;
+    -fx-border-radius: 6 6 0 0;
+    -fx-background-radius: 6 6 0 0;
+}
+
+.panel-card .subtitle {
+    -fx-text-fill: #b2bec3;
+    -fx-font-size: 14px;
+    -fx-font-style: italic;
+}
+
+/* =============================================
+   BOTONES - Estilo carta/botón RTS
+   ============================================= */
+
+.button {
+    -fx-background-color: #1c2833;
+    -fx-text-fill: #ecf0f1;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 12 24;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 6, 0, 0, 4);
+    -fx-transition: all 0.2s;
+}
+
+.button:hover {
+    -fx-background-color: #2c3e50;
+    -fx-border-color: #5dade2;
+    -fx-effect: dropshadow(three-pass-box, rgba(78, 165, 217, 0.4), 14, 0, 0, 8);
+}
+
+.button:pressed {
+    -fx-background-color: #0f1720;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 2, 0, 0, 1);
+}
+
+.button-build {
+    -fx-min-width: 200px;
+    -fx-min-height: 120px;
+    -fx-background-color: #1c2833;
+    -fx-border-color: #4ea5d9;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-background-image: url("/img/buildings/bg.png");
+    -fx-background-size: cover;
+}
+
+.button-build:hover {
+    -fx-background-color: #2c3e50;
+    -fx-border-color: #5dade2;
+    -fx-effect: dropshadow(three-pass-box, rgba(78, 165, 217, 0.4), 18, 0, 0, 10);
+}
+
+.button-tech {
+    -fx-min-width: 240px;
+    -fx-min-height: 80px;
+    -fx-background-color: #1c2833;
+    -fx-border-color: #d4ac0d;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+.button-tech:hover {
+    -fx-background-color: #2c3e50;
+    -fx-border-color: #f1c40f;
+    -fx-effect: dropshadow(three-pass-box, rgba(212, 172, 13, 0.4), 18, 0, 0, 10);
+}
+
+.button-attack {
+    -fx-background-color: #7b1a1a;
+    -fx-border-color: #c0392b;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-background-image: url("/img/units/attack-bg.png");
+    -fx-background-size: cover;
+}
+
+.button-attack:hover {
+    -fx-background-color: #922b21;
+    -fx-border-color: #e74c3c;
+    -fx-effect: dropshadow(three-pass-box, rgba(192, 57, 43, 0.5), 18, 0, 0, 10);
+}
+
+.button-defense {
+    -fx-background-color: #1a3d5c;
+    -fx-border-color: #2980b9;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-background-image: url("/img/units/defense-bg.png");
+    -fx-background-size: cover;
+}
+
+.button-defense:hover {
+    -fx-background-color: #2471a3;
+    -fx-border-color: #3498db;
+    -fx-effect: dropshadow(three-pass-box, rgba(41, 128, 185, 0.5), 18, 0, 0, 10);
+}
+
+.button-special {
+    -fx-background-color: #6a5a0a;
+    -fx-border-color: #d4ac0d;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-background-image: url("/img/units/special-bg.png");
+    -fx-background-size: cover;
+}
+
+.button-special:hover {
+    -fx-background-color: #9a7d0a;
+    -fx-border-color: #f1c40f;
+    -fx-effect: dropshadow(three-pass-box, rgba(212, 172, 13, 0.5), 18, 0, 0, 10);
+}
+
+/* =============================================
+   MARCADOR DE BATALLAS - Scoreboard estilo RTS
+   ============================================= */
+
+.scoreboard {
+    -fx-background-color: #0f1720;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 2;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 20 36;
+    -fx-spacing: 28;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 24, 0, 0, 12);
+    -fx-max-width: 700;
+    -fx-background-image: url("/img/scoreboard-bg.png");
+    -fx-background-size: cover;
+}
+
+.scoreboard .team-name {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.scoreboard .score {
+    -fx-font-size: 48px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Courier New", monospace;
+}
+
+.scoreboard .score.victory {
+    -fx-text-fill: #2ecc71;
+}
+
+.scoreboard .score.defeat {
+    -fx-text-fill: #e74c3c;
+}
+
+.scoreboard .vs {
+    -fx-text-fill: #b2bec3;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* =============================================
+   ÁREA DE LOG - Consola militar
+   ============================================= */
+
+.log-area {
+    -fx-background-color: #0f1720;
+    -fx-text-fill: #b2bec3;
+    -fx-font-family: "Courier New", monospace;
+    -fx-font-size: 14px;
+    -fx-padding: 16;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.8), 8, 0, 0, 4);
+    -fx-background-image: url("/img/log-bg.png");
+    -fx-background-size: cover;
+}
+
+.log-area .log-title {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 8 0;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* =============================================
+   SEPARADORES Y MISCELÁNEA
+   ============================================= */
+
+.separator {
+    -fx-background-color: #4ea5d9;
+    -fx-opacity: 0.3;
+}
+
+.badge {
+    -fx-padding: 4 16;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+.badge.victory {
+    -fx-background-color: rgba(46, 204, 113, 0.2);
+    -fx-text-fill: #2ecc71;
+    -fx-border-color: #2ecc71;
+}
+
+.badge.defeat {
+    -fx-background-color: rgba(231, 76, 60, 0.2);
+    -fx-text-fill: #e74c3c;
+    -fx-border-color: #e74c3c;
+}
+
+/* =============================================
+   GRID DE ESTADÍSTICAS - Tabla militar
+   ============================================= */
+
+.stats-grid {
+    -fx-background-color: #0f1720;
+    -fx-border-color: #4ea5d9;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 14;
+    -fx-background-image: url("/img/stats-bg.png");
+    -fx-background-size: cover;
+}
+
+.stats-grid .label {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 14px;
+}
+
+.stats-grid .label.header {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
