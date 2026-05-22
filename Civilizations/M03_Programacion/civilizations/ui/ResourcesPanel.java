@@ -89,29 +89,40 @@ public class ResourcesPanel {
         return ResourceBar.create(civilization, foodValueLabel, woodValueLabel, ironValueLabel, manaValueLabel);
     }
 
-    private Button createBuildButton(String text, String costDetails) {
-        Button btn = new Button();
-        btn.getStyleClass().addAll("button", "button-build");
-        btn.setMinWidth(200);
-        btn.setPrefWidth(220);
-        btn.setMinHeight(140);
-        btn.setPrefHeight(140);
+    private Button createBuildButton(String name, String costDetails) {
+    Button btn = new Button();
+    btn.getStyleClass().addAll("button", "button-build");
+    btn.setMinWidth(160);
+    btn.setPrefWidth(180);
+    btn.setMinHeight(100);
+    btn.setPrefHeight(100);
 
-        VBox content = new VBox(6);
-        content.setAlignment(Pos.CENTER);
+    VBox content = new VBox(4);
+    content.setAlignment(Pos.CENTER);
 
-        Label nameLabel = new Label(text);
-        nameLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 16px; -fx-font-weight: bold;");
+    // Nombre del edificio (con emoji o sin él)
+    Label nameLabel = new Label(name);
+    nameLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 16px; -fx-font-weight: bold;");
 
-        Label costLabel = new Label(costDetails);
-        costLabel.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 12px; -fx-text-alignment: center;");
-        costLabel.setWrapText(true);
-
-        content.getChildren().addAll(nameLabel, costLabel);
-        btn.setGraphic(content);
-        btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        return btn;
+    // Costes formateados en una línea más limpia
+    // Ejemplo: "Comida: 5,000 | Madera: 10,000 | Hierro: 12,000"
+    String[] lines = costDetails.split("\n");
+    StringBuilder costLine = new StringBuilder();
+    for (int i = 0; i < lines.length; i++) {
+        if (i > 0) costLine.append(" | ");
+        costLine.append(lines[i].replace("Comida:", "C:").replace("Madera:", "M:").replace("Hierro:", "H:"));
     }
+
+    Label costLabel = new Label(costLine.toString());
+    costLabel.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 11px;");
+    costLabel.setWrapText(true);
+    costLabel.setAlignment(Pos.CENTER);
+
+    content.getChildren().addAll(nameLabel, costLabel);
+    btn.setGraphic(content);
+    btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+    return btn;
+}
 
     private void updateTechButtons() {
         int defLevel = civilization.getTechnologyDefense();
