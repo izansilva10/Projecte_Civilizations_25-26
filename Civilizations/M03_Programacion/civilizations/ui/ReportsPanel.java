@@ -5,10 +5,10 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import civilizations.Battle;
+import civilizations.Civilization;
+
 import java.util.ArrayList;
 
 public class ReportsPanel {
@@ -58,45 +58,8 @@ public class ReportsPanel {
     }
 
     private HBox createResourceBar() {
-        HBox bar = new HBox(25);
-        bar.setAlignment(Pos.CENTER);
-        bar.getStyleClass().add("resource-bar");
-        bar.setMaxWidth(Double.MAX_VALUE);
-
-        foodValueLabel = new Label("0");
-        woodValueLabel = new Label("0");
-        ironValueLabel = new Label("0");
-        manaValueLabel = new Label("0");
-
-        bar.getChildren().addAll(
-            createResourceCard("Comida", "🍽️", foodValueLabel, "/img/resources/food.png"),
-            createResourceCard("Madera", "🪵", woodValueLabel, "/img/resources/wood.png"),
-            createResourceCard("Hierro", "⛏️", ironValueLabel, "/img/resources/iron.png"),
-            createResourceCard("Maná", "✦", manaValueLabel, "/img/resources/mana.png")
-        );
-        return bar;
-    }
-
-    private HBox createResourceCard(String name, String icon, Label valueLabel, String imagePath) {
-        HBox card = new HBox(8);
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.getStyleClass().add("resource-card");
-
-        ImageView iconView = new ImageView(new Image(getClass().getResourceAsStream(imagePath)));
-        iconView.setFitWidth(28);
-        iconView.setFitHeight(28);
-
-        VBox infoBox = new VBox(2);
-        infoBox.setAlignment(Pos.CENTER_LEFT);
-
-        Label nameLabel = new Label(name);
-        nameLabel.getStyleClass().add("resource-name");
-
-        valueLabel.getStyleClass().add("resource-value");
-
-        infoBox.getChildren().addAll(nameLabel, valueLabel);
-        card.getChildren().addAll(iconView, infoBox);
-        return card;
+        Civilization civilization = null;
+        return ResourceBar.create(civilization, foodValueLabel, woodValueLabel, ironValueLabel, manaValueLabel);
     }
 
     private HBox createScoreboard() {
@@ -175,12 +138,54 @@ public class ReportsPanel {
         contentBox.getChildren().clear();
 
         Label header = new Label("⚔️ INFORME DE BATALLA #" + battleNum);
-        header.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 0 0 10 0;");
+        header.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 0 0 10 0; -fx-border-color: #4ea5d9; -fx-border-width: 0 0 1 0;");
         contentBox.getChildren().add(header);
 
         String report = battle.getBattleReport(battleNum);
         String[] lines = report.split("\n");
 
+        ArrayList<String> civUnitsList = new ArrayList<>();
+        ArrayList<String> eneUnitsList = new ArrayList<>();
+        String civCost = "", eneCost = "", civLoss = "", eneLoss = "", waste = "", result = "";
+        boolean inStats = false;
+
+        for (String line : lines) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            if (line.contains("BATTLE STATISTICS")) {
+                inStats = true;
+                continue;
+            }
+            if (inStats && line.contains("*****")) break;
+
+            if (inStats && !line.contains("Army planet")) {
+                String[] parts = line.split("\\s+");
+                if (parts.length >= 5) {
+                    civUnitsList.add(parts[0] + ": " + parts[1] + " (bajas: " + parts[2] + ")");
+                    eneUnitsList.add(parts[3] + ": " + parts[4] + " (bajas: " + (parts.length > 5 ? parts[5] : "0") + ")");
+                } else if (parts.length == 3) {
+                    civUnitsList.add(parts[0] + ": " + parts[1] + " (bajas: " + parts[2] + ")");
+                }
+                continue;
+            }
+
+            if (line.contains("Cost Army Civilization:")) {
+                civCost = line.replace("Cost Army Civilization:", "").trim();
+            } else if (line.contains("Cost Army Enemy:")) {
+                eneCost = line.replace("Cost Army Enemy:", "").trim();
+            } else if (line.contains("Losses Army Civilization:")) {
+                civLoss = line.replace("Losses Army Civilization:", "").trim();
+            } else if (line.contains("Losses Army Enemy:")) {
+                eneLoss = line.replace("Losses Army Enemy:", "").trim();
+            } else if (line.contains("Waste Generated:")) {
+                waste = line.replace("Waste Generated:", "").trim();
+            } else if (line.contains("Battle Winned by")) {
+                result = line.trim();
+            }
+        }
+
+        // --- ESTADÍSTICAS DE UNIDADES ---
         GridPane statsGrid = new GridPane();
         statsGrid.setHgap(30);
         statsGrid.setVgap(8);
@@ -196,62 +201,30 @@ public class ReportsPanel {
         statsGrid.add(eneHeader, 1, 0);
 
         VBox civUnitsBox = new VBox(5);
+        for (String unit : civUnitsList) {
+            Label label = new Label(unit);
+            label.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 14px;");
+            civUnitsBox.getChildren().add(label);
+        }
         VBox eneUnitsBox = new VBox(5);
-        boolean inStats = false;
-
-        for (String line : lines) {
-            if (line.contains("BATTLE STATISTICS")) {
-                inStats = true;
-                continue;
-            }
-            if (inStats && line.contains("*****")) break;
-            if (inStats && line.trim().length() > 0 && !line.contains("Army planet")) {
-                String[] parts = line.trim().split("\\s+");
-                if (parts.length >= 5) {
-                    String unitCiv = parts[0];
-                    String countCiv = parts[1];
-                    String dropsCiv = parts[2];
-                    String unitEne = parts[3];
-                    String countEne = parts[4];
-                    String dropsEne = parts.length > 5 ? parts[5] : "0";
-
-                    Label civLine = new Label(unitCiv + ": " + countCiv + " (bajas: " + dropsCiv + ")");
-                    civLine.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 14px;");
-                    Label eneLine = new Label(unitEne + ": " + countEne + " (bajas: " + dropsEne + ")");
-                    eneLine.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 14px;");
-                    civUnitsBox.getChildren().add(civLine);
-                    eneUnitsBox.getChildren().add(eneLine);
-                } else if (parts.length == 3) {
-                    String unitCiv = parts[0];
-                    String countCiv = parts[1];
-                    String dropsCiv = parts[2];
-                    Label civLine = new Label(unitCiv + ": " + countCiv + " (bajas: " + dropsCiv + ")");
-                    civLine.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 14px;");
-                    civUnitsBox.getChildren().add(civLine);
-                }
-            }
+        for (String unit : eneUnitsList) {
+            Label label = new Label(unit);
+            label.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 14px;");
+            eneUnitsBox.getChildren().add(label);
         }
 
         statsGrid.add(civUnitsBox, 0, 1);
         statsGrid.add(eneUnitsBox, 1, 1);
+        contentBox.getChildren().add(statsGrid);
 
-        String civCost = "", eneCost = "", civLoss = "", eneLoss = "", waste = "", result = "";
-
-        for (String line : lines) {
-            if (line.contains("Cost Army Civilization:")) civCost = line.replace("Cost Army Civilization:", "").trim();
-            else if (line.contains("Cost Army Enemy:")) eneCost = line.replace("Cost Army Enemy:", "").trim();
-            else if (line.contains("Losses Army Civilization:")) civLoss = line.replace("Losses Army Civilization:", "").trim();
-            else if (line.contains("Losses Army Enemy:")) eneLoss = line.replace("Losses Army Enemy:", "").trim();
-            else if (line.contains("Waste Generated:")) waste = line.replace("Waste Generated:", "").trim();
-            else if (line.contains("Battle Winned by")) result = line.trim();
-        }
-
+        // --- COSTES Y PÉRDIDAS ---
         HBox costsBox = new HBox(20);
         costsBox.setAlignment(Pos.CENTER);
         costsBox.getChildren().addAll(
             createInfoBox("COSTES INICIALES", civCost, "#4ea5d9"),
             createInfoBox("COSTES INICIALES", eneCost, "#e74c3c")
         );
+        contentBox.getChildren().add(costsBox);
 
         HBox lossesBox = new HBox(20);
         lossesBox.setAlignment(Pos.CENTER);
@@ -259,13 +232,18 @@ public class ReportsPanel {
             createInfoBox("PÉRDIDAS", civLoss, "#4ea5d9"),
             createInfoBox("PÉRDIDAS", eneLoss, "#e74c3c")
         );
+        contentBox.getChildren().add(lossesBox);
 
-        VBox wasteBox = createInfoBox("RESIDUOS OBTENIDOS", waste, "#d4ac0d");
+        // --- RESIDUOS Y RESULTADO ---
+        VBox wasteBox = createInfoBox("RECURSOS GANADOS", waste, "#d4ac0d");
         wasteBox.setAlignment(Pos.CENTER);
+        contentBox.getChildren().add(wasteBox);
 
         VBox resultBox = createInfoBox("RESULTADO DE LA BATALLA", result, "#f39c12");
         resultBox.setAlignment(Pos.CENTER);
+        contentBox.getChildren().add(resultBox);
 
+        // --- LOG DE DESARROLLO ---
         VBox logBox = new VBox(8);
         logBox.setPadding(new Insets(10));
         logBox.setAlignment(Pos.TOP_LEFT);
@@ -280,16 +258,7 @@ public class ReportsPanel {
         logContent.setWrapText(true);
 
         logBox.getChildren().addAll(logLabel, logContent);
-
-        contentBox.getChildren().addAll(
-            statsGrid,
-            costsBox,
-            lossesBox,
-            wasteBox,
-            resultBox,
-            new Separator(),
-            logBox
-        );
+        contentBox.getChildren().add(logBox);
     }
 
     private VBox createInfoBox(String title, String content, String color) {

@@ -1,374 +1,688 @@
-/* =============================================
-   TEMA PRINCIPAL - Civilizations UI
-   Estilo: RTS / Estrategia
-   ============================================= */
+/* =========================================================
+   CIVILIZATIONS UI THEME
+   Estilo RTS / Strategy Game
+   Versión corregida y mejorada
+   ========================================================= */
+
+/* =========================================================
+   FUENTE GLOBAL
+   ========================================================= */
 
 * {
-    -fx-font-family: "Segoe UI", "System", sans-serif;
+    -fx-font-family: "Segoe UI", "Inter", "System";
 }
+
+/* =========================================================
+   ROOT / FONDO PRINCIPAL
+   ========================================================= */
 
 .root {
-    /* CORRECTO: Gradiente en fondo, no en texto */
-    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #0f1720, #16202a);
+    -fx-background-color:
+        radial-gradient(
+            center 50% 15%,
+            radius 140%,
+            rgba(78,165,217,0.10),
+            transparent
+        ),
+        linear-gradient(
+            to bottom,
+            #0b1118 0%,
+            #0f1720 45%,
+            #16202a 100%
+        );
 }
 
-/* =============================================
-   PESTAÑAS
-   ============================================= */
+/* =========================================================
+   SCROLLPANE
+   ========================================================= */
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
 
 .tab-pane {
-    -fx-tab-min-width: 160px;
-    -fx-tab-max-width: 200px;
-    -fx-tab-min-height: 48px;
-    -fx-tab-max-height: 48px;
     -fx-background-color: transparent;
-    -fx-padding: 0 0 4 0;
+    -fx-padding: 0 0 8 0;
+    -fx-tab-min-width: 170px;
+    -fx-tab-max-width: 220px;
+    -fx-tab-min-height: 50px;
+    -fx-tab-max-height: 50px;
 }
 
 .tab-pane .tab-header-area {
-    -fx-padding: 8 16 0 16;
+    -fx-padding: 12 20 0 20;
     -fx-background-color: transparent;
 }
 
-.tab-pane .tab-header-area .tab-header-background {
+.tab-pane .tab-header-background {
     -fx-background-color: transparent;
+    -fx-border-color: rgba(78,165,217,0.25);
     -fx-border-width: 0 0 1 0;
-    -fx-border-color: #4ea5d9;
+}
+
+.tab-pane *.tab-down-button {
+    -fx-background-color: transparent;
 }
 
 .tab {
-    -fx-background-color: #1c2833;
-    -fx-background-radius: 8 8 0 0;
-    -fx-padding: 0 24;
+    -fx-background-color: #17212b;
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-radius: 12 12 0 0;
+    -fx-border-color: transparent;
+    -fx-padding: 0 26;
     -fx-cursor: hand;
-    -fx-transition: all 0.2s;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 4, 0, 0, 2);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0,0,0,0.75),
+            16,
+            0.20,
+            0,
+            4
+        );
+}
+
+.tab:hover {
+    -fx-background-color: #223041;
 }
 
 .tab:selected {
     -fx-background-color: #0f1720;
-    -fx-border-color: #4ea5d9 #4ea5d9 transparent #4ea5d9;
+    -fx-border-color: #4ea5d9;
     -fx-border-width: 2 2 0 2;
-    -fx-border-radius: 8 8 0 0;
-}
 
-.tab:hover {
-    -fx-background-color: #2c3e50;
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(78,165,217,0.18),
+            20,
+            0.25,
+            0,
+            4
+        );
 }
 
 .tab .tab-label {
-    -fx-text-fill: #b2bec3; /* COLOR PLANO */
+    -fx-text-fill: #aeb9c4;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-padding: 0 8;
 }
 
 .tab:selected .tab-label {
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
+    -fx-text-fill: #ecf0f1;
 }
 
-/* =============================================
+/* =========================================================
    BARRA DE RECURSOS
-   ============================================= */
+   ========================================================= */
 
 .resource-bar {
-    -fx-background-color: #0f1720;
-    -fx-border-color: #4ea5d9;
+    -fx-background-color: rgba(11,17,24,0.92);
+
+    -fx-border-color:
+        transparent
+        transparent
+        rgba(78,165,217,0.35)
+        transparent;
+
     -fx-border-width: 0 0 2 0;
-    -fx-padding: 12 24;
-    -fx-spacing: 32;
-    -fx-alignment: center;
+
+    -fx-padding: 16 28;
+    -fx-spacing: 26;
+    -fx-alignment: center-left;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0,0,0,0.7),
+            20,
+            0.2,
+            0,
+            6
+        );
 }
 
 .resource-card {
-    -fx-background-color: #1c2833;
-    -fx-border-color: #4ea5d9;
+    -fx-background-color: #17212b;
+
+    -fx-border-color: rgba(78,165,217,0.40);
     -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-padding: 6 18 6 14;
-    -fx-spacing: 12;
+
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+
+    -fx-padding: 10 18 10 16;
+    -fx-spacing: 14;
+
     -fx-alignment: center-left;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 8, 0, 0, 4);
-    -fx-min-width: 180px;
+
+    -fx-min-width: 190px;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0,0,0,0.85),
+            18,
+            0.25,
+            0,
+            6
+        );
 }
 
 .resource-card:hover {
-    -fx-background-color: #2c3e50;
+    -fx-background-color: #223041;
+
     -fx-border-color: #5dade2;
-    -fx-effect: dropshadow(three-pass-box, rgba(78, 165, 217, 0.3), 12, 0, 0, 6);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(78,165,217,0.25),
+            22,
+            0.30,
+            0,
+            8
+        );
 }
 
 .resource-icon {
-    -fx-fit-width: 32px;
-    -fx-fit-height: 32px;
+    -fx-fit-width: 34px;
+    -fx-fit-height: 34px;
 }
 
 .resource-name {
-    -fx-text-fill: #b2bec3; /* COLOR PLANO */
+    -fx-text-fill: #9ba8b4;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
 .resource-value {
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
-    -fx-font-size: 22px;
+    -fx-text-fill: #ecf0f1;
+
+    -fx-font-size: 23px;
     -fx-font-weight: bold;
-    -fx-font-family: "Courier New", monospace;
+
+    -fx-font-family: "Consolas";
 }
 
-/* =============================================
-   PANELES
-   ============================================= */
+/* =========================================================
+   PANEL PRINCIPAL
+   ========================================================= */
 
 .panel-card {
-    -fx-background-color: #1c2833;
-    -fx-border-color: #4ea5d9;
-    -fx-border-width: 1;
-    -fx-border-radius: 14;
-    -fx-background-radius: 14;
-    -fx-padding: 20;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 14, 0, 0, 6);
-    /* CORREGIDO: No usar imagen de fondo si no existe o usar solo color */
-    -fx-background-image: null;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #17212b,
+            #141d27
+        );
+
+    -fx-border-color: rgba(78,165,217,0.35);
+    -fx-border-width: 1.2;
+
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+
+    -fx-padding: 28;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0,0,0,0.92),
+            24,
+            0.25,
+            0,
+            8
+        );
 }
 
-.panel-card .title {
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
-    -fx-font-size: 22px;
+.panel-card:hover {
+
+    -fx-border-color: rgba(93,173,226,0.55);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(78,165,217,0.16),
+            28,
+            0.30,
+            0,
+            10
+        );
+}
+
+/* =========================================================
+   TÍTULOS
+   ========================================================= */
+
+.title {
+    -fx-text-fill: #ecf0f1;
+
+    -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-padding: 0 0 12 0;
-    -fx-border-color: #4ea5d9;
-    -fx-border-width: 0 0 1 0;
-    -fx-background-color: rgba(15, 23, 32, 0.6);
-    -fx-padding: 8 12;
-    -fx-border-radius: 6 6 0 0;
-    -fx-background-radius: 6 6 0 0;
+
+    -fx-padding: 0 0 14 0;
 }
 
-.panel-card .subtitle {
-    -fx-text-fill: #b2bec3; /* COLOR PLANO */
+.subtitle {
+    -fx-text-fill: #9ba8b4;
+
     -fx-font-size: 14px;
     -fx-font-style: italic;
 }
 
-/* =============================================
-   BOTONES - Estilo carta
-   ============================================= */
+/* =========================================================
+   LABELS
+   ========================================================= */
+
+.label {
+    -fx-text-fill: #ecf0f1;
+}
+
+/* =========================================================
+   BOTONES BASE
+   ========================================================= */
 
 .button {
-    -fx-background-color: #1c2833;
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
-    -fx-font-weight: bold;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #223041,
+            #1a2531
+        );
+
+    -fx-text-fill: #ecf0f1;
+
     -fx-font-size: 14px;
-    -fx-border-color: #4ea5d9;
-    -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-padding: 12 24;
+    -fx-font-weight: bold;
+
+    -fx-padding: 14 24;
+
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+
+    -fx-border-color: rgba(78,165,217,0.45);
+    -fx-border-width: 1.2;
+
     -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 6, 0, 0, 4);
-    -fx-transition: all 0.2s;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0,0,0,0.80),
+            16,
+            0.22,
+            0,
+            5
+        );
 }
 
 .button:hover {
-    -fx-background-color: #2c3e50;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #2b3f54,
+            #223041
+        );
+
     -fx-border-color: #5dade2;
-    -fx-effect: dropshadow(three-pass-box, rgba(78, 165, 217, 0.4), 14, 0, 0, 8);
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(78,165,217,0.30),
+            24,
+            0.30,
+            0,
+            8
+        );
 }
 
 .button:pressed {
-    -fx-background-color: #0f1720;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 2, 0, 0, 1);
+
+    -fx-background-color: #101821;
+
+    -fx-translate-y: 1;
 }
+
+/* =========================================================
+   BOTONES GRANDES / BUILD
+   ========================================================= */
 
 .button-build {
-    -fx-min-width: 200px;
-    -fx-min-height: 120px;
-    -fx-background-color: #1c2833;
-    -fx-border-color: #4ea5d9;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
+
+    -fx-min-width: 230px;
+    -fx-min-height: 140px;
+
+    -fx-alignment: center;
+    -fx-content-display: top;
+
+    -fx-spacing: 12;
+
+    -fx-padding: 18;
 }
 
-.button-build:hover {
-    -fx-background-color: #2c3e50;
-    -fx-border-color: #5dade2;
-    -fx-effect: dropshadow(three-pass-box, rgba(78, 165, 217, 0.4), 18, 0, 0, 10);
-}
+/* =========================================================
+   TECNOLOGÍA
+   ========================================================= */
 
 .button-tech {
-    -fx-min-width: 240px;
-    -fx-min-height: 80px;
-    -fx-background-color: #1c2833;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #4f4310,
+            #352b07
+        );
+
     -fx-border-color: #d4ac0d;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
+
+    -fx-min-width: 250px;
+    -fx-min-height: 90px;
 }
 
 .button-tech:hover {
-    -fx-background-color: #2c3e50;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #6a590f,
+            #4f4310
+        );
+
     -fx-border-color: #f1c40f;
-    -fx-effect: dropshadow(three-pass-box, rgba(212, 172, 13, 0.4), 18, 0, 0, 10);
 }
 
+/* =========================================================
+   ATAQUE
+   ========================================================= */
+
 .button-attack {
-    -fx-background-color: #7b1a1a;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #812020,
+            #5d1616
+        );
+
     -fx-border-color: #c0392b;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
 }
 
 .button-attack:hover {
-    -fx-background-color: #922b21;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #9a2929,
+            #741d1d
+        );
+
     -fx-border-color: #e74c3c;
-    -fx-effect: dropshadow(three-pass-box, rgba(192, 57, 43, 0.5), 18, 0, 0, 10);
 }
 
+/* =========================================================
+   DEFENSA
+   ========================================================= */
+
 .button-defense {
-    -fx-background-color: #1a3d5c;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #1f4968,
+            #17354b
+        );
+
     -fx-border-color: #2980b9;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
 }
 
 .button-defense:hover {
-    -fx-background-color: #2471a3;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #2b6187,
+            #1f4968
+        );
+
     -fx-border-color: #3498db;
-    -fx-effect: dropshadow(three-pass-box, rgba(41, 128, 185, 0.5), 18, 0, 0, 10);
 }
 
+/* =========================================================
+   ESPECIALES
+   ========================================================= */
+
 .button-special {
-    -fx-background-color: #6a5a0a;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #7a640d,
+            #5a4a09
+        );
+
     -fx-border-color: #d4ac0d;
-    -fx-border-radius: 12;
-    -fx-background-radius: 12;
 }
 
 .button-special:hover {
-    -fx-background-color: #9a7d0a;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #a18411,
+            #7a640d
+        );
+
     -fx-border-color: #f1c40f;
-    -fx-effect: dropshadow(three-pass-box, rgba(212, 172, 13, 0.5), 18, 0, 0, 10);
 }
 
-/* =============================================
-   MARCADOR DE BATALLAS
-   ============================================= */
+/* =========================================================
+   SCOREBOARD
+   ========================================================= */
 
 .scoreboard {
-    -fx-background-color: #0f1720;
-    -fx-border-color: #4ea5d9;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #111a23,
+            #0f1720
+        );
+
+    -fx-border-color: rgba(78,165,217,0.45);
     -fx-border-width: 2;
+
     -fx-border-radius: 20;
     -fx-background-radius: 20;
-    -fx-padding: 20 36;
-    -fx-spacing: 28;
+
+    -fx-padding: 24 40;
+
+    -fx-spacing: 34;
+
     -fx-alignment: center;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 24, 0, 0, 12);
-    -fx-max-width: 700;
+
+    -fx-max-width: 760;
+
+    -fx-effect:
+        dropshadow(
+            gaussian,
+            rgba(0,0,0,0.90),
+            28,
+            0.25,
+            0,
+            10
+        );
 }
 
-.scoreboard .team-name {
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
-    -fx-font-size: 20px;
+.team-name {
+
+    -fx-text-fill: #ecf0f1;
+
+    -fx-font-size: 21px;
     -fx-font-weight: bold;
 }
 
-.scoreboard .score {
-    -fx-font-size: 48px;
-    -fx-font-weight: bold;
-    -fx-font-family: "Courier New", monospace;
-}
+.score {
 
-.scoreboard .score.victory {
-    -fx-text-fill: #2ecc71; /* COLOR PLANO */
-}
+    -fx-font-family: "Consolas";
 
-.scoreboard .score.defeat {
-    -fx-text-fill: #e74c3c; /* COLOR PLANO */
-}
-
-.scoreboard .vs {
-    -fx-text-fill: #b2bec3; /* COLOR PLANO */
-    -fx-font-size: 24px;
+    -fx-font-size: 52px;
     -fx-font-weight: bold;
 }
 
-/* =============================================
-   ÁREA DE LOG (CONSOLA MILITAR)
-   ============================================= */
+.score.victory {
+    -fx-text-fill: #2ecc71;
+}
+
+.score.defeat {
+    -fx-text-fill: #e74c3c;
+}
+
+.vs {
+
+    -fx-text-fill: #9ba8b4;
+
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+/* =========================================================
+   LOG AREA
+   ========================================================= */
 
 .log-area {
+
+    -fx-control-inner-background: #0f1720;
+
     -fx-background-color: #0f1720;
-    -fx-text-fill: #b2bec3; /* COLOR PLANO */
-    -fx-font-family: "Courier New", monospace;
+
+    -fx-text-fill: #b2bec3;
+
+    -fx-font-family: "Consolas";
     -fx-font-size: 14px;
+
     -fx-padding: 16;
-    -fx-border-color: #4ea5d9;
+
+    -fx-border-color: rgba(78,165,217,0.40);
     -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.8), 8, 0, 0, 4);
+
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+
+    -fx-effect:
+        innershadow(
+            gaussian,
+            rgba(0,0,0,0.90),
+            12,
+            0.2,
+            0,
+            4
+        );
 }
 
-.log-area .log-title {
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
+.log-area .content {
+    -fx-background-color: #0f1720;
+}
+
+.log-title {
+
+    -fx-text-fill: #ecf0f1;
+
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-padding: 0 0 8 0;
-    -fx-border-color: #4ea5d9;
-    -fx-border-width: 0 0 1 0;
 }
 
-/* =============================================
-   SEPARADORES Y MISCELÁNEA
-   ============================================= */
-
-.separator {
-    -fx-background-color: #4ea5d9;
-    -fx-opacity: 0.3;
-}
-
-.badge {
-    -fx-padding: 4 16;
-    -fx-border-radius: 20;
-    -fx-background-radius: 20;
-    -fx-font-weight: bold;
-    -fx-font-size: 13px;
-}
-
-.badge.victory {
-    -fx-background-color: rgba(46, 204, 113, 0.2);
-    -fx-text-fill: #2ecc71; /* COLOR PLANO */
-    -fx-border-color: #2ecc71;
-}
-
-.badge.defeat {
-    -fx-background-color: rgba(231, 76, 60, 0.2);
-    -fx-text-fill: #e74c3c; /* COLOR PLANO */
-    -fx-border-color: #e74c3c;
-}
-
-/* =============================================
-   GRID DE ESTADÍSTICAS
-   ============================================= */
+/* =========================================================
+   STATS GRID
+   ========================================================= */
 
 .stats-grid {
-    -fx-background-color: #0f1720;
-    -fx-border-color: #4ea5d9;
+
+    -fx-background-color:
+        linear-gradient(
+            to bottom,
+            #141d27,
+            #111922
+        );
+
+    -fx-border-color: rgba(78,165,217,0.30);
+
     -fx-border-width: 1;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-padding: 14;
+
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+
+    -fx-padding: 18;
 }
 
 .stats-grid .label {
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
+
+    -fx-text-fill: #d7dde3;
+
     -fx-font-size: 14px;
 }
 
-.stats-grid .label.header {
-    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
+.stats-grid .header {
+
+    -fx-text-fill: #ecf0f1;
+
     -fx-font-size: 16px;
     -fx-font-weight: bold;
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge {
+
+    -fx-padding: 6 16;
+
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}
+
+.badge.victory {
+
+    -fx-background-color: rgba(46,204,113,0.15);
+
+    -fx-text-fill: #2ecc71;
+
+    -fx-border-color: rgba(46,204,113,0.5);
+}
+
+.badge.defeat {
+
+    -fx-background-color: rgba(231,76,60,0.15);
+
+    -fx-text-fill: #e74c3c;
+
+    -fx-border-color: rgba(231,76,60,0.5);
+}
+
+/* =========================================================
+   SEPARADOR
+   ========================================================= */
+
+.separator .line {
+
+    -fx-border-color: rgba(78,165,217,0.20);
+
+    -fx-border-width: 1;
 }
