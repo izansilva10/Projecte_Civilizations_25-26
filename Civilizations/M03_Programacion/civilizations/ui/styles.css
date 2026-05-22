@@ -1,6 +1,6 @@
 /* =============================================
-   TEMA PRINCIPAL - Civilizations
-   Estilo: RTS / Estrategia (Civilization VI, Age of Empires IV)
+   TEMA PRINCIPAL - Civilizations UI
+   Estilo: RTS / Estrategia
    ============================================= */
 
 * {
@@ -8,11 +8,12 @@
 }
 
 .root {
-    -fx-background: linear-gradient(from 0% 0% to 100% 100%, #0f1720, #16202a);
+    /* CORRECTO: Gradiente en fondo, no en texto */
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%, #0f1720, #16202a);
 }
 
 /* =============================================
-   PESTAÑAS - Estilo launcher de videojuego
+   PESTAÑAS
    ============================================= */
 
 .tab-pane {
@@ -56,18 +57,18 @@
 }
 
 .tab .tab-label {
-    -fx-text-fill: #b2bec3;
+    -fx-text-fill: #b2bec3; /* COLOR PLANO */
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-padding: 0 8;
 }
 
 .tab:selected .tab-label {
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
 }
 
 /* =============================================
-   BARRA DE RECURSOS - HUD Premium
+   BARRA DE RECURSOS
    ============================================= */
 
 .resource-bar {
@@ -104,20 +105,20 @@
 }
 
 .resource-name {
-    -fx-text-fill: #b2bec3;
+    -fx-text-fill: #b2bec3; /* COLOR PLANO */
     -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
 
 .resource-value {
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-font-family: "Courier New", monospace;
 }
 
 /* =============================================
-   PANELES - Tarjetas estratégicas
+   PANELES
    ============================================= */
 
 .panel-card {
@@ -128,14 +129,12 @@
     -fx-background-radius: 14;
     -fx-padding: 20;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.7), 14, 0, 0, 6);
-    -fx-background-image: url("/img/panel-bg.png");
-    -fx-background-size: cover;
-    -fx-background-position: center;
-    -fx-opacity: 0.95;
+    /* CORREGIDO: No usar imagen de fondo si no existe o usar solo color */
+    -fx-background-image: null;
 }
 
 .panel-card .title {
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
     -fx-font-size: 22px;
     -fx-font-weight: bold;
     -fx-padding: 0 0 12 0;
@@ -148,18 +147,18 @@
 }
 
 .panel-card .subtitle {
-    -fx-text-fill: #b2bec3;
+    -fx-text-fill: #b2bec3; /* COLOR PLANO */
     -fx-font-size: 14px;
     -fx-font-style: italic;
 }
 
 /* =============================================
-   BOTONES - Estilo carta/botón RTS
+   BOTONES - Estilo carta
    ============================================= */
 
 .button {
     -fx-background-color: #1c2833;
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
     -fx-font-weight: bold;
     -fx-font-size: 14px;
     -fx-border-color: #4ea5d9;
@@ -190,8 +189,6 @@
     -fx-border-color: #4ea5d9;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
-    -fx-background-image: url("/img/buildings/bg.png");
-    -fx-background-size: cover;
 }
 
 .button-build:hover {
@@ -220,8 +217,6 @@
     -fx-border-color: #c0392b;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
-    -fx-background-image: url("/img/units/attack-bg.png");
-    -fx-background-size: cover;
 }
 
 .button-attack:hover {
@@ -235,8 +230,6 @@
     -fx-border-color: #2980b9;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
-    -fx-background-image: url("/img/units/defense-bg.png");
-    -fx-background-size: cover;
 }
 
 .button-defense:hover {
@@ -250,8 +243,6 @@
     -fx-border-color: #d4ac0d;
     -fx-border-radius: 12;
     -fx-background-radius: 12;
-    -fx-background-image: url("/img/units/special-bg.png");
-    -fx-background-size: cover;
 }
 
 .button-special:hover {
@@ -261,7 +252,7 @@
 }
 
 /* =============================================
-   MARCADOR DE BATALLAS - Scoreboard estilo RTS
+   MARCADOR DE BATALLAS
    ============================================= */
 
 .scoreboard {
@@ -275,12 +266,10 @@
     -fx-alignment: center;
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 24, 0, 0, 12);
     -fx-max-width: 700;
-    -fx-background-image: url("/img/scoreboard-bg.png");
-    -fx-background-size: cover;
 }
 
 .scoreboard .team-name {
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
     -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
@@ -292,26 +281,26 @@
 }
 
 .scoreboard .score.victory {
-    -fx-text-fill: #2ecc71;
+    -fx-text-fill: #2ecc71; /* COLOR PLANO */
 }
 
 .scoreboard .score.defeat {
-    -fx-text-fill: #e74c3c;
+    -fx-text-fill: #e74c3c; /* COLOR PLANO */
 }
 
 .scoreboard .vs {
-    -fx-text-fill: #b2bec3;
+    -fx-text-fill: #b2bec3; /* COLOR PLANO */
     -fx-font-size: 24px;
     -fx-font-weight: bold;
 }
 
 /* =============================================
-   ÁREA DE LOG - Consola militar
+   ÁREA DE LOG (CONSOLA MILITAR)
    ============================================= */
 
 .log-area {
     -fx-background-color: #0f1720;
-    -fx-text-fill: #b2bec3;
+    -fx-text-fill: #b2bec3; /* COLOR PLANO */
     -fx-font-family: "Courier New", monospace;
     -fx-font-size: 14px;
     -fx-padding: 16;
@@ -320,12 +309,10 @@
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-effect: innershadow(three-pass-box, rgba(0,0,0,0.8), 8, 0, 0, 4);
-    -fx-background-image: url("/img/log-bg.png");
-    -fx-background-size: cover;
 }
 
 .log-area .log-title {
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
     -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-padding: 0 0 8 0;
@@ -352,18 +339,18 @@
 
 .badge.victory {
     -fx-background-color: rgba(46, 204, 113, 0.2);
-    -fx-text-fill: #2ecc71;
+    -fx-text-fill: #2ecc71; /* COLOR PLANO */
     -fx-border-color: #2ecc71;
 }
 
 .badge.defeat {
     -fx-background-color: rgba(231, 76, 60, 0.2);
-    -fx-text-fill: #e74c3c;
+    -fx-text-fill: #e74c3c; /* COLOR PLANO */
     -fx-border-color: #e74c3c;
 }
 
 /* =============================================
-   GRID DE ESTADÍSTICAS - Tabla militar
+   GRID DE ESTADÍSTICAS
    ============================================= */
 
 .stats-grid {
@@ -373,17 +360,15 @@
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-padding: 14;
-    -fx-background-image: url("/img/stats-bg.png");
-    -fx-background-size: cover;
 }
 
 .stats-grid .label {
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
     -fx-font-size: 14px;
 }
 
 .stats-grid .label.header {
-    -fx-text-fill: #ecf0f1;
+    -fx-text-fill: #ecf0f1; /* COLOR PLANO */
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
