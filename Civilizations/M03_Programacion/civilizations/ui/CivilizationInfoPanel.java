@@ -12,14 +12,9 @@ import java.util.ArrayList;
 public class CivilizationInfoPanel {
     private Civilization civilization;
     private Runnable updateUICallback;
-
-    // Recursos
     private Label foodValueLabel, woodValueLabel, ironValueLabel, manaValueLabel;
-    // Tecnologías
     private Label techDefLabel, techAtkLabel;
-    // Edificios
     private Label farmLabel, carpentryLabel, smithyLabel, magicTowerLabel, churchLabel;
-    // Ejército
     private Label[] unitCountLabels = new Label[9];
     private final String[] unitNames = {
         "Espadachín", "Lancero", "Ballesta", "Cañón",
@@ -33,8 +28,6 @@ public class CivilizationInfoPanel {
     public CivilizationInfoPanel(Civilization civilization, Runnable updateUICallback) {
         this.civilization = civilization;
         this.updateUICallback = updateUICallback;
-
-        // INICIALIZAR LOS LABELS AQUÍ PARA EVITAR NullPointerException
         this.foodValueLabel = new Label("0");
         this.woodValueLabel = new Label("0");
         this.ironValueLabel = new Label("0");
@@ -46,9 +39,7 @@ public class CivilizationInfoPanel {
         this.smithyLabel = new Label("0");
         this.magicTowerLabel = new Label("0");
         this.churchLabel = new Label("0");
-        for (int i = 0; i < 9; i++) {
-            this.unitCountLabels[i] = new Label("0");
-        }
+        for (int i = 0; i < 9; i++) this.unitCountLabels[i] = new Label("0");
     }
 
     public VBox getPanel() {
@@ -57,10 +48,7 @@ public class CivilizationInfoPanel {
         panel.setAlignment(Pos.TOP_CENTER);
         panel.setStyle("-fx-background-color: #0f1720;");
 
-        // Barra de recursos
         HBox resourcesBar = createResourceBar();
-
-        // Contenedor de dos columnas
         HBox columnsContainer = new HBox(30);
         columnsContainer.setAlignment(Pos.TOP_CENTER);
         columnsContainer.setPadding(new Insets(10));
@@ -72,17 +60,12 @@ public class CivilizationInfoPanel {
         leftColumn.setPrefWidth(450);
         leftColumn.setMaxWidth(500);
 
-        // Panel de Tecnologías
+        // Tecnologías
         VBox techCard = createInfoCard("⚙️ TECNOLOGÍAS");
         GridPane techGrid = new GridPane();
         techGrid.setHgap(20);
         techGrid.setVgap(10);
         techGrid.setPadding(new Insets(5));
-
-        techDefLabel = new Label("0");
-        techDefLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold;");
-        techAtkLabel = new Label("0");
-        techAtkLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold;");
 
         Label defIcon = new Label("🛡️");
         defIcon.setStyle("-fx-font-size: 20px;");
@@ -97,16 +80,12 @@ public class CivilizationInfoPanel {
         techGrid.add(techAtkLabel, 2, 1);
         techCard.getChildren().add(techGrid);
 
-        // Panel de Edificios
+        // Edificios
         VBox buildCard = createInfoCard("🏗️ EDIFICIOS");
         GridPane buildGrid = new GridPane();
         buildGrid.setHgap(20);
         buildGrid.setVgap(6);
         buildGrid.setPadding(new Insets(5));
-
-        farmLabel = new Label("0"); carpentryLabel = new Label("0");
-        smithyLabel = new Label("0"); magicTowerLabel = new Label("0");
-        churchLabel = new Label("0");
 
         Label farmIcon = new Label("🏚️");
         farmIcon.setStyle("-fx-font-size: 18px;");
@@ -134,7 +113,6 @@ public class CivilizationInfoPanel {
         buildGrid.add(churchIcon, 0, 4);
         buildGrid.add(new Label("Iglesias:"), 1, 4);
         buildGrid.add(churchLabel, 2, 4);
-
         buildCard.getChildren().add(buildGrid);
         leftColumn.getChildren().addAll(techCard, buildCard);
 
@@ -155,19 +133,14 @@ public class CivilizationInfoPanel {
             iconLabel.setStyle("-fx-font-size: 18px;");
             Label nameLabel = new Label(unitNames[i]);
             nameLabel.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 15px;");
-            unitCountLabels[i] = new Label("0");
-            unitCountLabels[i].setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold;");
-
             armyGrid.add(iconLabel, 0, i);
             armyGrid.add(nameLabel, 1, i);
             armyGrid.add(unitCountLabels[i], 2, i);
         }
-
         armyCard.getChildren().add(armyGrid);
         rightColumn.getChildren().add(armyCard);
 
         columnsContainer.getChildren().addAll(leftColumn, rightColumn);
-
         ScrollPane scrollPane = new ScrollPane(columnsContainer);
         scrollPane.setFitToWidth(true);
         scrollPane.setFitToHeight(true);
@@ -187,10 +160,8 @@ public class CivilizationInfoPanel {
         VBox card = new VBox(10);
         card.setPadding(new Insets(15));
         card.setStyle("-fx-background-color: #1c2833; -fx-border-color: #4ea5d9; -fx-border-radius: 12; -fx-background-radius: 12; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 8, 0, 0, 4);");
-
         Label titleLabel = new Label(title);
         titleLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 0 0 8 0; -fx-border-color: #4ea5d9; -fx-border-width: 0 0 1 0;");
-
         card.getChildren().add(titleLabel);
         return card;
     }
@@ -200,16 +171,13 @@ public class CivilizationInfoPanel {
         woodValueLabel.setText(String.format("%,d", civilization.getWood()));
         ironValueLabel.setText(String.format("%,d", civilization.getIron()));
         manaValueLabel.setText(String.format("%,d", civilization.getMana()));
-
         techDefLabel.setText(String.valueOf(civilization.getTechnologyDefense()));
         techAtkLabel.setText(String.valueOf(civilization.getTechnologyAttack()));
-
         farmLabel.setText(String.valueOf(civilization.getFarm()));
         carpentryLabel.setText(String.valueOf(civilization.getCarpentry()));
         smithyLabel.setText(String.valueOf(civilization.getSmithy()));
         magicTowerLabel.setText(String.valueOf(civilization.getMagicTower()));
         churchLabel.setText(String.valueOf(civilization.getChurch()));
-
         ArrayList<MilitaryUnit>[] armyGroups = civilization.getArmy();
         for (int i = 0; i < 9; i++) {
             int count = armyGroups[i].size();

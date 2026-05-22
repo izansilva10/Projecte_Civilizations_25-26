@@ -15,31 +15,23 @@ public class ResourcesPanel {
     private Label foodValueLabel, woodValueLabel, ironValueLabel, manaValueLabel;
     private Button upgradeDefenseBtn, upgradeAttackBtn;
 
-    // Constructor: inicializa todos los componentes aquí
     public ResourcesPanel(Civilization civilization, Runnable updateUICallback) {
         this.civilization = civilization;
         this.updateUICallback = updateUICallback;
-
-        // Inicializar los labels de recursos para evitar NullPointerException
         this.foodValueLabel = new Label("0");
         this.woodValueLabel = new Label("0");
         this.ironValueLabel = new Label("0");
         this.manaValueLabel = new Label("0");
-        this.upgradeDefenseBtn = new Button();
-        this.upgradeAttackBtn = new Button();
     }
 
     public VBox getPanel() {
         VBox panel = new VBox(20);
         panel.setPadding(new Insets(20));
-
-        // Barra de recursos
         HBox resourcesBar = createResourceBar();
 
-        // ====== SECCIÓN DE CONSTRUCCIÓN DE EDIFICIOS ======
+        // --- CONSTRUIR EDIFICIOS ---
         Label constructionTitle = new Label("🏗️ CONSTRUIR EDIFICIOS");
         constructionTitle.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 0 0 10 0; -fx-border-color: #4ea5d9; -fx-border-width: 0 0 1 0;");
-        
         GridPane buildGrid = new GridPane();
         buildGrid.setHgap(15);
         buildGrid.setVgap(15);
@@ -68,20 +60,19 @@ public class ResourcesPanel {
         buildGrid.add(magicTowerBtn, 0, 1);
         buildGrid.add(churchBtn, 1, 1);
 
-        // ====== SECCIÓN DE MEJORA DE TECNOLOGÍAS ======
+        // --- MEJORAR TECNOLOGÍAS ---
         Label techTitle = new Label("⚙️ MEJORAR TECNOLOGÍA");
         techTitle.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10 0 10 0; -fx-border-color: #4ea5d9; -fx-border-width: 0 0 1 0;");
-
         HBox techBox = new HBox(30);
         techBox.setAlignment(Pos.CENTER);
         techBox.setPadding(new Insets(10, 0, 20, 0));
 
-        // Actualizar los botones de tecnología
+        upgradeDefenseBtn = new Button("🛡️ Mejorar Defensa");
+        upgradeAttackBtn = new Button("⚔️ Mejorar Ataque");
         updateTechButtons();
-
         techBox.getChildren().addAll(upgradeDefenseBtn, upgradeAttackBtn);
 
-        // ====== CONFIGURACIÓN DE EVENTOS ======
+        // --- EVENTOS ---
         farmBtn.setOnAction(e -> construir(() -> civilization.newFarm(), "Granja"));
         carpentryBtn.setOnAction(e -> construir(() -> civilization.newCarpentry(), "Carpintería"));
         smithyBtn.setOnAction(e -> construir(() -> civilization.newSmithy(), "Herrería"));
@@ -90,13 +81,7 @@ public class ResourcesPanel {
         upgradeDefenseBtn.setOnAction(e -> mejorar(() -> civilization.upgradeTechnologyDefense(), "Defensa"));
         upgradeAttackBtn.setOnAction(e -> mejorar(() -> civilization.upgradeTechnologyAttack(), "Ataque"));
 
-        // ====== AGREGAR TODO AL PANEL PRINCIPAL ======
-        panel.getChildren().addAll(
-            resourcesBar, 
-            constructionTitle, buildGrid, 
-            new Separator(),
-            techTitle, techBox
-        );
+        panel.getChildren().addAll(resourcesBar, constructionTitle, buildGrid, new Separator(), techTitle, techBox);
         return panel;
     }
 
@@ -107,10 +92,10 @@ public class ResourcesPanel {
     private Button createBuildButton(String text, String costDetails) {
         Button btn = new Button();
         btn.getStyleClass().addAll("button", "button-build");
-        btn.setMinWidth(180);
-        btn.setPrefWidth(190);
-        btn.setMinHeight(120);
-        btn.setPrefHeight(120);
+        btn.setMinWidth(200);
+        btn.setPrefWidth(220);
+        btn.setMinHeight(140);
+        btn.setPrefHeight(140);
 
         VBox content = new VBox(6);
         content.setAlignment(Pos.CENTER);
@@ -121,7 +106,6 @@ public class ResourcesPanel {
         Label costLabel = new Label(costDetails);
         costLabel.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 12px; -fx-text-alignment: center;");
         costLabel.setWrapText(true);
-        costLabel.setAlignment(Pos.CENTER);
 
         content.getChildren().addAll(nameLabel, costLabel);
         btn.setGraphic(content);
@@ -179,21 +163,10 @@ public class ResourcesPanel {
     }
 
     public void updateUI() {
-        // Actualizar los valores de los labels
-        if (foodValueLabel != null) {
-            foodValueLabel.setText(String.format("%,d", civilization.getFood()));
-        }
-        if (woodValueLabel != null) {
-            woodValueLabel.setText(String.format("%,d", civilization.getWood()));
-        }
-        if (ironValueLabel != null) {
-            ironValueLabel.setText(String.format("%,d", civilization.getIron()));
-        }
-        if (manaValueLabel != null) {
-            manaValueLabel.setText(String.format("%,d", civilization.getMana()));
-        }
-
-        // Actualizar los botones de tecnología
+        if (foodValueLabel != null) foodValueLabel.setText(String.format("%,d", civilization.getFood()));
+        if (woodValueLabel != null) woodValueLabel.setText(String.format("%,d", civilization.getWood()));
+        if (ironValueLabel != null) ironValueLabel.setText(String.format("%,d", civilization.getIron()));
+        if (manaValueLabel != null) manaValueLabel.setText(String.format("%,d", civilization.getMana()));
         updateTechButtons();
     }
 

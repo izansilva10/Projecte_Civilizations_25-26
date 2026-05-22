@@ -30,7 +30,7 @@ public void start(Stage stage) {
 
     resourcesPanel = new ResourcesPanel(civilization, this::updateUI);
     armyPanel = new ArmyPanel(civilization, this::updateUI);
-    reportsPanel = new ReportsPanel(battleHistory);
+    reportsPanel = new ReportsPanel(battleHistory, civilization);
     infoPanel = new CivilizationInfoPanel(civilization, this::updateUI);
 
     TabPane tabPane = new TabPane();

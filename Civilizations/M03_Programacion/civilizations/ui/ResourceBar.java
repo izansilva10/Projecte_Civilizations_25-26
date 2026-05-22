@@ -31,7 +31,6 @@ public class ResourceBar {
         card.setAlignment(Pos.CENTER_LEFT);
         card.getStyleClass().add("resource-card");
 
-        // Seguridad extra: si el label es null, lo creamos aquí
         if (valueLabel == null) {
             valueLabel = new Label("0");
         }
@@ -42,7 +41,7 @@ public class ResourceBar {
             iconView.setFitWidth(28);
             iconView.setFitHeight(28);
         } catch (Exception e) {
-            // Si la imagen no existe, usamos un label con el icono
+            // Si la imagen no existe, usar emoji
             Label fallbackIcon = new Label(icon);
             fallbackIcon.setStyle("-fx-font-size: 24px;");
             card.getChildren().add(fallbackIcon);
@@ -50,12 +49,9 @@ public class ResourceBar {
 
         VBox infoBox = new VBox(2);
         infoBox.setAlignment(Pos.CENTER_LEFT);
-
         Label nameLabel = new Label(name);
         nameLabel.getStyleClass().add("resource-name");
-
         valueLabel.getStyleClass().add("resource-value");
-
         infoBox.getChildren().addAll(nameLabel, valueLabel);
 
         if (iconView != null) {

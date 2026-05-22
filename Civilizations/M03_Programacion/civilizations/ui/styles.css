@@ -686,3 +686,40 @@
 
     -fx-border-width: 1;
 }
+
+/* =========================================================
+   MEJORAS PARA BOTONES DE UNIDADES (ARMY PANEL)
+   ========================================================= */
+
+.button-attack, .button-defense, .button-special {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 15, 0.3, 0, 8);
+    transition: all 0.2s;
+}
+
+.button-attack:hover {
+    -fx-scale: 1.08;
+    -fx-effect: dropshadow(gaussian, #e74c3c88, 25, 0.4, 0, 12);
+}
+
+.button-defense:hover {
+    -fx-scale: 1.08;
+    -fx-effect: dropshadow(gaussian, #3498db88, 25, 0.4, 0, 12);
+}
+
+.button-special:hover {
+    -fx-scale: 1.08;
+    -fx-effect: dropshadow(gaussian, #f1c40f88, 25, 0.4, 0, 12);
+}
+
+/* Iconos más grandes y bonitos */
+.button .image-view {
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 10, 0.2, 0, 3);
+}
+
+/* Títulos de secciones más épicos */
+.section-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+    -fx-padding: 8 0 15 0;
+}
