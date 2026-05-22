@@ -4,8 +4,6 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import civilizations.Civilization;
 import civilizations.ResourceException;
@@ -20,63 +18,61 @@ public class ResourcesPanel {
     public ResourcesPanel(Civilization civilization, Runnable updateUICallback) {
         this.civilization = civilization;
         this.updateUICallback = updateUICallback;
+        this.foodValueLabel = new Label("0");
+        this.woodValueLabel = new Label("0");
+        this.ironValueLabel = new Label("0");
+        this.manaValueLabel = new Label("0");
     }
 
     public VBox getPanel() {
         VBox panel = new VBox(20);
         panel.setPadding(new Insets(20));
-
         HBox resourcesBar = createResourceBar();
 
-        // Edificios
-        Label constructionTitle = new Label("🏗️ EDIFICIOS");
-        constructionTitle.getStyleClass().add("title");
-        constructionTitle.setAlignment(Pos.CENTER_LEFT);
-        constructionTitle.setMaxWidth(Double.MAX_VALUE);
+        // --- CONSTRUIR EDIFICIOS ---
+        Label constructionTitle = new Label("🏗️ CONSTRUIR EDIFICIOS");
+        constructionTitle.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 0 0 10 0; -fx-border-color: #4ea5d9; -fx-border-width: 0 0 1 0;");
+        GridPane buildGrid = new GridPane();
+        buildGrid.setHgap(15);
+        buildGrid.setVgap(15);
+        buildGrid.setPadding(new Insets(10));
+        buildGrid.setAlignment(Pos.CENTER);
 
-        HBox constructionBox = new HBox(20);
-        constructionBox.setAlignment(Pos.CENTER);
-        constructionBox.setPadding(new Insets(10, 0, 15, 0));
-        constructionBox.setMaxWidth(Double.MAX_VALUE);
+        Button farmBtn = createBuildButton("🏚️ Granja", 
+            String.format("Comida: %,d\nMadera: %,d\nHierro: %,d", 
+                Variables.FOOD_COST_FARM, Variables.WOOD_COST_FARM, Variables.IRON_COST_FARM));
+        Button carpentryBtn = createBuildButton("🪚 Carpintería", 
+            String.format("Comida: %,d\nMadera: %,d\nHierro: %,d", 
+                Variables.FOOD_COST_CARPENTRY, Variables.WOOD_COST_CARPENTRY, Variables.IRON_COST_CARPENTRY));
+        Button smithyBtn = createBuildButton("⚒️ Herrería", 
+            String.format("Comida: %,d\nMadera: %,d\nHierro: %,d", 
+                Variables.FOOD_COST_SMITHY, Variables.WOOD_COST_SMITHY, Variables.IRON_COST_SMITHY));
+        Button magicTowerBtn = createBuildButton("🔮 Torre Mágica", 
+            String.format("Comida: %,d\nMadera: %,d\nHierro: %,d", 
+                Variables.FOOD_COST_MAGICTOWER, Variables.WOOD_COST_MAGICTOWER, Variables.IRON_COST_MAGICTOWER));
+        Button churchBtn = createBuildButton("⛪ Iglesia", 
+            String.format("Comida: %,d\nMadera: %,d\nHierro: %,d", 
+                Variables.FOOD_COST_CHURCH, Variables.WOOD_COST_CHURCH, Variables.IRON_COST_CHURCH));
 
-        Button farmBtn = createBuildButton("Granja", 
-            String.format("Comida: %,d | Madera: %,d | Hierro: %,d", 
-                Variables.FOOD_COST_FARM, Variables.WOOD_COST_FARM, Variables.IRON_COST_FARM),
-            "/img/buildings/farm.png");
-        Button carpentryBtn = createBuildButton("Carpintería", 
-            String.format("Comida: %,d | Madera: %,d | Hierro: %,d", 
-                Variables.FOOD_COST_CARPENTRY, Variables.WOOD_COST_CARPENTRY, Variables.IRON_COST_CARPENTRY),
-            "/img/buildings/carpentry.png");
-        Button smithyBtn = createBuildButton("Herrería", 
-            String.format("Comida: %,d | Madera: %,d | Hierro: %,d", 
-                Variables.FOOD_COST_SMITHY, Variables.WOOD_COST_SMITHY, Variables.IRON_COST_SMITHY),
-            "/img/buildings/smithy.png");
-        Button magicTowerBtn = createBuildButton("Torre Mágica", 
-            String.format("Comida: %,d | Madera: %,d | Hierro: %,d", 
-                Variables.FOOD_COST_MAGICTOWER, Variables.WOOD_COST_MAGICTOWER, Variables.IRON_COST_MAGICTOWER),
-            "/img/buildings/magic_tower.png");
-        Button churchBtn = createBuildButton("Iglesia", 
-            String.format("Comida: %,d | Madera: %,d | Hierro: %,d", 
-                Variables.FOOD_COST_CHURCH, Variables.WOOD_COST_CHURCH, Variables.IRON_COST_CHURCH),
-            "/img/buildings/church.png");
+        buildGrid.add(farmBtn, 0, 0);
+        buildGrid.add(carpentryBtn, 1, 0);
+        buildGrid.add(smithyBtn, 2, 0);
+        buildGrid.add(magicTowerBtn, 0, 1);
+        buildGrid.add(churchBtn, 1, 1);
 
-        constructionBox.getChildren().addAll(farmBtn, carpentryBtn, smithyBtn, magicTowerBtn, churchBtn);
-
-        // Tecnologías
-        Label techTitle = new Label("⚙️ TECNOLOGÍAS");
-        techTitle.getStyleClass().add("title");
-        techTitle.setAlignment(Pos.CENTER_LEFT);
-        techTitle.setMaxWidth(Double.MAX_VALUE);
-
+        // --- MEJORAR TECNOLOGÍAS ---
+        Label techTitle = new Label("⚙️ MEJORAR TECNOLOGÍA");
+        techTitle.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10 0 10 0; -fx-border-color: #4ea5d9; -fx-border-width: 0 0 1 0;");
         HBox techBox = new HBox(30);
         techBox.setAlignment(Pos.CENTER);
         techBox.setPadding(new Insets(10, 0, 20, 0));
 
-        upgradeDefenseBtn = createTechButton("🛡️ Mejorar Defensa", "Coste actual: 2000 Hierro");
-        upgradeAttackBtn = createTechButton("⚔️ Mejorar Ataque", "Coste actual: 2000 Hierro");
-
+        upgradeDefenseBtn = new Button("🛡️ Mejorar Defensa");
+        upgradeAttackBtn = new Button("⚔️ Mejorar Ataque");
+        updateTechButtons();
         techBox.getChildren().addAll(upgradeDefenseBtn, upgradeAttackBtn);
 
+        // --- EVENTOS ---
         farmBtn.setOnAction(e -> construir(() -> civilization.newFarm(), "Granja"));
         carpentryBtn.setOnAction(e -> construir(() -> civilization.newCarpentry(), "Carpintería"));
         smithyBtn.setOnAction(e -> construir(() -> civilization.newSmithy(), "Herrería"));
@@ -85,96 +81,71 @@ public class ResourcesPanel {
         upgradeDefenseBtn.setOnAction(e -> mejorar(() -> civilization.upgradeTechnologyDefense(), "Defensa"));
         upgradeAttackBtn.setOnAction(e -> mejorar(() -> civilization.upgradeTechnologyAttack(), "Ataque"));
 
-        panel.getChildren().addAll(resourcesBar, constructionTitle, constructionBox, techTitle, techBox);
+        panel.getChildren().addAll(resourcesBar, constructionTitle, buildGrid, new Separator(), techTitle, techBox);
         return panel;
     }
 
     private HBox createResourceBar() {
-        HBox bar = new HBox(25);
-        bar.setAlignment(Pos.CENTER);
-        bar.getStyleClass().add("resource-bar");
-        bar.setMaxWidth(Double.MAX_VALUE);
-
-        foodValueLabel = new Label("0");
-        woodValueLabel = new Label("0");
-        ironValueLabel = new Label("0");
-        manaValueLabel = new Label("0");
-
-        bar.getChildren().addAll(
-            createResourceCard("Comida", "🍽️", foodValueLabel, "/img/resources/food.png"),
-            createResourceCard("Madera", "🪵", woodValueLabel, "/img/resources/wood.png"),
-            createResourceCard("Hierro", "⛏️", ironValueLabel, "/img/resources/iron.png"),
-            createResourceCard("Maná", "✦", manaValueLabel, "/img/resources/mana.png")
-        );
-        return bar;
+        return ResourceBar.create(civilization, foodValueLabel, woodValueLabel, ironValueLabel, manaValueLabel);
     }
 
-    private HBox createResourceCard(String name, String icon, Label valueLabel, String imagePath) {
-        HBox card = new HBox(8);
-        card.setAlignment(Pos.CENTER_LEFT);
-        card.getStyleClass().add("resource-card");
+    private Button createBuildButton(String name, String costDetails) {
+    Button btn = new Button();
+    btn.getStyleClass().addAll("button", "button-build");
+    btn.setMinWidth(160);
+    btn.setPrefWidth(180);
+    btn.setMinHeight(100);
+    btn.setPrefHeight(100);
 
-        ImageView iconView = new ImageView(new Image(getClass().getResourceAsStream(imagePath)));
-        iconView.setFitWidth(28);
-        iconView.setFitHeight(28);
+    VBox content = new VBox(4);
+    content.setAlignment(Pos.CENTER);
 
-        VBox infoBox = new VBox(2);
-        infoBox.setAlignment(Pos.CENTER_LEFT);
+    // Nombre del edificio (con emoji o sin él)
+    Label nameLabel = new Label(name);
+    nameLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 16px; -fx-font-weight: bold;");
 
-        Label nameLabel = new Label(name);
-        nameLabel.getStyleClass().add("resource-name");
-
-        valueLabel.getStyleClass().add("resource-value");
-
-        infoBox.getChildren().addAll(nameLabel, valueLabel);
-        card.getChildren().addAll(iconView, infoBox);
-        return card;
+    // Costes formateados en una línea más limpia
+    // Ejemplo: "Comida: 5,000 | Madera: 10,000 | Hierro: 12,000"
+    String[] lines = costDetails.split("\n");
+    StringBuilder costLine = new StringBuilder();
+    for (int i = 0; i < lines.length; i++) {
+        if (i > 0) costLine.append(" | ");
+        costLine.append(lines[i].replace("Comida:", "C:").replace("Madera:", "M:").replace("Hierro:", "H:"));
     }
 
-    private Button createBuildButton(String name, String costText, String imagePath) {
-        Button btn = new Button();
-        btn.getStyleClass().addAll("button", "button-build");
+    Label costLabel = new Label(costLine.toString());
+    costLabel.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 11px;");
+    costLabel.setWrapText(true);
+    costLabel.setAlignment(Pos.CENTER);
 
-        VBox content = new VBox(8);
-        content.setAlignment(Pos.CENTER);
+    content.getChildren().addAll(nameLabel, costLabel);
+    btn.setGraphic(content);
+    btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+    return btn;
+}
 
-        ImageView iconView = new ImageView(new Image(getClass().getResourceAsStream(imagePath)));
-        iconView.setFitWidth(48);
-        iconView.setFitHeight(48);
+    private void updateTechButtons() {
+        int defLevel = civilization.getTechnologyDefense();
+        int atkLevel = civilization.getTechnologyAttack();
 
-        Label nameLabel = new Label(name);
-        nameLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 16px; -fx-font-weight: bold;");
+        int defIronCost = Variables.UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + defLevel * Variables.UPGRADEPLUS_DEFENSE_TECHNOLOGY_IRON_COST;
+        int defWoodCost = Variables.UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + defLevel * Variables.UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST;
+        int atkIronCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + atkLevel * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
+        int atkWoodCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + atkLevel * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
 
-        Label costLabel = new Label(costText);
-        costLabel.setStyle("-fx-text-fill: #b2bec3; -fx-font-size: 12px; -fx-text-alignment: center;");
-        costLabel.setWrapText(true);
-        costLabel.setAlignment(Pos.CENTER);
+        String defCost = "Coste: " + (defWoodCost > 0 ? "Madera: " + defWoodCost + " " : "") + "Hierro: " + defIronCost;
+        String atkCost = "Coste: " + (atkWoodCost > 0 ? "Madera: " + atkWoodCost + " " : "") + "Hierro: " + atkIronCost;
 
-        content.getChildren().addAll(iconView, nameLabel, costLabel);
-        btn.setGraphic(content);
-        btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        return btn;
+        upgradeDefenseBtn.setText("🛡️ Mejorar Defensa\n" + defCost);
+        upgradeDefenseBtn.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10; -fx-background-color: #4f4310; -fx-border-color: #d4ac0d; -fx-border-radius: 12; -fx-background-radius: 12; -fx-min-width: 250px; -fx-min-height: 90px;");
+
+        upgradeAttackBtn.setText("⚔️ Mejorar Ataque\n" + atkCost);
+        upgradeAttackBtn.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10; -fx-background-color: #4f4310; -fx-border-color: #d4ac0d; -fx-border-radius: 12; -fx-background-radius: 12; -fx-min-width: 250px; -fx-min-height: 90px;");
     }
 
-    private Button createTechButton(String text, String cost) {
-        Button btn = new Button();
-        btn.getStyleClass().addAll("button", "button-tech");
-
-        VBox content = new VBox(5);
-        content.setAlignment(Pos.CENTER);
-
-        Label nameLabel = new Label(text);
-        nameLabel.setStyle("-fx-text-fill: #ecf0f1; -fx-font-size: 16px; -fx-font-weight: bold;");
-
-        Label costLabel = new Label(cost);
-        costLabel.setStyle("-fx-text-fill: #d4ac0d; -fx-font-size: 14px;");
-
-        content.getChildren().addAll(nameLabel, costLabel);
-        btn.setGraphic(content);
-        btn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-        return btn;
-    }
-
+    // ==========================================
+    // LÓGICA DE ACCIONES
+    // ==========================================
     @FunctionalInterface
     private interface ActionWithException {
         void run() throws ResourceException;
@@ -203,36 +174,11 @@ public class ResourcesPanel {
     }
 
     public void updateUI() {
-        foodValueLabel.setText(String.format("%,d", civilization.getFood()));
-        woodValueLabel.setText(String.format("%,d", civilization.getWood()));
-        ironValueLabel.setText(String.format("%,d", civilization.getIron()));
-        manaValueLabel.setText(String.format("%,d", civilization.getMana()));
-
-        int defLevel = civilization.getTechnologyDefense();
-        int atkLevel = civilization.getTechnologyAttack();
-
-        int defIronCost = Variables.UPGRADE_BASE_DEFENSE_TECHNOLOGY_IRON_COST + defLevel * Variables.UPGRADEPLUS_DEFENSE_TECHNOLOGY_IRON_COST;
-        int defWoodCost = Variables.UPGRADE_BASE_DEFENSE_TECHNOLOGY_WOOD_COST + defLevel * Variables.UPGRADE_PLUS_DEFENSE_TECHNOLOGY_WOOD_COST;
-        int atkIronCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_IRON_COST + atkLevel * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_IRON_COST;
-        int atkWoodCost = Variables.UPGRADE_BASE_ATTACK_TECHNOLOGY_WOOD_COST + atkLevel * Variables.UPGRADE_PLUS_ATTACK_TECHNOLOGY_WOOD_COST;
-
-        String defCost = "Coste: " + (defWoodCost > 0 ? "Madera: " + defWoodCost + " " : "") + "Hierro: " + defIronCost;
-        String atkCost = "Coste: " + (atkWoodCost > 0 ? "Madera: " + atkWoodCost + " " : "") + "Hierro: " + atkIronCost;
-
-        updateTechButton(upgradeDefenseBtn, "🛡️ Mejorar Defensa", defCost);
-        updateTechButton(upgradeAttackBtn, "⚔️ Mejorar Ataque", atkCost);
-    }
-
-    private void updateTechButton(Button btn, String text, String cost) {
-        if (btn.getGraphic() instanceof VBox) {
-            VBox content = (VBox) btn.getGraphic();
-            if (content.getChildren().size() >= 2) {
-                Label nameLabel = (Label) content.getChildren().get(0);
-                nameLabel.setText(text);
-                Label costLabel = (Label) content.getChildren().get(1);
-                costLabel.setText(cost);
-            }
-        }
+        if (foodValueLabel != null) foodValueLabel.setText(String.format("%,d", civilization.getFood()));
+        if (woodValueLabel != null) woodValueLabel.setText(String.format("%,d", civilization.getWood()));
+        if (ironValueLabel != null) ironValueLabel.setText(String.format("%,d", civilization.getIron()));
+        if (manaValueLabel != null) manaValueLabel.setText(String.format("%,d", civilization.getMana()));
+        updateTechButtons();
     }
 
     private void showAlert(String msg) {
