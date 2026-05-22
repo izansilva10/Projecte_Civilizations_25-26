@@ -20,47 +20,48 @@ public class MainWindow extends javafx.application.Application {
     private Timer resourceTimer;
     private Timer enemyTimer;
 
-@Override
-public void start(Stage stage) {
-    civilization = Civilization.loadFromDatabase();
-    battleHistory = new ArrayList<>();
-    currentEnemyArmy = new ArrayList<>();
+    @Override
+    public void start(Stage stage) {
+        civilization = Civilization.loadFromDatabase();
+        battleHistory = new ArrayList<>();
+        currentEnemyArmy = new ArrayList<>();
 
-    startTimers();
+        startTimers();
 
-    resourcesPanel = new ResourcesPanel(civilization, this::updateUI);
-    armyPanel = new ArmyPanel(civilization, this::updateUI);
-    reportsPanel = new ReportsPanel(battleHistory, civilization);
-    infoPanel = new CivilizationInfoPanel(civilization, this::updateUI);
+        resourcesPanel = new ResourcesPanel(civilization, this::updateUI);
+        armyPanel = new ArmyPanel(civilization, this::updateUI);
+        reportsPanel = new ReportsPanel(battleHistory, civilization);
+        infoPanel = new CivilizationInfoPanel(civilization, this::updateUI);
 
-    TabPane tabPane = new TabPane();
-    tabPane.getStyleClass().add("tab-pane");
+        TabPane tabPane = new TabPane();
+        tabPane.getStyleClass().add("tab-pane");
 
-    Tab infoTab = new Tab("🏛️ INFORMACIÓN", infoPanel.getPanel());
-    Tab resourcesTab = new Tab("🏗️ EDIFICIOS", resourcesPanel.getPanel());
-    Tab armyTab = new Tab("⚔️ EJÉRCITO", armyPanel.getPanel());
-    Tab reportsTab = new Tab("📜 REPORTES", reportsPanel.getPanel());
+        Tab infoTab = new Tab("🏛️ INFORMACIÓN", infoPanel.getPanel());
+        Tab resourcesTab = new Tab("🏗️ EDIFICIOS", resourcesPanel.getPanel());
+        Tab armyTab = new Tab("⚔️ EJÉRCITO", armyPanel.getPanel());
+        Tab reportsTab = new Tab("📜 REPORTES", reportsPanel.getPanel());
 
-    infoTab.setClosable(false);
-    resourcesTab.setClosable(false);
-    armyTab.setClosable(false);
-    reportsTab.setClosable(false);
+        infoTab.setClosable(false);
+        resourcesTab.setClosable(false);
+        armyTab.setClosable(false);
+        reportsTab.setClosable(false);
 
-    tabPane.getTabs().addAll(infoTab, resourcesTab, armyTab, reportsTab);
+        tabPane.getTabs().addAll(infoTab, resourcesTab, armyTab, reportsTab);
 
-    Scene scene = new Scene(tabPane, 1440, 860);
+        Scene scene = new Scene(tabPane, 1440, 860);
 
-    scene.setUserAgentStylesheet(null);
+        scene.setUserAgentStylesheet(null);
 
-    scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
 
-    stage.setTitle("Civilizations");
-    stage.setScene(scene);
-    stage.show();
+        stage.setTitle("Civilizations");
+        stage.setScene(scene);
+        stage.show();
 
-    startUIUpdater();
-    updateUI();
-}
+        startUIUpdater();
+        updateUI();
+    }
+
     private void startTimers() {
         resourceTimer = new Timer();
         resourceTimer.scheduleAtFixedRate(new ResourceGenerator(civilization), 0, 60000);
@@ -174,4 +175,4 @@ public void start(Stage stage) {
             civilization.saveToDatabase();
         }
     }
-}   
+}
